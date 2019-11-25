@@ -1,0 +1,81 @@
+{
+  "name": "leaflet-draw",
+  "version": "0.4.0",
+  "description": "Vector drawing plugin for Leaflet",
+  "devDependencies": {
+    "happen": "^0.3.1",
+    "jake": "^8.0.15",
+    "jshint": "^2.9.3",
+    "karma": "^1.3.0",
+    "karma-coverage": "^1.1.1",
+    "karma-mocha": "^1.2.0",
+    "karma-phantomjs-launcher": "^1.0.2",
+    "leaflet": "~0.7.0",
+    "mocha": "^3.1.2",
+    "phantomjs": "^2.1.7",
+    "uglify-js": "^2.7.3"
+  },
+  "main": "dist/leaflet.draw.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "build": "jake",
+    "test": "jake test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Leaflet/Leaflet.draw.git"
+  },
+  "keywords": [
+    "maps",
+    "leaflet",
+    "client",
+    "vector",
+    "drawing",
+    "draw"
+  ],
+  "contributors": [
+    {
+      "name": "Jon West",
+      "email": "ddproxy@gmail.com"
+    },
+    {
+      "name": "Jacob Toye"
+    }
+  ],
+  "license": "MIT",
+  "gitHead": "308abf8fde7c8ce379f26c760af69eaf1802c73b",
+  "bugs": {
+    "url": "https://github.com/Leaflet/Leaflet.draw/issues"
+  },
+  "homepage": "https://github.com/Leaflet/Leaflet.draw#readme",
+  "_id": "leaflet-draw@0.4.0",
+  "_shasum": "1441f10c390588b6d70effcc52f4cb95a96d5260",
+  "_from": "leaflet-draw@latest",
+  "_npmVersion": "3.10.6",
+  "_nodeVersion": "6.3.1",
+  "_npmUser": {
+    "name": "ddproxy",
+    "email": "ddproxy@gmail.com"
+  },
+  "dist": {
+    "shasum": "1441f10c390588b6d70effcc52f4cb95a96d5260",
+    "tarball": "https://registry.npmjs.org/leaflet-draw/-/leaflet-draw-0.4.0.tgz"
+  },
+  "maintainers": [
+    {
+      "name": "ddproxy",
+      "email": "ddproxy@gmail.com"
+    },
+    {
+      "name": "jacobtoye",
+      "email": "jacob.toye@gmail.com"
+    }
+  ],
+  "_npmOperationalInternal": {
+    "host": "packages-16-east.internal.npmjs.com",
+    "tmp": "tmp/leaflet-draw-0.4.0.tgz_1476643144332_0.7149959581438452"
+  },
+  "_resolved": "https://registry.npmjs.org/leaflet-draw/-/leaflet-draw-0.4.0.tgz"
+}

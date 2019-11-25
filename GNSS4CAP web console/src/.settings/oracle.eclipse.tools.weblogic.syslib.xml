@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<system-libraries>
+    <library javadoc="http://docs.oracle.com/javaee/6/api/" path="server/lib/api.jar"/>
+    <library path="server/lib/wls-api.jar"/>
+</system-libraries>

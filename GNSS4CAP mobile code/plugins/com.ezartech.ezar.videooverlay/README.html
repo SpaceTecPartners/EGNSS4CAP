@@ -1,0 +1,56 @@
+<h1 id="ezarvideooverlaycordovaplugin">ezAR VideoOverlay Cordova Plugin</h1>
+
+<p>This plugin overlays the Cordova WebView on top of a custom camera view which provides <br />
+a video preview. Using the VideoOverlay JavaScript api you can switch between the front <br />
+and back cameras of a device, start and stop video preview from a camera and adjust the <br />
+zoom level of the camera. </p>
+
+<p>When a camera is started its video output is displayed on the ezAR camera view. By default <br />
+the camera view is not visible as it is hidden below the WebView's HTML content. <br />
+Increase the transparency for the area(s) of the app UI (html) where you wish to 
+see the view preview from the camera.  The Cordova WebView control has the same dimensions as <br />
+the camera view. In some cases the camera view and WebView sizes maybe smaller <br />
+than the device display due to automatic scaling performed by VideoOverlay to <br />
+maintain a consistent aspect ratio of the video stream. </p>
+
+<p>When a camera is started it is known as the active camera and it's video is <br />
+rendered on the camera view.  At this time the video content is NOT saved to the device's photo gallery. </p>
+
+<h2 id="supportedplatforms">Supported Platforms</h2>
+
+<ul>
+<li>iOS 7, 8 &amp; 9</li>
+
+<li>Android 4.2 and greater </li>
+</ul>
+
+<h2 id="gettingstarted">Getting Started</h2>
+
+<p>The simplest ezAR application involves adding the VideoOverlay plugin <br />
+to your Corodva project using the Cordova CLI</p>
+
+<pre><code>    cordova plugin add pathtoezar/com.ezartech.ezar.videooverlay
+</code></pre>
+
+<p>Next in your Cordova JavaScript deviceready handler include the following <br />
+JavaScript snippet to initialize the VideoOverlay plugin and activate the <br />
+camera on the back of the device, i.e., the camera away from the display.</p>
+
+<pre><code>    ezar.initializeVideoOverlay(
+        function() {
+            ezar.getBackCamera().start();
+            },
+        function(err) {
+            alert('unable to init ezar: ' + err);
+    });
+</code></pre>
+
+<h2 id="additionaldocumentation">Additional Documentation</h2>
+
+<p>See <a href="http://ezartech.com">ezartech.com</a> for documentation and support.</p>
+
+<h2 id="license">License</h2>
+
+<p>The ezAR Startup Kit is licensed under a <a href="http://www.ezartech.com/ezarstartupkit-license">modified MIT license</a>.</p>
+
+<p>Copyright (c) 2015-2016, ezAR Technologies</p>

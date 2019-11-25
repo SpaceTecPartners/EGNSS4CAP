@@ -1,0 +1,23 @@
+{
+  "name": "com.ezartech.ezar.videooverlay",
+  "version": "0.2.11",
+  "description": "Augmented reality SDK for Cordova hybrid-mobile applications. \n\t\t\t\t Overlay a real-world background mobile device camera with\n\t\t\t\t a transparent application web (HTML) UI that has full access\n\t\t\t\t to all Cordova plugin apis.  \n\t",
+  "cordova": {
+    "id": "com.ezartech.ezar.videooverlay",
+    "platforms": [
+      "ios",
+      "android"
+    ]
+  },
+  "keywords": [
+    "augmented reality",
+    "video preview",
+    "overlay",
+    "computer vision",
+    "ecosystem:cordova",
+    "cordova-ios",
+    "cordova-android"
+  ],
+  "author": "",
+  "license": "modified MIT License, see http://ezartech.com/ezarstartupkit-license"
+}

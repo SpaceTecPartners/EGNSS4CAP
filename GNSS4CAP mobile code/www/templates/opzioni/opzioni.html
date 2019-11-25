@@ -1,0 +1,102 @@
+<ion-view>
+	<ion-nav-title>{{ 'opzioni.title' | translate }}</ion-nav-title>
+
+
+    <ion-content padding="true" class="has-header">
+
+		<ion-list>
+			<div class="item item-divider margintop10">
+				{{ 'opzioni.imposta_device' | translate }}
+			</div>
+
+      <div class="row">
+        <ion-radio style="width: 90%" name="GPSproviderRadio" ng-model="settings.metadata.GPSprovider" ng-value="0"
+                   click-and-wait="selectedGPSChanged(0)">
+          {{ 'opzioni.esterno' | translate }}
+        </ion-radio>
+        <div style="min-width:10%;background-color:orangered"></div>
+      </div>
+
+      <div class="row">
+        <ion-radio style="width: 90%" name="GPSproviderRadio" ng-model="settings.metadata.GPSprovider" ng-value="1"
+                   click-and-wait="selectedGPSChanged(1)">
+          {{ 'opzioni.interno' | translate }}
+        </ion-radio>
+        <div style="min-width:10%;background-color:cornflowerblue"></div>
+      </div>
+
+      <div class="row">
+        <ion-radio name="GPSproviderRadio" ng-model="settings.metadata.GPSprovider" ng-value="2"
+                   click-and-wait="selectedGPSChanged(2)">
+          {{ 'opzioni.raw_data' | translate }} + {{ 'opzioni.loc_manager' | translate }}
+        </ion-radio>
+      </div>
+
+		</ion-list>
+
+		<ion-list >
+			<div class="item item-divider margintop10">
+				{{ 'opzioni.map' | translate }}
+			</div>
+
+			<div class="item range range-positive">
+				{{ 'opzioni.min' | translate }}: {{settings.metadata.minzoom}}
+				<input type="range"  on-release="zoomMinimoChanged(settings.metadata.minzoom)"
+					   ng-model="settings.metadata.minzoom" min="1" max="19" value="1">
+			</div>
+
+			<div class="item range range-positive">
+				{{ 'opzioni.max' | translate }}: {{settings.metadata.maxzoom}}
+				<input type="range"  on-release="zoomMassimoChanged(settings.metadata.maxzoom)"
+					   ng-model="settings.metadata.maxzoom" min="1" max="19" value="5">
+			</div>
+
+      <div class="item item-divider margintop10">
+        {{ 'opzioni.imposta_map_provider' | translate }}
+      </div>
+
+			<ion-radio name="layerRadio" ng-model="settings.metadata.default_tile_id" ng-value="$index"
+					   ng-repeat="layer in settings.layers track by layer.id" click-and-wait="selectedLayerChanged($index)">
+				{{layer.description}}
+				</ion-radio>
+
+      <div class="item item-divider margintop10">
+        Centroid Computation Time Interval
+      </div>
+      <div class="item range range-positive">
+        <!--{{ 'opzioni.min' | translate }}: {{settings.metadata.minzoom}}-->
+        Seconds: {{settings.metadata.centroid_computation_time}}
+        <input type="range"  on-release="centroidComputationTimeChanged(settings.metadata.centroid_computation_time)"
+               ng-model="settings.metadata.centroid_computation_time" min="10" max="60" value="30">
+      </div>
+
+      <div style="margin-top: 2%">
+        <div class="item item-divider margintop10">
+          Set Filter Values Quality
+        </div>
+        <div class="row" style="text-align: center;margin-top: 2%">
+          <div class="col col-100">
+            <input id="filter_knob" class="my_dial" value="0">
+          </div>
+        </div>
+        <div class="row">
+          <div id="min_snr" class="col col-33">
+
+          </div>
+          <div id="min_n_sat" class="col col-33">
+
+          </div>
+          <div id="min_hdop" class="col col-33">
+
+          </div>
+        </div>
+      </div>
+
+    </ion-list>
+
+      <button click-and-wait="goto_gps_advanced()" class="button button-icon" style="box-shadow: 5px 5px 10px 2px #333333;background: #005ce6; opacity: 0.7; width:inherit">
+        <i ng-class="'light'">{{ 'opzioni.opzioni_gps_avanzate' | translate }}</i>
+      </button>
+
+    </ion-content>
+</ion-view>

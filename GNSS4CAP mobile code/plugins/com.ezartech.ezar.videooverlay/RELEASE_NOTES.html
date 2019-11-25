@@ -1,0 +1,110 @@
+<h1 id="ezarvideooverlaypluginreleasenotes">ezAR VideoOverlay Plugin Release Notes</h1>
+
+<h2 id="021120170306">0.2.11 (20170306)</h2>
+
+<ol>
+<li>New Camera api, getHorizontalViewAngle() &amp; getVerticalViewAngle()</li>
+
+<li>Android - fixed refresh issue when performing camera start(), stop(), start() sequence</li>
+</ol>
+
+<h2 id="021020170123">0.2.10 (20170123)</h2>
+
+<ol>
+<li>iOS - handle multiple calls to initializeVideoOverlay().</li>
+
+<li>Android - added new android specific initializeVideoOverlay option 'fitWebViewToCameraView'.</li>
+
+<li>Android - fixed issue where [no camera preview size is selected]https://support.ezartech.com/index.php?p=/discussion/49/videooverlay-ezar-java-selectsizepair-return-null-value
+resulted in NPE.</li>
+</ol>
+
+<h2 id="02920160921">0.2.9 (20160921)</h2>
+
+<ol>
+<li>iOS - added support for WKWebView.</li>
+</ol>
+
+<h2 id="02820160915">0.2.8 (20160915)</h2>
+
+<ol>
+<li>iOS - added NSCameraUsageDescription to plist, required for iOS 10.</li>
+</ol>
+
+<h2 id="02720160901">0.2.7 (20160901)</h2>
+
+<ol>
+<li>Android - added support for the <a href="https://crosswalk-project.org/">Crosswalk webview</a>. </li>
+</ol>
+
+<h2 id="02620160818">0.2.6 (20160818)</h2>
+
+<ol>
+<li>Android - rolled back agressive use of hardware acceleration. In some cases users reported slower performance. 
+Now uses device default hardware acceleration settings.</li>
+
+<li>Android - fixed compile issue on Cordova 5 and earlier versions</li>
+</ol>
+
+<h2 id="02520160620">0.2.5 (20160620)</h2>
+
+<ol>
+<li>Android - modified strategy for camera resolution selection and UI resizing to reduce letterbox mattes 
+(black bars on opposing sides of the UI when camera aspect ratio does not match the display area). This 
+change is most noticable when in fullscreen mode, a.k.a., immersive mode.</li>
+
+<li>Fixed error in initializeVideoOverlay(). On older OSes the JavaScript String.startsWith() method is not
+available.</li>
+</ol>
+
+<h2 id="02420160606">0.2.4 (20160606)</h2>
+
+<ol>
+<li>Added backgroundColor (#RRGGBB) property to initializeVideoOverlay options parameter. Set the background color visible when a camera is not running. This background color is 
+visible only when the HTML <body> background color is transperent.</li>
+</ol>
+
+<h2 id="02320160503">0.2.3 (20160503)</h2>
+
+<ol>
+<li>Fixed render error on Galaxy S4. Removed unused setting of android picture size.</li>
+</ol>
+
+<h2 id="02220160310">0.2.2 (20160310)</h2>
+
+<ol>
+<li>Fixed video orientation to rotate consistently on device rotation.</li>
+</ol>
+
+<h2 id="021201603021">0.2.1 (20160302-1)</h2>
+
+<ol>
+<li>Fixed plugin name in plugin.xml</li>
+</ol>
+
+<h2 id="020201603021">0.2.0 (20160302-1)</h2>
+
+<p>This update is refactor of the previous super ezar plugin to only include functionality <br />
+for setting up and controlling the camera view and the device cameras.  The Android <br />
+implementation has been completely rewritten and fixes preview aspect ratio issue <br />
+from beta-1.  </p>
+
+<p>This plugin works with or without the Flashlight and Snapshot plugins.</p>
+
+<h3 id="knownissues">Known Issues</h3>
+
+<ol>
+<li>Plugin error reporting needs improvement.</li>
+</ol>
+
+<h2 id="010beta1">0.1.0 beta-1</h2>
+
+<p>This is the first public release of the ezAR Startup Kit.</p>
+
+<h2 id="knownissues-1">Known Issues</h2>
+
+<ol>
+<li>Camera view does not consistently maintain aspect ratio on device rotation</li>
+
+<li>Plugin error reporting needs improvement.</li>
+</ol>

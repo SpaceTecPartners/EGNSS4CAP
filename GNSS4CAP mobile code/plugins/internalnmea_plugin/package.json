@@ -1,0 +1,21 @@
+{
+  "cordova": {
+    "id": "com.erasmicoin.cordova.internalnmea",
+    "platforms": [
+      "android"
+    ]
+  },
+  "dependencies": {},
+  "description": "Cordova plugin to retreive NMEA stream from phone gps receiver",
+  "devDependencies": {},
+  "directories": {},
+  "keywords": [
+    "nmea"
+  ],
+  "license": "MIT",
+  "name": "InternalNmea",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "scripts": {},
+  "version": "0.0.1"
+}

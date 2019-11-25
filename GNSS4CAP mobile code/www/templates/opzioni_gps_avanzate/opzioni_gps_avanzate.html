@@ -1,0 +1,61 @@
+<ion-view>
+  <ion-nav-title>{{ 'opzioni.opzioni_gps_avanzate' | translate }}</ion-nav-title>
+
+  <ion-content padding="true" class="has-header">
+
+    <ion-list >
+
+      <div class="item item-divider margintop10">
+        {{ 'opzioni.campionamento' | translate }}
+      </div>
+
+      <div class="item range range-positive">
+        {{ 'opzioni.hdop_min' | translate }}: {{settings.metadata.min_hdop}}
+        <input type="range"  on-release="minHdopChanged(settings.metadata.min_hdop)"
+               ng-model="settings.metadata.min_hdop" min="0.01" max="10.0" value="5">
+      </div>
+
+      <div class="item range range-positive">
+        {{ 'opzioni.min_n_sat' | translate }}: {{settings.metadata.min_n_sat}}
+        <input type="range"  on-release="minNSatChanged(settings.metadata.min_n_sat)"
+               ng-model="settings.metadata.min_n_sat" min="1" max="40" value="7">
+      </div>
+
+      <div class="item range range-positive">
+        {{ 'opzioni.min_snr' | translate }}: {{settings.metadata.min_snr}}
+        <input type="range"  on-release="minSnrChanged(settings.metadata.min_snr)"
+               ng-model="settings.metadata.min_snr" min="2.0" max="100.0" value="31.0">
+      </div>
+
+      <div class="item range range-positive">
+        {{ 'opzioni.min_fix' | translate }}: {{settings.metadata.min_fix}}
+        <input type="range"  on-release="minFixChanged(settings.metadata.min_fix)"
+               ng-model="settings.metadata.min_fix" min="0" max="3" value="3">
+      </div>
+
+      <div class="item item-divider margintop10">
+        {{ 'opzioni.impostazioni_survey' | translate }}
+      </div>
+
+      <div class="item range range-positive">
+        {{ 'opzioni.num_campionamenti' | translate }}: {{settings.metadata.n_campionamenti}}
+        <input type="range"  on-release="numCampionamentiChanged(settings.metadata.n_campionamenti)"
+               ng-model="settings.metadata.n_campionamenti" min="1" max="50" value="1">
+      </div>
+
+      <div class="row">
+        <button click-and-wait="reset_gps_default()" class="button button-icon" style="box-shadow: 5px 5px 10px 2px #333333; background: #005ce6; opacity: 0.7; display:block; margin-left: auto; margin-right: auto; width: inherit">
+          <i ng-class="'light'">{{ 'opzioni.gps_default' | translate }}</i>
+        </button>
+      </div>
+      <br>
+      <div class="row">
+          <button id="filter_btn" click-and-wait="toggleFilterBtn()" class="button button-icon" style="box-shadow: 5px 5px 10px 2px #333333;background: #005ce6; opacity: 0.7; width:inherit;display:block; margin-left: auto; margin-right: auto">
+            <i ng-class="'light'">{{filterActive ? 'deactivate filters' : 'activate filters'}}</i>
+          </button>
+      </div>
+
+    </ion-list>
+
+  </ion-content>
+</ion-view>

@@ -1,0 +1,88 @@
+.dataTables_processing{
+	height:50px !important;
+}
+.celldatadetail{
+	line-height:100%;
+}
+.celldatadetail p{
+	padding:0px;
+	margin:0px;
+	width:100%;
+}
+
+.tableStyle {
+	border-spacing: 0px;
+}
+
+.tableStyle thead th {
+	font-weight: bold;
+	font-size: small;
+	font-family: Roboto;
+	/*background-image: url('../img/HeaderBackground.png');
+	background-image: url(../img/banner_green.jpg); */
+	background-color: #172983;
+	/*background-repeat: repeat-x;*/
+	border: 1px solid white;
+	/*height: 20px;*/
+	color: white;
+}
+
+.tableStyle tbody td {
+	font-size: small;
+	border: 1px solid #CCCCCC;
+	padding: 0.5em;
+	font-family: Roboto;
+}
+
+.bgcOk {
+	background-color:rgba(0,125,0,.8);
+	color:white;
+}
+
+.bgcWarn{
+	background-color:rgba(255, 204, 0,.8);
+	color:black;
+}
+
+
+.bgcErr1{
+	background-color:rgba(220,0,0,.9);
+	color:white;
+}
+
+.bgcErr2 {
+	background-color: gray;
+	color:white;
+}
+
+.bgcErr3{
+	background-color: black;
+	color:white;
+}
+
+.tableStyle tfoot td {
+	font-weight: bold;
+	font-size: 10px;
+	border: #CCCCCC;
+	font-family: Roboto;
+	padding: 0.5em;
+	background-color: #BBBBBB;
+}
+
+.tableStyleErr {
+	border-spacing: 0px;
+	border-color: red;
+}
+
+.tableStyleErr tbody td {
+	background-color: #FFFFE0;
+	font-weight: bold;
+}
+
+.tableStyle tr.bgc1:hover {
+	background-color: #ECFFB3;
+}
+
+.tableStyle tr.bgc0:hover {
+	background-color: #E6FF99;
+}

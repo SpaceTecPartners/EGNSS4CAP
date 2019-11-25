@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title></title>
+
+    <link rel="manifest" href="manifest.json">
+
+    <!-- un-comment this code to enable service worker
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('service-worker.js')
+          .then(() => console.log('service worker installed'))
+          .catch(err => console.log('Error', err));
+      }
+    </script>-->
+
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+    <script src="lib/jquery-3.1.0.js"></script>
+    <script src="lib/ngCordova/dist/ng-cordova.min.js"></script>
+    <script src="cordova.js"></script>
+
+    <script src="lib/angular-indexed-db.js"></script>
+    <script src="lib/angular-translate/angular-translate.min.js"></script>
+    <script src="lib/angular-translate-loader-url/angular-translate-loader-url.min.js"></script>
+    <script src="lib/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
+    <link rel='stylesheet' href='lib/v4.4.2-dist/ol.css'>
+    <script src="lib/v4.4.2-dist/ol-debug.js"></script>
+    <script src="lib/proj4js/lib/proj4js-compressed.js"></script>
+
+    <!-- JSTS -->
+    <script src="lib/jsts/dist/jsts.min.js"></script>
+    <script src="lib/jQuery-Knob-master/jquery.knob.min.js"></script>
+    <script src="lib/clickAndWait/click-and-wait.js"></script>
+    <script src="lib/ng-material-floating-button/src/mfb-directive.js"></script>
+    <link href="lib/ng-material-floating-button/mfb/dist/mfb.css" rel="stylesheet">
+    <script src="lib/ar/three.js"></script>
+    <script src="lib/ar/wicket.js"></script>
+    <script src="lib/ar/earcut.js"></script>
+    <script src="lib/ar/controls/OrbitControls.js"></script>
+    <script src="lib/ar/controls/DeviceOrientationControls.js"></script>
+    <script src="lib/ar/controls/DeviceOrientationController.js"></script>
+    <script src="lib/ar/renderers/CanvasRenderer.js"></script>
+    <script src="lib/ar/renderers/SoftwareRenderer.js"></script>
+    <script src="lib/ar/renderers/Projector.js"></script>
+    <script src="lib/qrious/qrious.min.js"></script>
+    <script src="lib/piexifjs/piexif.js"></script>
+    <link rel="stylesheet" href="lib/leaflet/style.css" />
+    <link rel="stylesheet" href="lib/leaflet/leaflet.css" />
+    <script src="lib/leaflet/leaflet.js"></script>
+    <script src="lib/leaflet/leaflet-draw/src/Leaflet.draw.js"></script>
+    <script src="lib/leaflet/leaflet-draw/src/ext/GeometryUtil.js"></script>
+    <script src="lib/kalmanjs/kalman.js"></script>
+    <script src="lib/hull-master/src/hull.js"></script>
+    <script src="lib/pixi/pixi.min.js"></script>
+
+    <script src="lib/chart/Chart.bundle.min.js"></script>
+    <script src="lib/leaflet/heatmap.js"></script>
+    <script src="lib/leaflet/leaflet-heatmap.js"></script>
+    <script src="lib/leaflet-polylinedecorator/dist/leaflet.polylineDecorator.js"></script>
+
+    <!-- your app's js -->
+    <script src="js/mappa/mappa.module.js"></script>
+    <script src="js/mappa/config.js"></script>
+    <script src="js/mappa/controllers/BaseMapController.js"></script>
+    <script src="js/mappa/controllers/pictureMapOl.js"></script>
+    <script src="js/mappa/controllers/takePictureAR.js"></script>
+    <script src="js/mappa/controllers/trackPathMapOl.js"></script>
+    <script src="js/mappa/services/mappaService.js"></script>
+    <script src="js/mappa/services/usbService.js"></script>
+    <script src="js/mappa/services/gpsService.js"></script>
+    <script src="js/mappa/services/gpsDiagnosticService.js"></script>
+    <script src="js/mappa/services/sqliteService.js"></script>
+    <script src="js/mappa/services/popupFactory.js"></script>
+    <script src="js/mappa/services/sessionService.js"></script>
+    <script src="js/mappa/services/coordinatesService.js"></script>
+    <script src="js/mappa/services/OL3Layers_services.js"></script>
+    <script src="js/mappa/services/OL3Map_services.js"></script>
+    <script src="js/mappa/services/JSTS_services.js"></script>
+    <script src="js/mappa/services/httpService.js"></script>
+    <script src="js/mappa/values/layersValues.js"></script>
+    <script src="js/mappa/values/takePictureValues.js"></script>
+    <script src="js/mappa/values/trackPathValues.js"></script>
+    <script src="js/esci/esci.module.js"></script>
+    <script src="js/esci/controllers/esci.js"></script>
+    <script src="js/esci/config.js"></script>
+    <script src="js/esci/services/exitService.js"></script>
+    <script src="js/opzioni/opzioni.module.js"></script>
+    <script src="js/opzioni/config.js"></script>
+    <script src="js/opzioni/controllers/opzioni.js"></script>
+    <script src="js/opzioni_gps_avanzate/opzioni_gps_avanzate.module.js"></script>
+    <script src="js/opzioni_gps_avanzate/config.js"></script>
+    <script src="js/opzioni_gps_avanzate/controllers/opzioni_gps_avanzate.js"></script>
+    <script src="js/sensoregps/sensoregps.module.js"></script>
+    <script src="js/sensoregps/config.js"></script>
+    <script src="js/sensoregps/controllers/sensoregps.js"></script>
+    <script src="js/login/login.module.js"></script>
+    <script src="js/login/config.js"></script>
+    <script src="js/login/controllers/login.js"></script>
+    <script src="js/login/services/authService.js"></script>
+    <script src="js/lavorazioni/lavorazioni.module.js"></script>
+    <script src="js/lavorazioni/config.js"></script>
+    <script src="js/lavorazioni/controllers/lavorazioni.js"></script>
+    <script src="js/about/about.module.js"></script>
+    <script src="js/about/config.js"></script>
+    <script src="js/about/controllers/about.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/appService.js"></script>
+    <script src="js/app.module.js"></script>
+  </head>
+
+  <body id="mainBody" style="display:none;">
+  <ion-side-menus enable-menu-with-back-views="true" id="sideMenus">
+    <ion-side-menu-content id="sidemenucontent" class="sideMenuContentVisible" drag-content="false">
+      <ion-nav-bar class="bar-stable">
+        <ion-nav-buttons side="left">
+          <button class="button button-icon button-clear ion-navicon" menu-toggle="left"></button>
+        </ion-nav-buttons>
+        <ion-nav-buttons side="right">
+          <button ui-sref="pictureMapOl" class="button button-icon"  style="background: #005ce6; opacity: 0.7;">
+            <i style="color: white">{{'menuAlsoRight.mappa_pic'|translate}}</i>
+          </button>
+          <button ng-hide="rightSideMenuHidden" class="button button-icon button-clear ion-home" menu-toggle="right"></button>
+        </ion-nav-buttons>
+      </ion-nav-bar>
+      <ion-nav-view name="menuContent"></ion-nav-view>
+    </ion-side-menu-content>
+    <ion-side-menu side="left" id="side-leftMenu" delegate-handle="leftMenuHandle" draggable="false">
+      <ion-header-bar class="bar-stable">
+        <div class="title">{{'menuAlsoRight.title'|translate}}</div>
+      </ion-header-bar>
+      <ion-content padding="false" class="side-menu-left has-header ">
+        <ion-list id="menu5">
+          <ion-item id="menul-list-item5" ui-sref="lavorazioni" menu-toggle="">{{'home_page.title'|translate}}</ion-item>
+        </ion-list>
+        <ion-list id="menul">
+          <ion-item id="menul-list-item1" ui-sref="pictureMapOl" menu-toggle="">{{'menuAlsoRight.mappa_pic'|translate}}</ion-item>
+        </ion-list>
+        <ion-list id="menu4">
+          <ion-item id="menul-list-item4" ui-sref="trackPathMapOl" menu-toggle="">{{'menuAlsoRight.mappa_track'|translate}}</ion-item>
+        </ion-list>
+        <ion-list id="menu2">
+          <ion-item id="menul-list-item2" ui-sref="opzioni" menu-toggle="">{{'menuAlsoRight.opzioni'|translate}}</ion-item>
+        </ion-list>
+        <ion-list id="menu3">
+          <ion-item id="menul-list-item3" ui-sref="sensoregps" menu-toggle="">{{'menuAlsoRight.gps_esterno'|translate}}</ion-item>
+        </ion-list>
+        <ion-list id="menu7">
+          <ion-item id="menul-list-item7" ui-sref="about" menu-toggle="">{{'menuAlsoRight.about'|translate}}</ion-item>
+        </ion-list>
+        <ion-list id="menu6">
+          <ion-item id="menul-list-item6" ui-sref="esci" menu-toggle="">{{'menuAlsoRight.esci'|translate}}</ion-item>
+        </ion-list>
+      </ion-content>
+    </ion-side-menu>
+  </ion-side-menus>
+  </body>
+</html>

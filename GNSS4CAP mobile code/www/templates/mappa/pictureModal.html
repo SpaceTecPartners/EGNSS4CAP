@@ -1,0 +1,28 @@
+<ion-modal-view class="pictureModal">
+	<ion-header-bar ng-if="imageFeatures.length > 1">
+	      <h3>{{ 'pictureModal.foto_selezionate' | translate }}</h3>
+	      <button ng-click="closeModal()" class="button button-icon button-clear ion-android-close" id="closeBtnMultiple" style="color:black; position:absolute; right:10px;"></button>
+    </ion-header-bar>
+	<ion-content ng-class="imageFeatures.length > 1 ? 'pictureWithHeader' : 'pictureWithoutHeader'">	
+		<ion-list>
+			<div class="card" ng-repeat="feature in imageFeatures">
+				<button ng-click="deleteMarker(feature)" class="button button-icon transparent pictureModalDeleteButton">
+					<i class="icon ion-minus-circled assertive"></i>
+				</button>
+				<button ng-if="imageFeatures.length == 1"  ng-click="closeModal()" class="button button-icon transparent pictureModalCloseButton"   id="closeBtnSingle">
+					<i class="icon ion-android-close assertive"></i>
+				</button>
+				<ion-scroll
+			    	direction="xy"
+			    	zooming="true"
+			    	min-zoom="1.0"
+			    	max-zoom="6.0"
+			    	overflow-scroll="false"
+			    	has-bouncing="false" style="width:90%; left:5%;">
+			    	<img ng-src="{{feature.get('url')}}" class="singlePhoto"/>   
+				</ion-scroll>
+				<div class="scroll" ng-bind-html="feature.get('text')"></div>
+			</div>
+		</ion-list>
+	</ion-content>
+</ion-modal-view>

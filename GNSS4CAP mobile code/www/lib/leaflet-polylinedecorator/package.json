@@ -1,0 +1,107 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "leaflet-polylinedecorator",
+        "scope": null,
+        "escapedName": "leaflet-polylinedecorator",
+        "name": "leaflet-polylinedecorator",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "C:\\Users\\Marzio"
+    ]
+  ],
+  "_from": "leaflet-polylinedecorator@latest",
+  "_id": "leaflet-polylinedecorator@1.5.1",
+  "_inCache": true,
+  "_location": "/leaflet-polylinedecorator",
+  "_nodeVersion": "6.11.4",
+  "_npmOperationalInternal": {
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/leaflet-polylinedecorator-1.5.1.tgz_1508662587642_0.18988249730318785"
+  },
+  "_npmUser": {
+    "name": "bbecquet",
+    "email": "benjamin.becquet@gmail.com"
+  },
+  "_npmVersion": "3.10.10",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "leaflet-polylinedecorator",
+    "scope": null,
+    "escapedName": "leaflet-polylinedecorator",
+    "name": "leaflet-polylinedecorator",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/leaflet-polylinedecorator/-/leaflet-polylinedecorator-1.5.1.tgz",
+  "_shasum": "b69534d62645579fbfa24981530fae16c65d3df3",
+  "_shrinkwrap": null,
+  "_spec": "leaflet-polylinedecorator",
+  "_where": "C:\\Users\\Marzio",
+  "ava": {
+    "require": [
+      "babel-register"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "latest",
+      "es2015"
+    ]
+  },
+  "bugs": {
+    "url": "https://github.com/bbecquet/Leaflet.PolylineDecorator/issues"
+  },
+  "dependencies": {
+    "leaflet-rotatedmarker": "^0.2.0"
+  },
+  "description": "[![CDNJS](https://img.shields.io/cdnjs/v/leaflet-polylinedecorator.svg)](https://cdnjs.com/libraries/leaflet-polylinedecorator)",
+  "devDependencies": {
+    "ava": "^0.21.0",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-es2015-rollup": "^3.0.0",
+    "babel-preset-latest": "^6.24.1",
+    "babel-register": "^6.24.1",
+    "rollup": "^0.45.2",
+    "rollup-plugin-babel": "^2.7.1",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-watch": "^4.3.1"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "b69534d62645579fbfa24981530fae16c65d3df3",
+    "tarball": "https://registry.npmjs.org/leaflet-polylinedecorator/-/leaflet-polylinedecorator-1.5.1.tgz"
+  },
+  "gitHead": "5b40bf0f31f162c3d509f5456e8aecf447f86be6",
+  "homepage": "https://github.com/bbecquet/Leaflet.PolylineDecorator#readme",
+  "license": "MIT",
+  "main": "./dist/leaflet.polylineDecorator.js",
+  "maintainers": [
+    {
+      "name": "bbecquet",
+      "email": "benjamin.becquet@gmail.com"
+    }
+  ],
+  "name": "leaflet-polylinedecorator",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bbecquet/Leaflet.PolylineDecorator.git"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "build:watch": "rollup -c -w",
+    "test": "ava tests -v",
+    "test:watch": "ava tests -v -w"
+  },
+  "version": "1.5.1"
+}

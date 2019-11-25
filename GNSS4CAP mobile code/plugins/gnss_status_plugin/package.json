@@ -1,0 +1,21 @@
+{
+  "cordova": {
+    "id": "com.erasmicoin.gnss_status",
+    "platforms": [
+      "android"
+    ]
+  },
+  "dependencies": {},
+  "description": "Cordova plugin to retreive gnss status information",
+  "devDependencies": {},
+  "directories": {},
+  "keywords": [
+    "gnss_status"
+  ],
+  "license": "MIT",
+  "name": "ErasmicoinGnssStatus",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "scripts": {},
+  "version": "0.0.1"
+}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html ng-app="plunker">
+
+<head>
+  <meta charset="utf-8" />
+  <title>AngularJS Plunker</title>
+  <script>
+    document.write('<base href="' + document.location + '" />');
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css">
+  <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <link href='http://fonts.googleapis.com/css?family=Raleway:100,200,300,400' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="mfb-styles.css" />
+  <script data-require="angular.js@1.4.x" src="https://code.angularjs.org/1.4.0-rc.0/angular.js" data-semver="1.4.0-rc.0"></script>
+  <script src="mfb-directive.js"></script>
+  <script src="app.js"></script>
+</head>
+
+<body ng-controller="MainCtrl">
+  <p>Hello {{name}}!</p>
+  <p>This is latest plnkr of my code for Fab Button</p>
+  <h2>Fab button with Custom Color for each button</h2>
+  <h4>Github: <a href="https://github.com/bapatel1/ng-material-floating-button">https://github.com/bapatel1/ng-material-floating-button</a></h4>
+  <nav mfb-menu position="br" effect="zoomin" bgcolor='#3F51B5' active-icon="ion-edit" resting-icon="ion-plus-round" toggling-method="click">
+    <button mfb-button bgcolor='#009688' label="item 1" icon="ion-ios-person"></button>
+    <button mfb-button bgcolor='#F44336' label="item 2" icon="ion-ios-star"></button>
+  </nav>
+
+</body>
+
+</html>

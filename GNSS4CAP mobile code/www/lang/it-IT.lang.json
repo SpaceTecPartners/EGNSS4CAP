@@ -1,0 +1,390 @@
+{
+  "login": {
+    "page": {
+      "title": "ACCEDI"
+    },
+    "buttons": {
+      "login": "LOGIN"
+    },
+    "labels": {
+      "username": "username",
+      "password": "password",
+      "wrongCredentials": "utente e/o password non validi"
+    },
+    "placeholders": {
+      "username": "utente",
+      "password": "password"
+    },
+    "popups": {
+      "noSession": {
+        "title": "ATTENZIONE",
+        "subtitle": "Nessuna sessione attiva trovata, rieffettuare il login",
+        "submitButton": "OK"
+      },
+      "incompleteForm": {
+        "title": "ATTENZIONE",
+        "subtitle": "Compilare tutti i campi",
+        "submitButton": "OK"
+      }
+    }
+  },
+  "lavorazioni": {
+    "page": {
+      "title": "LAVORAZIONI"
+    },
+    "labels": {
+      "lavorazioni": "Lavorazioni"
+    },
+    "error": {
+      "errorMessage": "errore gestione deleteInsertSelectLavorazioniPerUtente lavorazioni"
+    }
+  },
+  "trackPath": {
+    "title": "Mappa",
+    "ricerca": "Ricerca segnale GNSS...",
+    "chiudi": "Chiudi",
+    "zoom": {
+      "on_me": "Zoom alla posizione",
+      "on_path": "Zoom alla distanza",
+      "layer_visibility": "Visibilità layer"
+    },
+    "track": {
+      "rem_all_points": "Annulla tracking",
+      "rem_last_point": "Annulla ultimo marker",
+      "add_curr_point": "Aggiungi nuovo marker"
+    },
+    "server": {
+      "upload_tracks": "Salva",
+      "download_tracks": "Scarica"
+    },
+    "control": {
+      "toggle_track": "Start",
+      "pause_track": "Pausa",
+      "stop_track": "Stop",
+      "riprendi_track": "Riprendi"
+    },
+    "popups": {
+      "selPoints": {
+        "title": "Seleziona vertice",
+        "descrizione": "Seleziona range di vertici dalla geometria selezionata per iniziare il nuovo tracking",
+        "minPoint": "Primo vertice",
+        "maxPoint": "Ultimo vertice",
+        "submitButton": "Conferma"
+      },
+      "layerSelected": {
+        "title": "Layer selezionati",
+        "submitButton": "OK",
+        "content": {
+          "title": "Nel punto selezionato sono presenti più di una geometria. Che cosa stavi cercando di selezionare?",
+          "tracciati": "Tracciati"
+        }
+      },
+      "featureClicked": {
+        "title": "Poligono selezionato",
+        "submitButton": "OK",
+        "content": {
+          "title": "Che operazioni intendi effettuare sul poligono selezionato?",
+          "codice": "Assegna codice",
+          "cancella": "Cancella poligono",
+          "copia": "Copia poligono su un altro layer"
+        }
+      }
+    }
+  },
+  "navigatePath": {
+    "ricerca": "Ricerca segnale GNSS...",
+    "chiudi": "Chiudi",
+    "zoom": {
+      "on_me": "Zoom alla posizione",
+      "on_path": "Zoom alla distanza",
+      "layer_visibility": "Visibilità layer"
+    },
+    "flags": {
+      "on_start": "Zoom alla partenza",
+      "on_end": "Zoom all'arrivo"
+    },
+    "navigate": {
+      "nav_maps": "Apri mappe"
+    }
+  },
+  "picturePath": {
+    "title": "Foto",
+    "ricerca": "Ricerca segnale GNSS...",
+    "chiudi": "Chiudi",
+    "zoom": {
+      "on_me": "Zoom alla posizione",
+      "on_path": "Zoom alla distanza",
+      "layer_visibility": "Visibilità photo"
+    },
+    "pics": {
+      "open_gallery": "Apri galleria",
+      "take_picture": "Scatta foto senza correzione",
+      "take_picture_hull": "Scatta foto con correzione",
+      "take_picture_ntrip": "Scatta foto con EDAS"
+    },
+    "server": {
+      "upload_tracks": "Salva",
+      "download_tracks": "Scarica"
+    },
+    "popups": {
+      "downloadPhotos": {
+        "title": "Info",
+        "subtitle": "Ci sono %VAR% foto sul server che non sono sul tuo device, le vuoi scaricare?",
+        "submitButton": "OK",
+        "cancelButton": "Annulla"
+      },
+      "deletePhoto": {
+        "title": "Attenzione",
+        "subtitle": "Eliminare la foto anche dal server?",
+        "submitButton": "Si",
+        "cancelButton": "No"
+      },
+      "deletePhotoError": {
+        "title": "Errore",
+        "subtitle": "Impossibile cancellare la foto dal server",
+        "submitButton": "OK"
+      },
+      "deletePhotoSuccess": {
+        "title": "Successo",
+        "subtitle": "Foto cancellata correttamente",
+        "submitButton": "OK"
+      },
+      "downloadNoPhotos": {
+        "title": "Info",
+        "subtitle": "Non ci sono altre foto da scaricare",
+        "submitButton": "OK"
+      },
+      "updatePhotoSuccess": {
+        "title": "Success",
+        "subtitle": "Foto scaricate",
+        "submitButton": "OK"
+      },
+      "updatePhotoError": {
+        "title": "Error",
+        "subtitle": "Errore nel download",
+        "submitButton": "OK"
+      },
+      "sendPhotoSuccess": "Foto salvata con successo",
+      "sendPhotoErrorSave": "Errore su server durante il salvataggio",
+      "sendPhotoErrorConnect": "Errore di comunicazione col server",
+      "sendPhotoErrorNoNewPhoto": "Non ci sono nuove foto da inviare",
+      "minimumInfoNeeded": "Informazioni di geolocalizzazione minime mancanti, attendi di essere localizzato prima di scattare una foto!",
+      "sending": "Invio",
+      "photos": "foto",
+      "no_sim_msg": "Sei offline o non hai una sim inserita, la foto non può essere scattata",
+      "tilt_error_msg_h": "LA FOTO NON PUO' ESSERE SCATTATA! INCLINAZIONE ECCESSIVA RISPETTO AI PARAMETRI MASSIMI ( < 60°)",
+      "tilt_error_msg_v": "LA FOTO NON PUO' ESSERE SCATTATA! INCLINAZIONE ECCESSIVA RISPETTO AI PARAMETRI MASSIMI (50-100°)",
+      "points_to_go": "punti ancora necessari per centroide...",
+      "possible_fake_detected": "Localizzazione potenzialmente fittizia!"
+    }
+  },
+  "finalCheckPath": {
+    "ricerca": "Ricerca segnale GNSS...",
+    "chiudi": "Chiudi",
+    "zoom": {
+      "on_me": "Zoom alla posizione",
+      "on_path": "Zoom alla distanza",
+      "layer_visibility": "Visibilità layer"
+    },
+    "server": {
+      "upload_tracks": "Salva",
+      "download_tracks": "Scarica"
+    },
+    "check": {
+      "approve": "Convalida"
+    },
+    "popups": {
+      "workInProgress": {
+        "title": "ATTENZIONE",
+        "subtitle": "Funzione in fase di sviluppo",
+        "submitButton": "OK"
+      }
+    }
+  },
+  "opzioni": {
+    "title": "Opzioni",
+    "zoom": "Opzioni di zoom",
+    "min": "Zoom minimo",
+    "max": "Zoom massimo",
+    "tracking": "Impostazioni tracking",
+    "fake_tracking": "Tracking simulato",
+    "distance": "Filtro distanza",
+    "margine aggiustamento area": "margine aggiustamento area",
+    "conferma utilizzo": "conferma utilizzo",
+    "abilita": "Abilitato",
+    "disabilita": "Disabilitato",
+    "tempo1": "Ogni ",
+    "tempo2": " secondi",
+    "pic": "Impostazioni foto",
+    "controll": "Controllo area di lavoro",
+    "db": "Impostazioni database",
+    "cod": "Allinea codici",
+    "delete": "Cancella mappe offline",
+    "reset": "Reset Database",
+    "map": "Impostazioni mappa",
+    "applica": "Applica macroaree",
+    "imposta_lingua": "Impostazioni lingua",
+    "imposta_device": "Impostazioni fonte di localizzazione",
+    "imposta_map_provider": "Impostazioni provider mappa",
+    "esterno": "Dati GNSS Raw",
+    "interno": "WiFi LocationManager",
+    "raw_data": "Dati GNSS Raw",
+    "loc_manager": "WiFi LocationManager",
+    "entrambi": "Dati GNSS Raw + WiFi LocationManager",
+    "italiano": "Italiano",
+    "inglese": "Inglese",
+    "campionamento": "Impostazioni campionamento generali",
+    "num_campionamenti": "Numero campionamenti",
+    "range_oscill": "Range oscillazione (cm)",
+    "pdop_min": "Pdop minimo",
+    "hdop_min": "Hdop minimo",
+    "min_n_sat": "Numero di satelliti minimo",
+    "min_snr": "SNR medio minimo",
+    "min_speed": "Velocità minima",
+    "wait": "Attesa campionam. (sec)",
+    "min_fix": "Min fix",
+    "kalman_speed": "Velocità Kalman",
+    "kalman_accuracy": "Accuracy Kalman",
+    "avg_sampling_number": "Campionamenti per medie",
+    "impostazioni_track": "Impostazioni campionamento tracking",
+    "impostazioni_survey": "Impostazioni campionamento survey",
+    "opzioni_gps_avanzate": "Opzioni GNSS Avanzate",
+    "kalman_default": "Valori Default Kalman",
+    "gps_default": "Resetta Valori Default per Filtri"
+  },
+  "codVarietaModal": {
+    "select_code": "Scegli codice",
+    "conferma": "conferma"
+  },
+  "galleriaModal": {
+    "galleria": "Galleria"
+  },
+  "pictureModal": {
+    "foto_selezionate": "Foto selezionate"
+  },
+  "reasonModal": {
+    "motiva_scatto": "Motiva scatto",
+    "motivazione": "Motivazione",
+    "note": "Note",
+    "scatta": "Scatta"
+  },
+  "takePictureAR": {
+    "altezza": "Altezza camera",
+    "info": "Info GPS",
+    "attesa": "Attesa GPS stabile",
+    "posizione": "Rimani fermo in posizione",
+    "calibrazione": "Calibrazione in corso, attendi...",
+    "manual": "Controllo manuale",
+    "inclinometer": "Inclinometer",
+    "polygonfill": "Polygon fill"
+  },
+  "esci": {
+    "title": "Esci"
+  },
+  "galleria": {
+    "title": "Galleria"
+  },
+  "sensoregps": {
+    "title": "GNSS",
+    "geo_loc_est": "Info Dati Raw GNSS",
+    "sat_view": "Sats in vista",
+    "fix_type": "EGNOS",
+    "nmea_mess": "MESSAGGI NMEA GREZZI",
+    "geo": "INFO GEOLOCALIZZAZIONE",
+    "lat": "Latitudine",
+    "lon": "Longitudine",
+    "alt": "Altitudine",
+    "fix_mode": "Qualità del fix",
+    "nav": "INFORMAZIONI DI NAVIGAZIONE",
+    "track": "Gradi Tracciato",
+    "magne": "Variazione Magnetica",
+    "speed": "Velocità",
+    "knots": "Nodi",
+    "n_sat_used": "Sat in uso",
+    "track_mg": "Angolo Nord Reale",
+    "true_degrees": "Gradi Reali",
+    "magnetic_degrees": "Gradi Magnetici"
+  },
+  "home_page": {
+    "manufact": "Produttore Telefono",
+    "model": "Modello Telefono",
+    "supported_galileo": "Controllo Segnale Galileo",
+    "supported_dual_freq": "Controllo Segnale Dual Frequency",
+    "supported_egnos": "Controllo Segnale EGNOS",
+    "supported_osnma": "Controllo Galileo Navigation Message",
+    "title": "Home Page",
+    "phone_info": "INFO DISPOSITIVO"
+  },
+  "menu": {
+    "title": "Menu",
+    "lavorazioni": "Lavorazioni",
+    "preferite": "Preferite",
+    "opzioni": "Configurazioni",
+    "about": "About",
+    "gps_esterno": "Info Dati Raw GNSS",
+    "sensori_esterni": "Sensori Esterni",
+    "esci": "Esci",
+    "gpx_viewer": "Visualizza Dati GPX"
+  },
+  "menuAlsoRight": {
+    "mappa_pic": "Mappa Foto",
+    "mappa_track": "Mappa Tracking",
+    "mappa": "Mappa",
+    "title": "Menu",
+    "lavorazioni": "Lavorazioni",
+    "opzioni": "Configurazioni",
+    "about": "Info App",
+    "gps_esterno": "Info Dati Raw GNSS",
+    "sensori_esterni": "Sensori Esterni",
+    "esci": "Esci",
+    "aziende": "Aziende"
+  },
+  "baseMap": {
+    "raw_data_btn_txt_on": "connetti",
+    "raw_data_btn_txt_off": "disconnetti",
+    "popups": {
+      "extDeviceError": {
+        "title": "ATTENZIONE",
+        "subtitle": "Errore di comunicazione col device esterno",
+        "submitButton": "OK"
+      },
+      "layerVisibility": {
+        "title": "Visibilit&agrave Layer",
+        "submitButton": "OK"
+      },
+      "gnssInfo": {
+        "title": "GNSS Info",
+        "submitButton": "OK"
+      },
+      "surveyCountdown": {
+        "title": "Calcolo punto survey"
+      },
+      "errorToken": {
+        "text": "Sessione di login scaduta, effettua nuovamente login"
+      }
+    },
+    "gnss_info": "mostra info GNSS",
+    "red_marker_info": "marker rosso: posizione GNSS da dati raw",
+    "blue_marker_info": "marker blu: posizione nominale da chipset"
+  },
+  "about": {
+    "name": "",
+    "role": "",
+    "company": "",
+    "address": "",
+    "city": "",
+    "website": "",
+    "tel": "",
+    "fax": "",
+    "mobile": "",
+    "email": "",
+    "pec-email": "",
+    "title": "GEOTAGGING PHOTO APPLICATION USING EGNSS DIFFERENTIATORS FOR CAP",
+    "text": "European farmers can now provide geo-tagged photos with this app as a part of their reporting requirements under the Common Agricultural Policy (CAP). These photos will use Galileo differentiators to support and complement the Copernicus Sentinel-based monitoring approach for CAP.",
+    "text_j_1": "EGNSS4CAP is a mobile phone application for farmers in the European Union to digitalise procedures surrounding their reporting requirements under the current and post-2020 Common Agricultural Policy (CAP) reform.\n\nThis application enables farmers to provide geotagged photos to support and complement a Copernicus Sentinel-based monitoring approach for CAP.\n\nIt is using EGNSS (EGNOS and Galileo) differentiators such as OS-NMA and dual-frequency capabilities to reduce errors and duplication, as well as improve performance and trustworthiness.\n\nIn order to know if the device that you are using is able to use all the EGNSS differentiators, the following traffic lights are giving a confirmation of your smartphone capabilities:",
+    "text_j_2": "Galileo Signal Check: green light if this device is able to use the Galileo signals.\nDual Frequency Signal Check: green light if this device is able to track GNSS dual-frequency (L1/L5 for GPS and E1/E5 for Galileo).\nEGNOS Signal Check: green light if this device is able to work with EGNOS/SBAS satellites.\nGalileo Navigation Message Check: green light if the device firmware is accessing to the GNSS raw data in general and Galileo Navigation message in particular, being capable to benefit from Galileo Open Service Navigation Message Authentication (OS-NMA).\n\nThe project team has worked closely with the paying agencies responsible for administering subsidies for farmers and JRC to ensure that the minimum user requirements will be met.\n\nIf you are interested in learning more about EGNSS4CAP, please get in touch with us.",
+    "contacts_1": "https://www.egnss4cap.eu/\n\nhello@egnss4cap.eu",
+    "text_j_3": "EGNSS4CAP is a project for the European GNSS Agency (GSA) coordinated by SpaceTec Partners and developed by Erasmicoin.",
+    "contacts_2": "https://www.gsa.europa.eu/\n\nhttps://www.spacetec.partners/\n\nhttp://www.erasmicoin.eu/"
+  }
+}

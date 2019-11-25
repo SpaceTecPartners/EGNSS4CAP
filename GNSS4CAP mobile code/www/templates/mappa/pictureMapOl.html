@@ -1,0 +1,100 @@
+<ion-view title={{title}} name="menupicture" id="menupicture" hide-nav-bar="false">
+  <ion-nav-bar class="bar-stable">
+    <ion-nav-buttons side="left">
+      <button class="button button-icon button-clear ion-android-arrow-back" ng-click="gotoListaPart()"></button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+      <button ng-click="checkPreToggleUsbCommunication_pic()" class="button button-icon"  style="background: #005ce6; opacity: 0.7;" id="usbBtn">
+        <i ng-class="'light'">{{deviceEnabled ? raw_data_btn_txt_off : raw_data_btn_txt_on}}</i>
+      </button>
+    </ion-nav-buttons>
+  </ion-nav-bar>
+  <ion-content  class="has-header">
+
+    <div style="width:100%;height:100%;position: relative;" id="map_canvas_picture">
+
+      <div style="background-color: transparent">
+        <div style="text-align: center; color: red; background-color: transparent">{{ 'baseMap.red_marker_info' | translate }}</div>
+        <div style="text-align: center; color: dodgerblue; background-color: transparent">{{ 'baseMap.blue_marker_info' | translate }}</div>
+      </div>
+
+      <mfb-menu id="menu_zoom" position="tl" effect="zoomin" label="{{ 'picturePath.chiudi' | translate }}"
+                active-icon="ion-close" resting-icon="ion-search" menu-state="menu_stati.zoom.state"
+                toggling-method="click" main-action="menu_zoom_toggled()"
+                ng-show="loading_status.pos" style="margin-top:15%" bgcolor="white">
+
+        <mfb-button ng-click="centerOnMe()"
+                    id="centerOnMeBtn"
+                    icon="menu_stati.zoom.btns.on_me.icon"
+                    label="on_me"
+                    ng-disabled="!loading_status.pos"
+                    style="z-index:9999;position:absolute;"></mfb-button>
+
+        <mfb-button ng-click="showVisibilityPopup()"
+                    id="visibilityBtn"
+                    icon="menu_stati.zoom.btns.layer_visibility.icon"
+                    label="layer_visibility"></mfb-button>
+
+      </mfb-menu>
+
+      <mfb-menu position="bl" effect="zoomin" label="{{ 'picturePath.chiudi' | translate }}" id="menu_pics"
+                active-icon="ion-close" resting-icon="ion-android-image" menu-state="menu_stati.pics.state"
+                toggling-method="click" main-action="menu_pics_toggled()"
+                ng-show="loading_status.pos">
+
+        <mfb-button-orange ng-click="takePictureOld(0)"
+                  id="take_pictureBtn"
+                  icon="menu_stati.pics.btns.take_picture.icon"
+                  label="take_picture"
+                  ng-disabled="!loading_status.pos || !loading_status.photo"></mfb-button-orange>
+
+        <mfb-button ng-click="takePictureOld(1)"
+                    id="take_pictureBtn_hull"
+                    icon="menu_stati.pics.btns.take_picture.icon"
+                    label="take_picture_hull"
+                    ng-disabled="!loading_status.pos || !loading_status.photo"></mfb-button>
+
+      </mfb-menu>
+
+      <mfb-menu position="tr" effect="zoomin" label="{{ 'picturePath.chiudi' | translate }}" id="menu_server"
+                active-icon="ion-close" resting-icon="ion-monitor" menu-state="menu_stati.server.state"
+                toggling-method="click" main-action="menu_server_toggled()"
+                ng-show="loading_status.pos" style="margin-top:15%">
+
+        <mfb-button ng-click="updatePhotos()"
+                    ng-disabled="!loading_status.photo"
+                    id="updateBtn"
+                    icon="menu_stati.server.btns.download_pics.icon"
+                    label="download_pics"></mfb-button>
+
+        <mfb-button ng-click="sendPhotos()"
+                    ng-disabled="!loading_status.photo"
+                    id="saveBtn"
+                    icon="menu_stati.server.btns.upload_pics.icon"
+                    label="upload_pics"></mfb-button>
+      </mfb-menu>
+
+      <mfb-menu position="br" effect="zoomin" label="{{ 'picturePath.chiudi' | translate }}" id="menu_gnss"
+                active-icon="ion-close" resting-icon="ion-clipboard" menu-state="menu_stati.gnss.state"
+                toggling-method="click" main-action="menu_gnss_toggled()"
+                ng-show="loading_status.pos">
+
+        <mfb-button ng-click="showGnssInfoPopup()"
+                    id="gnssInfoBtn"
+                    icon="info_gnss_icon"
+                    label="gnss_info"></mfb-button>
+
+      </mfb-menu>
+
+      <div class="row ricercaSegnale" ng-show="!loading_status.pos" >
+        <div class="col text-center">
+          <p>{{ 'picturePath.ricerca' | translate }}</p>
+        </div>
+      </div>
+    </div>
+    <div id="popup-picture" class="ol-popup" style="background-color: rgba(255,255,255, 0.5);">
+      <div id="popup-content-picture"></div>
+    </div>
+
+  </ion-content>
+</ion-view>

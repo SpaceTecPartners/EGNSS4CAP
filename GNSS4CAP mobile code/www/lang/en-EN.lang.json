@@ -1,0 +1,374 @@
+{
+    "login":{
+        "page":{
+            "title":"ENTER"
+        },
+        "buttons":{
+            "login":"LOGIN"
+        },
+        "labels":{
+            "username":"username",
+            "password":"password",
+            "wrongCredentials":"wrong username and/or password"
+        },
+        "placeholders":{
+            "username":"username",
+            "password":"password"
+        },
+        "popups":{
+            "noSession":{
+                "title":"WARNING",
+                "subtitle":"No active session found, please log-in again",
+                "submitButton":"OK"
+            },
+            "incompleteForm":{
+                "title":"WARNING",
+                "subtitle":"Fill in all the fields",
+                "submitButton":"OK"
+            }
+        }
+    },
+    "lavorazioni":{
+        "page":{
+            "title":"PROCESSINGS"
+        },
+        "labels":{
+            "lavorazioni":"Processings"
+        },
+        "error":{
+            "errorMessage":"deleteInsertSelect management error processings"
+        }
+    },
+    "trackPath":{
+      "title":"Map",
+        "ricerca":"Looking for GNSS signal...",
+        "chiudi":"Close",
+        "zoom":{
+            "on_me":"Zoom to position",
+            "on_path":"Zoom to distance",
+            "layer_visibility":"Layer visibility"
+        },
+        "track":{
+            "rem_all_points":"Undo tracking",
+            "rem_last_point":"Remove last marker",
+            "add_curr_point":"Add new marker"
+        },
+        "server":{
+            "upload_tracks":"Upload",
+            "download_tracks":"Download"
+        },
+        "control":{
+            "toggle_track":"Start",
+            "pause_track":"Pause",
+            "stop_track":"Stop",
+            "riprendi_track":"Resume"
+        },
+        "popups":{
+            "selPoints": {
+                "title": "Select points",
+                "descrizione" : "Select vertex range from selected geometry to start new tracking",
+                "minPoint": "First vertex",
+                "maxPoint": "Last vertex",
+                "submitButton": "Confirm"
+            },
+            "layerSelected":{
+                "title":"Selected layers",
+                "submitButton":"OK",
+                "content":{
+                    "title":"The point you selected contains more than one geometry. What were you trying to select?",
+                    "tracciati":"Trackings"
+                }
+            },
+            "featureClicked":{
+                "title":"Selected Polygons",
+                "submitButton":"OK",
+                "content":{
+                    "title":"What kind of operations do you intend to perform on selected polygon?",
+                    "codice":"Assign code",
+                    "cancella":"Delete polygon",
+                    "copia":"Copy polygon on another layer"
+                }
+            }
+        }
+    },
+    "navigatePath":{
+        "ricerca":"Looking for GNSS signal...",
+        "chiudi":"Close",
+        "zoom":{
+            "on_me":"Zoom to position",
+            "on_path":"Zoom to distance",
+            "layer_visibility":"Layer visibility"
+        },
+        "flags":{
+            "on_start":"Zoom on start",
+            "on_end":"Zoom on arrival"
+        },
+        "navigate":{
+            "nav_maps":"Open map"
+        }
+    },
+    "picturePath":{
+      "title":"Photos",
+        "ricerca":"Looking for GNSS signal...",
+        "chiudi":"Close",
+        "zoom":{
+            "on_me":"Zoom to position",
+            "on_path":"Zoom to distance",
+            "layer_visibility":"Photo visibility"
+        },
+        "pics":{
+            "open_gallery":"Open gallery",
+            "take_picture":"Take photo without correction",
+            "take_picture_hull":"Take photo with correction",
+            "take_picture_ntrip":"Take photo with EDAS"
+        },
+        "server":{
+            "upload_tracks":"Upload",
+            "download_tracks":"Download"
+        },
+        "popups":{
+            "downloadPhotos":{
+            	"title":"Info",
+                "subtitle": "There are %VAR% photos on the server that aren't on your device, do you want to download them?",
+            	"submitButton":"OK",
+            	"cancelButton":"Cancel"
+            },
+            "deletePhoto":{
+            	"title":"Warning",
+            	"subtitle": "Do you want to remove the photo from server too?",
+            	"submitButton":"OK",
+            	"cancelButton":"Cancel"
+            },
+            "deletePhotoError":{
+            	"title":"Error",
+            	"subtitle":"Error occurred during operation",
+            	"submitButton":"OK"
+            },
+            "deletePhotoSuccess":{
+            	"title":"Success",
+            	"subtitle":"Photo deleted successfully",
+            	"submitButton":"OK"
+            },
+            "downloadNoPhotos":{
+            	"title":"Info",
+            	"subtitle":"No more photos to download",
+            	"submitButton":"OK"
+            },
+            "updatePhotoSuccess":{
+            	"title":"Success",
+            	"subtitle":"Download completed",
+            	"submitButton":"OK"
+            },
+            "updatePhotoError":{
+            	"title":"Error",
+            	"subtitle":"Error while downloading",
+            	"submitButton":"OK"
+            },
+            "sendPhotoSuccess":"Photo successfully uploaded",
+            "sendPhotoErrorSave":"Error occurred on server while uploading",
+            "sendPhotoErrorConnect":"Server connection error",
+            "sendPhotoErrorNoNewPhoto":"No new photo to upload",
+            "minimumInfoNeeded":"Minimum geolocation Info Missing, wait to be located before taking photos!",
+            "sending":"Sending",
+            "photos":"photos",
+            "no_sim_msg":"You are either offline or without a SIM card, the photo can not be taken",
+            "tilt_error_msg_h":"PHOTO CAN NOT BE TAKEN! TILT ANGLE IS OUT OF ACCEPTANCE RANGE ( < 60°)",
+						"tilt_error_msg_v":"PHOTO CAN NOT BE TAKEN! TILT ANGLE IS OUT OF ACCEPTANCE RANGE (50-100°)",
+            "points_to_go":"points to compute centroid...",
+          "possible_fake_detected":"Possible Fake GNSS Location Detected!"        }
+    },
+    "finalCheckPath":{
+        "ricerca":"Looking for GNSS signal...",
+        "chiudi":"Close",
+        "zoom":{
+            "on_me":"Zoom to position",
+            "on_path":"Zoom to distance",
+            "layer_visibility":"Layer visibility"
+        },
+        "server":{
+            "upload_tracks":"Upload",
+            "download_tracks":"Download"
+        },
+        "check":{
+            "approve":"Validate"
+        },
+        "popups":{
+            "workInProgress":{
+                "title":"WARNING",
+                "subtitle":"This function in still under development",
+                "submitButton":"OK"
+            }
+        }
+    },
+    "opzioni":{
+        "title":"Settings",
+        "zoom":"Zoom options",
+        "min":"minimum Zoom",
+        "max":"maximum Zoom",
+        "tracking":"Tracking settings",
+        "abilita": "enable",
+        "disabilita": "disable",
+        "tempo1" : "Every ",
+        "tempo2" :" seconds",
+        "pic":"Photo settings",
+        "db":"Database settings",
+        "reset":"Reset Database",
+        "map":"Map settings",
+        "imposta_lingua":"Language settings",
+        "imposta_device":"Location source settings",
+        "imposta_map_provider":"Map provider settings",
+        "esterno":"GNSS Raw Data",
+        "interno":"WiFi location manager",
+        "raw_data":"GNSS Raw Data",
+        "loc_manager":"WiFi location manager",
+        "entrambi":"GNSS Raw Data + WiFi location manager",
+        "italiano":"Italian",
+        "inglese":"English",
+        "campionamento":"General sampling settings",
+        "num_campionamenti":"Sampling number",
+        "range_oscill":"Sampling range (cm)",
+        "pdop_min":"Pdop min",
+        "hdop_min":"Hdop min",
+        "min_n_sat":"Min satellite number",
+        "min_snr":"Min mean SNR",
+        "min_speed":"Min speed",
+        "wait":"Sampling wait (sec)",
+        "min_fix":"Min fix",
+      "avg_sampling_number":"Sampling for avgs",
+      "impostazioni_track":"Tracking sampling settings",
+      "impostazioni_survey":"Survey sampling settings",
+      "gps_default":"Reset To Filter Default Values",
+      "opzioni_gps_avanzate":"Advanced GNSS Settings"
+    },
+    "codVarietaModal":{
+        "select_code":"Choose code",
+        "conferma":"Confirm"
+    },
+    "galleriaModal":{
+        "galleria":"Gallery"
+    },
+    "pictureModal":{
+        "foto_selezionate":"Selected photos"
+    },
+    "reasonModal":{
+        "scatta":"Take picture"
+    },
+    "takePictureAR":{
+        "altezza":"Camera height",
+        "info":"GPS Info",
+        "attesa":"Waiting for stable localization",
+        "posizione":"Stand still in position",
+        "calibrazione": "Calibrating, please wait...",
+        "manual": "Manual control",
+        "inclinometer": "Inclinometer",
+        "polygonfill": "Polygon fill"
+    },
+    "esci":{
+        "title":"Exit"
+    },
+    "galleria":{
+        "title":"Gallery"
+    },
+    "sensoregps":{
+        "title":"GNSS Raw Data",
+        "geo_loc_est":"GNSS Raw Data",
+        "sat_view":"Sat in view",
+        "fix_type":"EGNOS",
+        "nmea_mess":"RAW NMEA MESSAGES",
+        "geo":"GEOLOCATION INFO",
+        "lat":"Latitude",
+        "lon":"Longitude",
+        "alt":"Altitude",
+        "fix_mode":"Fix Quality",
+        "nav":"NAVIGATION INFO",
+        "track":"Track Degrees",
+        "magne":"Magnetic Variation",
+        "speed":"Speed",
+        "knots":"Knots",
+      "n_sat_used":"Sat in use",
+      "track_mg":"True North Angle",
+      "true_degrees":"True Degrees",
+      "magnetic_degrees":"Magnetic Degrees"
+    },
+  "home_page":{
+    "manufact":"Phone Manufacturer",
+    "model":"Phone Model",
+    "supported_galileo":"Galileo Signal Check",
+    "supported_dual_freq":"Dual Frequency Signal Check",
+    "supported_egnos":"EGNOS Signal Check",
+    "supported_osnma":"Galileo Navigation Message Check",
+    "title":"Home",
+    "phone_info":"DEVICE INFO"
+  },
+    "menu":{
+        "title":"Menu",
+        "lavorazioni":"Processings",
+        "opzioni":"Settings",
+        "about":"About",
+        "gps_esterno":"GNSS Raw Data",
+        "sensori_esterni":"External sensors",
+        "esci":"Exit",
+        "gpx_viewer":"View GPX data",
+        "opzioni_gps_avanzate":"Advanced Gps Settings"
+    },
+    "menuAlsoRight":{
+        "mappa_pic":"Picture Map",
+        "mappa_track":"Tracking Map",
+        "mappa":"Map",
+        "title":"Menu",
+        "lavorazioni":"Processings",
+        "opzioni":"Settings",
+        "about":"About",
+        "gps_esterno":"GNSS Raw Data",
+        "sensori_esterni":"External sensors",
+        "esci":"Exit"
+    },
+ 	"baseMap":{
+      "raw_data_btn_txt_on":"connect",
+      "raw_data_btn_txt_off":"disconnect",
+    	"popups":{
+    		"extDeviceError":{
+                "title":"Warning",
+                "subtitle":"External device communication error",
+                "submitButton":"OK"
+            },
+            "layerVisibility":{
+            	"title":"Layer visibility",
+            	"submitButton": "OK"
+            },
+          "gnssInfo":{
+            "title":"GNSS Info",
+            "submitButton": "OK"
+          },
+        "surveyCountdown":{
+          "title":"Computing survey point"
+        },
+        "errorToken":{
+          "text":"Session expired, please log-in again"
+        }
+    	},
+      "gnss_info":"show GNSS info",
+    "red_marker_info":"red marker: GNSS position using raw data",
+    "blue_marker_info":"blue marker: nominal chipset position"
+    },
+    "about":{
+      "name":"",
+      "role":"",
+      "company":"",
+      "address":"",
+      "city":"",
+      "website":"",
+      "tel":"",
+      "fax":"",
+      "mobile":"",
+      "email":"",
+      "pec-email":"",
+      "title":"GEOTAGGING PHOTO APPLICATION USING EGNSS DIFFERENTIATORS FOR CAP",
+      "text":"European farmers can now provide geo-tagged photos with this app as a part of their reporting requirements under the Common Agricultural Policy (CAP). These photos will use Galileo differentiators to support and complement the Copernicus Sentinel-based monitoring approach for CAP.",
+      "text_j_1":"EGNSS4CAP is a mobile phone application for farmers in the European Union to digitalise procedures surrounding their reporting requirements under the current and post-2020 Common Agricultural Policy (CAP) reform.<br><br>This application enables farmers to provide geotagged photos to support and complement a Copernicus Sentinel-based monitoring approach for CAP.\n\nIt is using EGNSS (EGNOS and Galileo) differentiators such as OS-NMA and dual-frequency capabilities to reduce errors and duplication, as well as improve performance and trustworthiness.\n\nIn order to know if the device that you are using is able to use all the EGNSS differentiators, the following traffic lights are giving a confirmation of your smartphone capabilities:",
+      "text_j_2":"Galileo Signal Check: green light if this device is able to use the Galileo signals.\nDual Frequency Signal Check: green light if this device is able to track GNSS dual-frequency (L1/L5 for GPS and E1/E5 for Galileo).\nEGNOS Signal Check: green light if this device is able to work with EGNOS/SBAS satellites.\nGalileo Navigation Message Check: green light if the device firmware is accessing to the GNSS raw data in general and Galileo Navigation message in particular, being capable to benefit from Galileo Open Service Navigation Message Authentication (OS-NMA).\n\nThe project team has worked closely with the paying agencies responsible for administering subsidies for farmers and JRC to ensure that the minimum user requirements will be met.\n\nIf you are interested in learning more about EGNSS4CAP, please get in touch with us.",
+      "contacts_1":"https://www.egnss4cap.eu/\n\nhello@egnss4cap.eu",
+      "text_j_3":"EGNSS4CAP is a project for the European GNSS Agency (GSA) coordinated by SpaceTec Partners and developed by Erasmicoin.",
+      "contacts_2":"https://www.gsa.europa.eu/\n\nhttps://www.spacetec.partners/\n\nhttp://www.erasmicoin.eu/"
+    }
+}

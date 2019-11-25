@@ -1,0 +1,59 @@
+<div id="container">
+	<div id="wrapper">
+		<div class="w-80 centerItAbs">
+			<span id="backBtn" class="backBtn"><img src="./resources/img/Arrows-Left-icon.png" style="width:35px"/></span>
+			<h3 class="nomeUtenteUsers">
+				<img src="resources/img/user.png">
+				<span class="font-b" id='nomeUtente' class="nomeUtenteUsers"></span>
+			</h3>
+			<div id='accordion' class="f-left col-12">				
+				<h3 id='fotoTableH3' class='fotoTableClass'>Users list</h3>
+				
+				<div id='fotoTableDIV'
+					class='accordionContent fotoTableClass'>
+					<table id='usersTable' class='tableStyle W-100'>
+						<thead>
+							<tr>
+								<th class="w-10">Id</th>
+								<th class="w-30">Username</th>
+								<th class="w-20">Creation Date</th>
+								<th class="w-20">Suspend Date</th>
+								<th class="w-10">Role</th>
+								<th class="w-10">Action</th>
+							</tr>
+						</thead>
+						<tfoot>
+							<tr>
+								<td colspan='6'>&nbsp;</td>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
+			</div>
+			<div id='message' class="d-none" align='center'></div>
+		</div>
+		<div class="crudShade" id="crudShade" style="display:none">
+			<div class="userCrud centerItAbs" id="userCrud">
+				<span id="closeCrud" class="closeCrud"><img src="./resources/img/Cancel-icon.png" style="width:35px"/></span>
+				<label for="username" style="justify-self:end">Username</label>
+				<input type="text" id="username" maxlength="16" style="text-align:left; justify-self:start;"/>
+				<label for="password" style="justify-self:end">Password</label>
+				<input type="text" id="password" maxlength="16" style="text-align:left; justify-self:start;"/>
+				<label for="confirmp" style="justify-self:end">Confirm password</label>
+				<input type="text" id="confirmp" maxlength="16" style="text-align:left; justify-self:start;"/>
+				<label id="roleSelectLabel" for="roleSelect" style="justify-self:end">Role</label>
+				<select id="roleSelect" style="text-align:left; justify-self:start;">
+					<option value="USER">USER</option>
+					<option value="PAYING_AGENCY">PAYING_AGENCY</option>
+					<option value="SUPERUSER">SUPERUSER</option>
+				</select>
+				<label id="adminSelectLabel" for="adminSelect" style="justify-self:end">Agency</label>
+				<select id="adminSelect" style="text-align:left; justify-self:start;">
+				</select>
+				<span id="userError" style="grid-column-start: 1;grid-column-end: 3;color:red;"></span>
+				<button id="userSubmit" style="grid-column-start: 1;grid-column-end: 3;">Submit</button>
+				<input type="hidden" value="" id="userIdHid"/>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+    id="com.erasmicoin.cordova.cell_info"
+    version="0.0.1">
+    <name>NetworkInfo</name>
+    <description>Cordova plugin to retreive current cell and simcard info</description>
+    <license>MIT</license>
+    <keywords>cell_info</keywords>
+
+    <!-- js module -->
+    <js-module src="www/cell_info.js" name="cell_info">
+        <clobbers target="window.cell_info" />
+    </js-module>
+
+    <!-- android -->
+    <platform name="android">
+    	<config-file target="AndroidManifest.xml" parent="/manifest">
+        	<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+            <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+        </config-file>
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="ErasmicoinNetworkInfo">
+                <param name="android-package" value="com.erasmicoin.cordova.cell_info.ErasmicoinNetworkInfo"/>
+            </feature>
+        </config-file>
+        <source-file src="src/android/com/erasmicoin/cordova/cell_info/ErasmicoinNetworkInfo.java" target-dir="src/android/com/erasmicoin/cordova/cell_info" />
+    </platform>
+</plugin>
