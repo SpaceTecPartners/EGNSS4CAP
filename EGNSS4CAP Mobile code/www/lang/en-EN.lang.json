@@ -23,7 +23,7 @@
             },
             "incompleteForm":{
                 "title":"WARNING",
-                "subtitle":"Fill in all the fields",
+                "subtitle":"Fill in all fields",
                 "submitButton":"OK"
             }
         }
@@ -33,7 +33,7 @@
             "title":"PROCESSINGS"
         },
         "labels":{
-            "lavorazioni":"Processings"
+            "lavorazioni":"Processing"
         },
         "error":{
             "errorMessage":"deleteInsertSelect management error processings"
@@ -50,8 +50,8 @@
         },
         "track":{
             "rem_all_points":"Undo tracking",
-            "rem_last_point":"Remove last marker",
-            "add_curr_point":"Add new marker"
+            "rem_last_point":"Remove the last marker",
+            "add_curr_point":"Add a new marker"
         },
         "server":{
             "upload_tracks":"Upload",
@@ -66,7 +66,7 @@
         "popups":{
             "selPoints": {
                 "title": "Select points",
-                "descrizione" : "Select vertex range from selected geometry to start new tracking",
+                "descrizione" : "Select vertex range from selected geometry to start a new tracking",
                 "minPoint": "First vertex",
                 "maxPoint": "Last vertex",
                 "submitButton": "Confirm"
@@ -75,7 +75,7 @@
                 "title":"Selected layers",
                 "submitButton":"OK",
                 "content":{
-                    "title":"The point you selected contains more than one geometry. What were you trying to select?",
+                    "title":"The point you selected contains more than one geometry. What did you try to select?",
                     "tracciati":"Trackings"
                 }
             },
@@ -118,9 +118,9 @@
         },
         "pics":{
             "open_gallery":"Open gallery",
-            "take_picture":"Take photo without correction",
-            "take_picture_hull":"Take photo with correction",
-            "take_picture_ntrip":"Take photo with EDAS"
+            "take_picture":"Take a photo without correction",
+            "take_picture_hull":"Take a photo with correction",
+            "take_picture_ntrip":"Take a photo with EDAS"
         },
         "server":{
             "upload_tracks":"Upload",
@@ -135,7 +135,7 @@
             },
             "deletePhoto":{
             	"title":"Warning",
-            	"subtitle": "Do you want to remove the photo from server too?",
+            	"subtitle": "Do you want to remove the photo from server, too?",
             	"submitButton":"OK",
             	"cancelButton":"Cancel"
             },
