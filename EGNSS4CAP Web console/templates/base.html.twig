@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html class="h-100">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>
+    {% block title %}Empty title{% endblock %}
+  </title>
+
+  {% for style in css %}
+  <link rel="stylesheet" type="text/css" href="{{ style }}?v={{ app_version }}" />
+  {% endfor %}
+  {% for js in javascript %}
+  <script type="text/javascript" src="{{ js }}?v={{ app_version }}"></script>
+  {% endfor %}
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
+  integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+</head>
+
+<body class="d-flex flex-column">
+  <header>
+    <nav class="navbar navbar-expand-md navbar-light fixed-top navbar-green">
+      <a class="navbar-brand" href="index.php">EGNSS4CAP</a>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="index.php">{{ home }}</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="index.php?act=load_release_notes">{{ release_notes }}</a>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item"><a id="cz" class="nav-link {% if lang == 'cz' %} active {% endif %} js_lang" href="#">CZ</a></li>
+          <li class="nav-item"><a id="en" class="nav-link {% if lang == 'en' %} active {% endif %} js_lang" href="#">EN</a></li>
+          <li class="nav-item"> <span class="active nav-link" >{{ user_name }}</span></li>
+          <li class="nav-item"><a class="nav-link" href="login.php?act=logout">{{ logout }}</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+  <div class="overlap"></div>
+  <main role="main" class="w-100 pl-2 pt-2 pr-2">
+    <div class="pl-2 pt-5 w-100 h-100">
+      {% block body %}{% endblock %}
+    </div>
+  </main>
+  <!--<div class="w-100 footer">
+    <img src="../img/footer_grass.jpg" alt="footer grass">
+  </div>-->
+</body>
+</html>

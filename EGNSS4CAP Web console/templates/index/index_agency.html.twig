@@ -1,0 +1,47 @@
+{% extends "base.html.twig" %}
+{% block title %}{{ title }}{% endblock %}
+{% block body %}
+<h2>{{ heading }}</h2>
+
+<div class="w-100">
+  <nav class="navbar navbar-light pl-md-0">
+    <button class="js_new_agency_show mt-2 float-right mb-2 btn btn-primary" data-userid="0" data-formheader="{{ new_agency_header }}">{{ new_agency }}</button>
+  </nav>
+  <div class="js_new_agency_inputs">
+    <h2 id="js_fi_header">{{ new_agency_header }}</h2>
+    <form id="new_agency_form" method="POST" action="index.php">
+    <input type="hidden" class="not_clear" name="act" id="js_fi_act" value="new_agency">
+      <table>
+        <thead>
+          <tr>
+            <th>{{ name }}</th>
+          </tr>
+          <tr>
+            <td><input id="js_fi_login" type="text" name="agency_name" required></td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <button class="js_new_agency btn btn-primary" type="submit">{{ save }}</button>
+              <button class="js_button_close_agency_edit btn btn-secondary" type="button">{{ close }}</button>
+            </td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+  </div>
+  <div class="w-100 float-md-left">
+    <table class="w-100 table float-md-left js_table">
+      <thead>
+        <tr>
+          <th>{{ agency_name_text }}</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

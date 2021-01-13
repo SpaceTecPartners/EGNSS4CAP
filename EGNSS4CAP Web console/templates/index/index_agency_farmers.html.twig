@@ -1,0 +1,98 @@
+{% extends "base.html.twig" %}
+{% block title %}{{ title }}{% endblock %}
+{% block body %}
+<h2>{{ heading }}</h2>
+
+<div class="w-100 pl-2">
+  <div id="map"></div>
+</div>
+
+<div class="w-100">
+  <nav class="navbar navbar-light pl-md-0">
+    <form class="form-inline">
+      <input class="form-control mr-sm-2 js_search_input" type="search" value="{{ filter }}" placeholder="{{ search }}" aria-label="Search">
+      <button type="button" class="btn js_search"> <i class="fas fa-search"></i></button>
+    </form>
+    <button class="js_new_farmer_show mt-2 float-right mb-2 btn btn-primary" data-userid="0" data-formheader="{{ new_farmer_header }}">{{ new_farmer }}</button>
+  </nav>
+  <div class="js_new_farmer_inputs">
+    <h2 id="js_fi_header">{{ new_farmer_header }}</h2>
+    <form id="new_farmer_form" method="POST" action="index.php">
+    <input type="hidden" name="act" id="js_fi_act" value="new_farmer">
+    <input type="hidden" name="user_id" id="js_fi_uid" value="0">
+      <table>
+        <thead>
+          <tr>
+            <th>{{ login }}</th>
+            <th>{{ password }}</th>
+          </tr>
+          <tr>
+            <td><input id="js_fi_login" type="text" name="login" required></td>
+            <td><input id="js_fi_pass" type="password" name="password" required></td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th class="not_required">{{ name }}</th>
+            <th class="not_required">{{ surname }}</th>
+          </tr>
+          <tr>
+            <td><input id="js_fi_name" type="text" name="name"></td>
+            <td><input id="js_fi_surname" type="text" name="surname"></td>
+          </tr>
+          <tr>
+            <th class="not_required">{{ email }}</th>
+            <th></th>
+          </tr>
+          <tr>
+            <td><input id="js_fi_email" type="email" name="email"></td>
+            <td></td>
+          </tr>
+          <tr>
+            <th class="not_required">{{ ji }}</th>
+            <th class="not_required">{{ vat }}</th>
+          </tr>
+          <tr>
+            <td><input id="js_fi_in" type="number" name="identification_number"></td>
+            <td><input id="js_fi_vat" type="text" name="vat"></td>
+          </tr>
+          <tr>
+            <td>
+              <button class="js_new_farmer btn btn-primary" type="submit">{{ save }}</button>
+              <button class="js_button_close_farmer_edit btn btn-secondary" type="button">{{ close }}</button>
+            </td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+  </div>
+  <div class="w-100 float-md-left">
+    {% if (sort is not empty or filter is not empty) %}
+      <button type="button" class="clickResetSort btn btn-secondary mb-2">{{ reset_sort }}</button>
+    {% endif %}
+    <table class="w-100 table float-md-left js_table">
+      <thead>
+        <tr>
+          <th class="clicksort {{ attribute(sort, 'u.id') }}" data-field="u.id"><span class="sortflag"><i class="fas fa-arrow-circle-down"></i></span>{{ id }}</th>
+          <th class="clicksort {{ attribute(sort, 'u.name') }}" data-field="u.name"><span class="sortflag"><i class="fas fa-arrow-circle-down"></i></span>{{ name }}</th>
+          <th class="clicksort {{ attribute(sort, 'u.surname') }}" data-field="u.surname"><span class="sortflag"><i class="fas fa-arrow-circle-down"></i></span>{{ surname }}</th>
+          <th class="clicksort {{ attribute(sort, 'u.identification_number') }}" data-field="u.identification_number"><span class="sortflag"><i class="fas fa-arrow-circle-down"></i></span>{{ ji }}</th>
+          <th>{{ tasks_count_text }}</th>
+          <th>{{ photos_count_text }}</th>
+          <th>{{ unassigned_photos_count_text }}</th>
+          <th>{{ tasks_provided_count_text }}</th>
+          {% if agency %}
+            <th>{{ action }}</th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+</div>
+<script src="https://unpkg.com/@google/markerclustererplus@5.1.0/dist/markerclustererplus.min.js"></script>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key={{ map_api_key }}&libraries=geometry"></script>
+{% endblock %}

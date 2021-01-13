@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="eu.foxcom.gtphotos">
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera.any" />
+
+    <application
+        android:name=".Launcher"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="GTPhotos"
+        android:largeHeap="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".model.mock.LocationMock" />
+
+        <service
+            android:name=".model.pathTrack.PTService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <service
+            android:name=".model.convexHullUtil.CHService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <activity android:name=".model.mock.MockQuickHullActivity" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/map_key" />
+
+        <activity
+            android:name=".StartActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="GTPhotos"
+            android:launchMode="singleTask"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/FullscreenTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".PermissionActivity"
+            android:label="@string/title_permissions"
+            android:launchMode="singleTask"
+            android:parentActivityName=".StartActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_login"
+            android:launchMode="singleTask"
+            android:parentActivityName=".StartActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/title_home"
+            android:launchMode="singleTask"
+            android:parentActivityName=".StartActivity"
+            android:screenOrientation="sensorPortrait" /> <!-- main -->
+        <activity
+            android:name=".TaskOverviewActivity"
+            android:label="@string/menu_taskOverview"
+            android:launchMode="singleTask"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".MapActivity"
+            android:label="@string/title_map"
+            android:launchMode="singleTask"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".PathTrackingOverviewActivity"
+            android:label="@string/title_pathTrackingOverview"
+            android:launchMode="singleTask"
+            android:parentActivityName=".MapActivity"
+            android:screenOrientation="sensorPortrait"/>
+        <activity
+            android:name=".TaskFulfillActivity"
+            android:label="@string/title_taskFulfill"
+            android:launchMode="singleTask"
+            android:parentActivityName=".TaskOverviewActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".TaskPhotoGalleryActivity"
+            android:label="@string/title_taskPhotoGallery"
+            android:launchMode="singleTask"
+            android:parentActivityName=".TaskFulfillActivity"
+            android:screenOrientation="fullSensor" />
+        <activity
+            android:name=".UnownedPhotoOverviewActivity"
+            android:label="@string/title_unownedPhotos"
+            android:launchMode="singleTask"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".UnownedPhotoDetailActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/title_photoDetail"
+            android:launchMode="singleTask"
+            android:parentActivityName=".UnownedPhotoOverviewActivity"
+            android:screenOrientation="fullSensor" />
+        <activity
+            android:name=".CameraActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/ca_camera"
+            android:launchMode="singleTask"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="fullSensor"
+            android:theme="@style/FullscreenTheme" />
+        <activity
+            android:name=".TaskDetailActivity"
+            android:launchMode="singleTask"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_settings"
+            android:launchMode="singleTask"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".SettingFilterActivity"
+            android:label="@string/title_setFilterCentroid"
+            android:launchMode="singleTask"
+            android:parentActivityName=".SettingsActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".GnssRawActivity"
+            android:label="@string/title_gnnsRawData"
+            android:launchMode="singleTask"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".AboutActivity"
+            android:label="@string/title_about"
+            android:launchMode="singleTask"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="sensorPortrait" />
+        <activity
+            android:name=".model.mock.MockSensorActivity"
+            android:label="Mock sensor activity"
+            android:launchMode="singleTask"
+            android:parentActivityName=".StartActivity"
+            android:screenOrientation="fullSensor" />
+
+        <service android:name=".MainService" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="eu.foxcom.gtphotos.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+    </application>
+
+</manifest>

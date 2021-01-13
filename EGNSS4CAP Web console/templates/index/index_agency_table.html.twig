@@ -1,0 +1,5 @@
+{% for agency in list_of_agency %}
+<tr class="clickable" id="{{agency.id}}">
+  <td class="js_agency_detail" data-href="{{agency.id}}">{{ agency.name }}</td>
+</tr>
+{% endfor %}

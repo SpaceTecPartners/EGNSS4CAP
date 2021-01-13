@@ -1,0 +1,8 @@
+{
+    "require": {
+        "twig/twig": "^2.12",
+        "components/jquery": "^3.4",
+        "dibi/dibi": "^4.1",
+        "mpdf/mpdf": "v7.1.7"
+    }
+}

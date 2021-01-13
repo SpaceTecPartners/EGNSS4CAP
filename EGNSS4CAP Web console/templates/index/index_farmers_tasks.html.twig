@@ -1,0 +1,144 @@
+{% extends "base.html.twig" %}
+{% block title %}{{ title }}{% endblock %}
+{% block body %}
+<h2>
+  {% if farmer_name %}
+  {{ farmer_name }}
+  {{ task_s }}
+  {% else %}
+  {{ task_l }}
+  {% endif %}
+</h2>
+<div class="p-2">
+  {% if agency %}
+    <a href="{{ ret_url }}" class="btn btn-secondary text-capitalize">{{ back }}</a>
+  {% endif %}
+  <a href="{{ img_gallery }}" class="btn btn-secondary">{{ unassigned_photos }}</a>
+  <a href="{{ url_paths }}" class="btn btn-secondary">{{ paths }}</a>
+</div>
+<div class="float-left w-50">
+  {% if agency %}
+  <nav class="navbar navbar-light pl-md-0">
+    <form class="form-inline">
+      <input class="form-control mr-sm-2 js_search_input" type="search" value="{{ filter['search'] }}" placeholder="{{ search }}" aria-label="Search">
+      <button type="button" class="btn js_search"> <i class="fas fa-search"></i></button>
+    </form>
+    <button class="js_new_task_show mt-2 float-right mb-2 btn btn-primary">{{ new_task_btn }}</button>
+  </nav>
+  <div class="js_new_task_inputs">
+    <h2>{{ new_task_header }}</h2>
+    <form id="new_task_form" method="POST" action="index.php">
+    <input type="hidden" name="act" value="add_task">
+      <table>
+        <thead>
+          <tr>
+            <th>{{ name }}</th>
+            <th class="not_required">{{ description }}</th>
+            <th class="not_required">{{ type }}</th>
+            <th>{{ due_date }}</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="text" name="name" required></td>
+            <td><input type="text" name="description"></td>
+            <td>
+              <select name="type">
+              {% for type in task_types %}
+                <option value="{{ type.id }}">{{ type.name }}</option>
+              {% endfor %}
+              </select>
+            </td>
+            <td><input type="date" name="due_date" min="{{ "now"|date("Y-m-d") }}" required></td>
+            <td>
+              <button class="js_new_task btn btn-primary ml-5" type="submit">{{ save }}</button>
+            </td>
+            <input type="hidden" name="status" value="NEW">
+          </tr>
+        </tbody>
+      </table>
+    </form>
+  </div>
+  {% else %}
+  <nav class="navbar navbar-light pl-md-0">
+    <form class="form-inline">
+      <input class="form-control mr-sm-2 js_search_input" type="search" value="{{ filter['search'] }}" placeholder="{{ search }}" aria-label="Search">
+      <button type="button" class="btn js_search"> <i class="fas fa-search"></i></button>
+    </form>
+  </nav>
+  {% endif %}
+  <div class="filter_section">
+    <h5>{{ status_filter }}:</h5>
+    <div class="status_filters">
+      <div>
+        <label for="filter_status_new">{{ status_new }}: </label>
+          <input id="filter_status_new" type="checkbox" class="changeFilter" data-field="status" data-fieldtype="new" value="1" {% if filter['filter']['status']['new'] == 1 %} checked="checked" {% endif %}></input>
+      </div>
+      <div>
+        <label for="filter_status_open">{{ status_open }}: </label>
+          <input id="filter_status_open" type="checkbox" class="changeFilter" data-field="status" data-fieldtype="open" value="1" {% if filter['filter']['status']['open'] == 1 %} checked="checked" {% endif %}>
+      </div>
+      <div>
+        <label for="filter_status_provided">{{ status_provided }}: </label>
+          <input id="filter_status_provided" type="checkbox" class="changeFilter" data-field="status" data-fieldtype="data provided" value="1" {% if filter['filter']['status']['data provided'] == 1 %} checked="checked" {% endif %}>
+      </div>
+      <div>
+        <label for="filter_status_returned">{{ status_returned }}: </label>
+          <input id="filter_status_returned" type="checkbox" class="changeFilter" data-field="status" data-fieldtype="returned" value="1" {% if filter['filter']['status']['returned'] == 1 %} checked="checked" {% endif %}>
+      </div>
+      <div>
+        <label for="filter_status_checked">{{ status_flag_accept }}: </label>
+          <input id="filter_status_checked" type="checkbox" class="changeFilter" data-field="flag" data-fieldtype="1" value="1" {% if filter['filter']['flag']['1'] == 1 %} checked="checked" {% endif %}>
+      </div>
+      <div>
+        <label for="filter_status_closed">{{ status_flag_decline }}: </label>
+          <input id="filter_status_closed" type="checkbox" class="changeFilter" data-field="flag" data-fieldtype="2" value="1" {% if filter['filter']['flag']['2'] == 1 %} checked="checked" {% endif %}>
+      </div>
+    </div>
+    <h5>{{ task_adv_sorting }}:</h5>
+    <div class="advanced_sorting">
+      <div>
+        <label for="after_deadline_to_end">{{ after_deadline_to_end }}: </label>
+          <input id="after_deadline_to_end" type="checkbox" class="clicksort" data-field="afterdeadline" value="1" {% if sort['afterdeadline'] == 'DESC' %} checked="checked" {% endif %}>
+      </div>
+    </div>
+  </div>
+  {% if (sort is not empty or filter is not empty) %}
+    <button type="button" class="clickResetSort btn btn-secondary mb-2">{{ reset_sort }}</button>
+  {% endif %}
+  {% if agency %}
+    <button type="button" class="clickGroupTaskAccept btn btn-secondary mb-2" style="float: right;">{{ group_task_accept_button }}</button>
+  {% endif %}
+  <div>{{ showing }} {{ count['filtered'] }} {{ out_of }} {{ count['total'] }}</div>
+  <table class="w-100 table float-md-left js_table">
+    <thead>
+      <tr>
+        <th class="clicksort {{ attribute(sort, 'sort.sortorder') }}" data-field="sort.sortorder"><span class="sortflag"><i class="fas fa-arrow-circle-down"></i></span>{{ status }}</th>
+        <th class="clicksort {{ attribute(sort, 'photos_taken') }}" data-field="photos_taken"><span class="sortflag"><i class="fas fa-arrow-circle-down"></i></span>{{ photos }}</th>
+        {% if agency %}
+          <th class="">{{ photos_verified }}</th>
+        {% endif %}
+        <th class="clicksort {{ attribute(sort, 't.name') }}" data-field="t.name"><span class="sortflag"><i class="fas fa-arrow-circle-down"></i></span>{{ name }}</th>
+        <th class="clicksort {{ attribute(sort, 't.text') }}" data-field="t.text"><span class="sortflag"><i class="fas fa-arrow-circle-down"></i></span>{{ description }}</th>
+        <th class="clicksort {{ attribute(sort, 'created') }}" data-field="created"><span class="sortflag"><i class="fas fa-arrow-circle-down"></i></span>{{ date_created }}</th>
+        <th class="clicksort {{ attribute(sort, 'due') }}" data-field="due"><span class="sortflag"><i class="fas fa-arrow-circle-down"></i></span>{{ due_date }}</th>
+        <th class="clicksort {{ attribute(sort, 'tf.flag_id') }}" data-field="tf.flag_id"><span class="sortflag"><i class="fas fa-arrow-circle-down"></i></span>{{ accept }}</th>
+        {% if agency %}
+          <th>{{ group_task_accept }}</th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+    </thead>
+  </table>
+</div>
+<div class="float-left w-50 pl-2">
+  <div id="map"></div>
+</div>
+<script src="https://unpkg.com/@google/markerclustererplus@5.1.0/dist/markerclustererplus.min.js"></script>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key={{ map_api_key }}&libraries=geometry"></script>
+{% endblock %}

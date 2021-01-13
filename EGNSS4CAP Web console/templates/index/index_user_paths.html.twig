@@ -1,0 +1,42 @@
+{% extends "base.html.twig" %}
+{% block title %}{{ title }}{% endblock %}
+{% block body %}
+<h2>{{ heading }}</h2>
+<div>
+  <a href="{{ ret_url }}" class="btn btn-secondary text-capitalize">{{ back }}</a>
+</div>
+
+<div class="float-left w-100 p-2 m-2">
+  <div id="map"></div>
+  <input type="hidden" class="js_search_input" value="{{ user_id }}">
+</div>
+
+<div class="w-100 float-md-left">
+  <table class="w-100 table float-md-left js_table">
+    <thead>
+      <tr>
+        <th>{{ path_name }}</th>
+        <th>{{ path_area }}</th>
+        <th>{{ path_start }}</th>
+        <th>{{ path_end }}</th>
+        <th>{{ path_actions }}</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for path in paths %}
+      <tr>
+        <td>{{ path.name }}</td>
+        <td>{{ path.area }}</td>
+        <td>{{ path.start }}</td>
+        <td>{{ path.end }}</td>
+        <td><div class="js_path_delete" data-path_db_id="{{ path.id }}"><i class="fas fa-trash"></i> {{ path_delete }}</div></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<script src="https://unpkg.com/@google/markerclustererplus@5.1.0/dist/markerclustererplus.min.js"></script>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key={{ map_api_key }}&callback=initMap&libraries=geometry"></script>
+{% endblock %}

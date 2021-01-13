@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- general -->
+    <string name="gn_failure">Chyba</string>
+    <string name="gn_taskRefreshStart">Zahajuji synchronizaci se serverem.</string>
+    <string name="gn_taskRefreshSuccess">Všechny úkoly se úspěšně synchronizovaly se serverem.</string>
+    <string name="gn_taskRefreshError">Chyba během synchronizace úkolů.\n\n%1$s</string>
+    <string name="gn_taskUploadStatusFailed">Chyba při nahrávání statusu úkolu na server.\n\n%1$s</string>
+    <string name="gn_failedPhotoDownload">Chyba při stahování fotografie ze serveru.\n\n%1$s</string>
+    <string name="gn_success">Úspěch</string>
+    <string name="gn_yes">Ano</string>
+    <string name="gn_no">Ne</string>
+
+    <!-- menu -->
+    <string name="menu_syncTasks">Synchronizovat úkoly</string>
+    <string name="menu_home">Domů</string>
+    <string name="menu_taskOverview">Přehled úkolů</string>
+    <string name="menu_map">Mapa</string>
+    <string name="menu_settings">Nastavení</string>
+    <string name="menu_logout">Odhlásit se</string>
+    <string name="menu_gnssRawData">Gnss Raw Data</string>
+    <string name="menu_about">O aplikaci</string>
+    <string name="menu_unownedPhoto">Samostatné fotografie</string>
+
+    <!-- title -->
+    <string name="title_activity_start">StartActivity</string>
+    <string name="title_activity_login">Přihlášení do EGNSS4CAP</string>
+    <string name="title_home">@string/app_name</string>
+    <string name="title_map">Mapa</string>
+    <string name="title_pathTrackingOverview">Přehled cest</string>
+    <string name="title_settings">Nastavení</string>
+    <string name="title_setFilterCentroid">Nastavení filtrů těžiště pozice</string>
+    <string name="title_taskView">Přehled úkolů</string>
+    <string name="title_taskFulfill">Plnění úkolu</string>
+    <string name="title_taskPhotoGallery">Prohlížení fotografií úkolu</string>
+    <string name="title_taskDetail">Detail úkolu</string>
+    <string name="title_gnnsRawData">Gnss Raw Data</string>
+    <string name="title_about">O aplikaci</string>
+    <string name="title_permissions">Udělení oprávnění</string>
+    <string name="title_unownedPhotos">Samostatné fotografie</string>
+    <string name="title_photoDetail">Detail fotografie</string>
+
+    <!-- BaseActivity -->
+    <string name="bs_permissionDeniedTitle">Oprávnění odmítnuto</string>
+    <string name="bs_permissionDeniedContent">Odmítnul jste udělit %1$s oprávnění.
+        Bude vám znemožněno využít plné funkcionality aplikace, dokud toto oprávnění neudělíte.</string>
+    <string name="bs_syncTitle">Synchronizace</string>
+    <string name="bs_syncStateProgress">Probíhá synchronizace.
+        \nBěhem synchronizace nelze aplikaci používat.</string>
+    <string name="bs_syncStateCompleteSuccess">Synchronizace dokončena.</string>
+    <string name="bs_syncStateCompleteError">Během synchronizace nastaly chyby.</string>
+    <string name="bs_syncWait">Čekejte prosím.</string>
+
+    <!-- MainService -->
+    <string name="ms_notificationContent">Aplikace je spuštěna</string>
+    <string name="ms_deviceConditionTitle">Způsobilost telefonu</string>
+    <string name="ms_deviceConditionDetail">Telefon není způsobilý pro chod aplikace. Zkontrolujte povolení k použití lokačních služeb a zda jsou aktivní</string>
+
+    <!-- StartActivity -->
+    <string name="st_loading">Nahrávání</string>
+
+    <!-- MainActivity -->
+    <string name="hs_title">Hlavní obrazovka</string>
+    <string name="hs_loggedUser">Přihlášený uživatel</string>
+    <string name="hs_login">Login:</string>
+    <string name="hs_name">Jméno:</string>
+    <string name="hs_surname">Příjmení:</string>
+    <string name="hs_noLocationServiceTitle">Žádné lokační služby</string>
+    <string name="hs_noLocationServiceText">Zkontrolujte, zda máte aktivovanou lokační službu s dostatečnými oprávněními.</string>
+
+    <!-- PermissionActivity -->
+    <string name="pr_insufficientPermissions">Nedostatečná oprávnění</string>
+    <string name="pr_description">Bude vám znemožněno využít plné funkcionality aplikace, dokud neudělíte všechna požadovaná oprávnění.</string>
+    <string name="pr_grandPermissions">Udělit oprávnění</string>
+
+    <!-- TaskFulfillActivity -->
+    <string name="tf_id">Id:</string>
+    <string name="tf_name">Jméno:</string>
+    <string name="tf_status">Stav:</string>
+    <string name="tf_instructions">Pokyny:</string>
+    <string name="tf_reasonForReturn">Důvod vrácení:</string>
+    <string name="tf_dateCreated">Vytvořeno:</string>
+    <string name="tf_taskDueDay">Splnit do:</string>
+    <string name="tf_note">Poznámka:</string>
+    <string name="tf_photos">Fotografie:</string>
+    <string name="tf_lat">Lat:</string>
+    <string name="tf_lng">Lng:</string>
+    <string name="tf_photoCreated">Vytvořeno:</string>
+    <string name="tf_send">Odeslat</string>
+    <string name="tf_lockedTaskTitle">Úkol je uzamčen</string>
+    <string name="tf_lockedTaskText">Úkol bude uzamčen, dokud nebude bez chyby odeslán nebo synchronizován se stabilním stavem na serveru.</string>
+    <string name="tf_sendFailedTitle">Chyba při odesílání</string>
+    <string name="tf_createImgFileFailure">Chyba při vytváření souboru fotografie.\n\n%1$s</string>
+    <string name="tf_savePhotoFileFailure">Chyba při ukládání fotografie do souboru.\n\n%1$s</string>
+    <string name="tf_unsatisfactoryLocation">Neuspokojivá data pozice.</string>
+    <string name="tf_unsatisfactoryLocationText">Při snímání fotografie nebyla získána uspokojivá data pozice.</string>
+    <string name="tf_wait">Čekejte</string>
+    <string name="tf_processingPosition">Nepohybujte se. Zpracovávám pozici ...</string>
+    <string name="tf_unsatisfactoryDatetime">Neuspokojivé stáří fotografie.</string>
+    <string name="tf_unsatisfactoryDatetimeText">Fotografie nesmí být starší než %1$s od výpočtu pozice.</string>
+    <string name="tf_failedLoadPhoto">Selhalo načtení fotografie</string>
+    <string name="tf_failedLoadPhotoText">Nastala chyba během načítání fotografie z lokálního úložiště.\n\n%1$s</string>
+    <string name="tf_sendDialogTitle">Potvrdit odeslání</string>
+    <string name="tf_sendDialogText">Opravdu si přejete odeslat tuto úlohu včetně všech jejích fotografií.\nPo odeslání již nepůjde editovat.</string>
+    <string name="tf_sendDialogNoPhotosTitle">Žádné snímky</string>
+    <string name="tf_sendDialogNoPhotosText">Nelze odeslat úkol bez žádných fotografií.</string>
+    <string name="tf_deleteDialogTitle">Potvrdit smazání</string>
+    <string name="tf_deleteDialogText">Opravdu si přejete smazat tuto fotografii?</string>
+
+    <!-- TaskOverview -->
+    <string name="to_forbiddenEdit">Pro editaci musí být úkol ve stavu otevřený.</string>
+    <string name="to_failedToOpenStatus">Chyba při odeslání změny stavu na otevřený na server.\n\n%1$s</string>
+    <string name="to_filter">Filtr</string>
+    <string name="to_showCount">Zobrazeno %1$d z %2$d.</string>
+    <string name="to_contains">Jméno:</string>
+    <string name="to_containsHint">Obsahuje</string>
+    <string name="to_status">Status:</string>
+    <string name="to_sort">Řadit:</string>
+    <string name="to_showAll">Všechny</string>
+    <string name="to_showNew">Nové</string>
+    <string name="to_showOpen">Otevřené</string>
+    <string name="to_showSent">Odeslané</string>
+    <string name="to_showProvided">Poskytnuté</string>
+    <string name="to_showAccepted">Schválené</string>
+    <string name="to_showDeclined">Zamítnuté</string>
+    <string name="to_showReturned">Vrácené</string>
+    <string name="to_sortPassedAtEnd">Prošlé na konec</string>
+    <string name="to_sortByStatus">Dle statusu</string>
+    <string name="to_sortByDueDate">Dle data splatnosti</string>
+    <string name="to_sortByName">Dle jména</string>
+    <string name="to_sortAsc">Vzestupně</string>
+    <string name="to_sortDesc">Sestupně</string>
+    <string name="to_photoCount">%1$d fotografií</string>
+    <string name="to_created">Vytvořeno:</string>
+    <string name="to_dueDate">Splnit do:</string>
+
+    <!-- TaskPhotoGallery -->
+    <string name="tpg_taskId">Id úlohy:</string>
+    <string name="tpg_order">Pořadí:</string>
+    <string name="tpg_latitude">Šířka:</string>
+    <string name="tpg_longitude">Délka:</string>
+    <string name="tpg_created">Vytvořeno:</string>
+    <string name="tpg_imageDrawError">Během vykreslování obrázku nastala neočekávaná chyba.\n\n%1$s</string>
+
+    <!-- login -->
+    <string name="lg_promptLogin">Login</string>
+    <string name="lg_promptPassword">Heslo</string>
+    <string name="lg_actionSignIn">Přihlásit</string>
+    <string name="lg_welcome">Vítejte !</string>
+    <string name="lg_loginFailed">Přihlášení selhalo\n\n%1$s</string>
+
+    <!-- start -->
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <!-- map -->
+    <string name="map_photoInfo_taskId">Id úlohy:</string>
+    <string name="map_photoInfo_lat">Šířka:</string>
+    <string name="map_photoInfo_lng">Délka:</string>
+    <string name="map_photoInfo_alt">Výška:</string>
+    <string name="map_photoInfo_created">Vytvořeno:</string>
+    <string name="map_photoInfo_toDetailLabel">Stiskněte pro přechod na detail.</string>
+    <string name="map_photoInfo_toggleLabel">Stiskněte fotografii pro zobrazení ostatních schovaných za.</string>
+    <string name="map_drawingError">Chyba vykreslení.</string>
+    <string name="map_failedDrawIconPhotoText">Nastala chyba při vykreslování fotografie.\n\n%1$s</string>
+    <string name="map_unownedTask">Samostatná</string>
+    <string name="map_nd">n/d</string>
+    <string name="map_unexpectedExceptionGG">Neočekávaná chyba</string>
+    <string name="map_exceptionDuringDownloadGG">Nastala neočekávaná chyba během stahování dat geometrie pozemků.</string>
+    <string name="map_exceptionAfterDownloadGG">Data geometrie pozemků nebyla stažena úspěšně.</string>
+    <string name="map_exceptionDuringParsingGG">Data geometrie pozemků stažená ze serveru nejsou platná.</string>
+    <string name="map_failedCurrentLocationTitle">Bez aktuální pozice</string>
+    <string name="map_failedCurrentLocationText">Nelze zobrazovat aktuální polohu v důsledku nedostatečných oprávnění.</string>
+    <string name="map_blueMarker">modrá značka: poloha dle čipové sady</string>
+    <string name="map_redMarker">červená značka: poloha dle těžiště</string>
+    <string name="map_sampleCount">(vzorků: %1$s/%2$s)</string>
+
+    <!-- pathTracking -->
+    <string name="pt_defaultPathName">Nepojmenovaná</string>
+    <string name="pt_startingExceptionTitle">Chyba při spouštění trasování</string>
+    <string name="pt_startingExceptionText">%1$s</string>
+    <string name="pt_stoppingExceptionTitle">Chyba při ukončování trasování</string>
+    <string name="pt_stoppingExceptionText">%1$s</string>
+    <string name="pt_nameHint">Napište jméno cesty</string>
+    <string name="pt_centroidsNote">Cesta bude zaznamenána dle těžišť poloh.</string>
+    <string name="pt_itemId">Id:</string>
+    <string name="pt_itemName">Jméno:</string>
+    <string name="pt_itemStart">Zahájeno:</string>
+    <string name="pt_itemEnd">Ukončeno:</string>
+    <string name="pt_itemArea">Plocha:</string>
+    <string name="pt_itemByCentroids">Dle těžišť:</string>
+    <string name="pt_notSent">Neodesláno</string>
+    <string name="pt_cannotDrawWhileRecTitle">Nelze vykreslit cestu</string>
+    <string name="pt_cannotDrawWhileRecText">Nelze vykreslit cestu, pokud se momentálně zaznamenává jiná.</string>
+    <string name="pt_infoPointLat">Šířka:</string>
+    <string name="pt_infoPointLng">Délka:</string>
+    <string name="pt_infoPointOrder">Pořadí:</string>
+    <string name="pt_infoPointCreated">Vytvořeno:</string>
+    <string name="pt_infoCurPathTitleRecording">Nahrává se cesta</string>
+    <string name="pt_infoCurPathTitleShown">Zobrazená cesta</string>
+    <string name="pt_infoCurPathCentroidsNote">(dle těžišť)</string>
+    <string name="pt_infoCurPathId">Id:</string>
+    <string name="pt_infoCurPathName">Jméno:</string>
+    <string name="pt_noPointsTitle">Neplatná cesta</string>
+    <string name="pt_noPointsText">Cesta nebude uložena, protože neobsahuje žádné body.</string>
+    <string name="pt_deleteDialogTitle">Potvrdit smazání</string>
+    <string name="pt_deleteDialogText">Opravdu si přejete odstranit cestu %1$s?</string>
+    <string name="pt_androidVersionException">Tato verze systému Android není podporována (vyžadováno minimáně Nougat).</string>
+
+
+    <!-- GNSS Raw Data -->
+    <string name="gnss_satInUse">Využívaných satelitů</string>
+    <string name="gnss_satInView">Satelitů v dosahu</string>
+    <string name="gnss_egnos">Egnos</string>
+    <string name="gnss_rmcInfo">RMC INFO</string>
+    <string name="gnss_galileoSats">GALILEO SATs</string>
+    <string name="gnss_gpsSats">GPS SATs</string>
+    <string name="gnss_glonassSats">GLONASS SATs</string>
+    <string name="gnss_beidouSats">BEIDOU SATs</string>
+    <string name="gnss_no">ne</string>
+    <string name="gnss_yes">ano</string>
+    <string name="gnss_magneticVariation">Magnetická variace</string>
+    <string name="gnss_EW">E/W</string>
+    <string name="gnss_TrueNorthAngle">Skutečný úhel severu</string>
+    <string name="gnss_speedKnots">Rychlost v uzlech</string>
+    <string name="gnss_speedKmh">Rychlost v Km/h</string>
+    <string name="gnss_nd">n/d</string>
+    <string name="gnss_vtgInfo">VTG INFO</string>
+    <string name="gnss_trueDegrees">Skutečné stupně</string>
+    <string name="gnss_magneticDegrees">Magnetické stupně</string>
+    <string name="gnss_snr">SNR</string>
+    <string name="gnss_meanSnr">Střední hodnota SNR</string>
+    <string name="gnss_geolocationInfo">GEOLOKAČNÍ INFO</string>
+    <string name="gnss_latitude">Šířka</string>
+    <string name="gnss_longitude">Výška</string>
+    <string name="gnss_altitude">Nadmořská výška</string>
+    <string name="gnss_NS">N/S</string>
+    <string name="gnss_fixQuality">Určení kvality</string>
+    <string name="gnss_hdop">HDOP</string>
+    <string name="gnss_pdop">PDOP</string>
+    <string name="gnss_vdop">VDOP</string>
+    <string name="gnss_accurancy">Správnost</string>
+    <string name="gnss_precision">Přesnost</string>
+
+    <!-- CameraActivity -->
+    <string name="ca_snap">VYFOTIT</string>
+    <string name="ca_camera">Kamera</string>
+    <string name="ca_failedCreateFile">Nastala chyba při vytváření souboru snímku.\n\n%1$s</string>
+    <string name="ca_failedSavePhoto">Nastala chyba při ukládání snímku souboru.\n\n%1$s</string>
+    <string name="ca_latitude">Šířka:</string>
+    <string name="ca_longitude">Délka:</string>
+    <string name="ca_altitude">Výška:</string>
+    <string name="ca_azimuth">Azimut:</string>
+    <string name="ca_photoHeading">Azimut snímku:</string>
+    <string name="ca_tilt">Úhel:</string>
+    <string name="ca_accuracy">Přesnost:</string>
+    <string name="ca_unavailable">Nedostupný</string>
+    <string name="ca_wrongAnglePortrait">Špatný úhel.\nDovolený úhel je v rozmezí  %1$s° - %2$s°.</string>
+    <string name="ca_wrongAngleLandscape">Špatný úhel.\nDovolený úhel je v rozmezí  %1$s° - %2$s°.</string>
+    <string name="ca_unsatifactoryPosition">Neuspokojivá data pozice.\nSetrvejte na místě.</string>
+    <string name="ca_takePictureWait">Čekejte na automatickou spoušť.</string>
+    <string name="ca_takePictureCountDown">Stahuji data ze satelitů. (zbývá %1$s s)</string>
+    <string name="ca_takePictureCalibrating">Kalibruji kameru …</string>
+    <string name="ca_pictureRejectedTitle">Snímek zamítnut</string>
+    <string name="ca_pictureRejectedText">Ujistěte se, že během focení není zobrazena žádná varovná zpráva.</string>
+    <string name="ca_computeCentroidButton">Spočítat těžiště polohy</string>
+    <string name="ca_centroidLocation">Těžiště polohy</string>
+    <string name="ca_sampleNumber">Vzorků:</string>
+    <string name="ca_noCentroidLocation">Žádná data těžiště polohy.
+        \nSetrvejte na místě pro shromáždění všech vzorků.</string>
+    <string name="ca_unsupportedSettingsTitle">Nepodporované nastavení</string>
+    <string name="ca_unssuprotedSettingsText">Toto nastavení není tímto zařízením podporováno.</string>
+
+    <!-- task STATUS -->
+    <string name="stat_new">Nový</string>
+    <string name="stat_open">Otevřený</string>
+    <string name="stat_returned">Vrácený</string>
+    <string name="stat_dataProvided">Data poskytnuta</string>
+    <string name="stat_dataCheked">Data ověřena</string>
+    <string name="stat_dataCheckedError">Data ověřena\n(Chyba: Nesprávná data o akceptaci)</string>
+    <string name="stat_closed">Uzavřený</string>
+
+    <!-- SettingsActivity -->
+    <string name="se_photoWithCentroid">Focení s výpočtem těžiště poloh</string>
+    <string name="se_filtersOfCentroidLocation">Filtry výpočtu těžiště poloh</string>
+    <string name="se_samplingNumber">Počet vzorků pro těžiště:</string>
+    <string name="se_buttonDefault">Defaultní</string>
+    <string name="se_buttonToSnap">Tlačítko pro pořízení fotografie</string>
+    <string name="se_buttonToSnapCode">Tlačítko:</string>
+    <string name="se_buttonToSnapTitle">Stiskněte tlačítko</string>
+    <string name="se_buttonToSnapDesc">Stiskněte tlačítko na telefonu, kterým chcete pořizovat fotografie.\n\nPokud ho lze použít, uvidíte jeho jméno v nastavení.Ne všechny tlačítka mohou být použity nebo jsou vhodná.</string>
+    <string name="se_buttonToSnapUnassigned">Nepřiřazeno</string>
+    <string name="se_buttonManualBrightnessCorrection">Manualní korekce jasu</string>
+
+    <!-- SettingFilterActivity -->
+    <string name="sef_hdopMin">Min. HDOP:</string>
+    <string name="sef_minSatNumber">Min. počet satelitů:</string>
+    <string name="sef_minMeanSnr">Min. stř. h. SNR:</string>
+    <string name="sef_minFix">Min. fix:</string>
+    <string name="sef_setToDefault">Nastavit defaultní hodnoty</string>
+
+    <!-- AboutActivity -->
+    <string name="ab_title">APLIKACE KE GEOTAGOVÁNÍ FOTOGRAFIÍ VYUŽÍVAJÍCÍ EGNSS DIFERENCIÁTORY PRO SZP</string>
+    <string name="ab_text">
+        EGNSS4CAP je aplikace pro mobilní telefony určená pro zemědělce v Evropské unii k digitalizaci postupů týkajících se odbavování požadavků na podávání zpráv v rámci současné reformy společné zemědělské politiky (SZP) po roce 2020.
+        \n\nTato aplikace umožňuje zemědělcům poskytovat geotagované fotografie, které podporují a doplňují přístup monitorování SZP založený na Copernicus Sentinel.
+        \n\nPoužívají se diferenciátory EGNSS (EGNOS a Galileo), jako jsou OS-NMA a dostupné možnosti duální frekvence, ke snížení chyb a zdvojení, jakož i ke zlepšení výkonu a důvěryhodnosti.
+        \n\nChcete-li vědět, zda zařízení, které používáte, je schopné používat všechny diferenciátory EGNSS, pak následující semafory zobrazují možnosti tohoto zařízení
+    </string>
+    <string name="ab_textAfter">
+        &lt;b&gt;Způsobilost telefonu&lt;/b&gt;: rozsvítí se zelené světlo, pokud zařízení plní minimální požadavky pro fungování aplikace.
+        &lt;br&gt;&lt;br&gt;&lt;b&gt;Dostupnost kompasu a gyroskopu&lt;/b&gt;: rozsvítí se zelené světlo, pokud má zařízení kompas i gyroskop.
+        &lt;br&gt;&lt;br&gt;&lt;b&gt;Dostupnost Galileo&lt;/b&gt;: rozvítí se zelené světlo, pokud je zařízení schopno příjmat signály Galileo.
+        &lt;br&gt;&lt;br&gt;&lt;b&gt;Dostupnost duální frekvence&lt;/b&gt;: rozvítí se zelené světlo, pokud je zařízení schopno sledovat GNSS duální frekvenci (L1/L5 pro GPS nebo E1/E5 pro Galileo).
+        &lt;br&gt;&lt;br&gt;&lt;b&gt;Dostupnost EGNOS&lt;/b&gt;: rozvítí se zelené světlo, pokud je zařízení schopno sledovat EGNOS/SBAS satelity.
+        &lt;br&gt;&lt;br&gt;&lt;b&gt;Dostupnost navigačních zpráv galileo&lt;/b&gt;: rozvítí se zelené světlo, pokud je firmware zařízení schopen přijmout surová GNSS data obecně a zejména pak Galileo navigační zprávy, a těžit tak z ověřování navigačních zpráv systému Galileo Open (OS-NMA).
+        &lt;br&gt;&lt;br&gt;Projektový tým úzce spolupracoval s platebními agenturami odpovědnými za správu dotací pro zemědělce a SVS, aby zajistil splnění minimálních požadavků uživatelů.
+        \n\nMáte-li zájem dozvědět se více o EGNSS4CAP, kontaktujte nás.
+        &lt;br&gt;&lt;br&gt;&lt;a href="https://www.egnss4cap.eu"&gt;https://www.egnss4cap.eu/&lt;/a&gt;
+        &lt;br&gt;&lt;br&gt;&lt;a href="mailto: hello@egnss4cap.eu"&gt;hello@egnss4cap.eu&lt;/a&gt;,
+        &lt;br&gt;&lt;br&gt;EGNSS4CAP je projekt pro European GNSS Agency (GSA) koordinovaný společností SpaceTec Partners a vyvynut společnostmi Foxcom a Erasmicoin.
+        &lt;br&gt;&lt;br&gt;&lt;a href="https://www.gsa.europa.eu/"&gt;https://www.gsa.europa.eu/&lt;/a&gt;
+        &lt;br&gt;&lt;br&gt;&lt;a href="https://www.spacetec.partners/"&gt;https://www.spacetec.partners/&lt;/a&gt;
+        &lt;br&gt;&lt;br&gt;&lt;a href="https://www.foxcom.cz/"&gt;https://www.foxcom.cz/&lt;/a&gt;
+        &lt;br&gt;&lt;br&gt;&lt;a href="https://www.erasmicoin.eu/"&gt;https://www.erasmicoin.eu/&lt;/a&gt;
+    </string>
+
+    <!-- PhotoDetail | UnownedPhotoOverview -->
+    <string name="pd_latitude">Šířka:</string>
+    <string name="pd_longitude">Délka:</string>
+    <string name="pd_created">Vytvořeno:</string>
+    <string name="pd_sended">Odesláno:</string>
+    <string name="pd_sendedYes">Ano</string>
+    <string name="pd_sendedNo">Ne</string>
+    <string name="pd_sendButton">Odeslat</string>
+    <string name="pd_note">Poznámka:</string>
+    <string name="pd_errorImageLoadTitle">Chyba načtení snímku</string>
+    <string name="pd_errorImageLoadText">Nastala chyba při načítání souboru snímku.\n\n%1$s</string>
+    <string name="pd_errorUploadPhotoTitle">Chyba nahrávání snímku</string>
+    <string name="pd_errorUploadPhotoText">Nastala chyba při nahrávání souboru snímku na server.\n\n%1$s</string>
+    <string name="pd_errorImagesLoadTitle">Chyba při nahrávání snímků</string>
+    <string name="pd_errorImagesLoadText">Nastala chyba při nahrávání snímků na server.\n\n%1$s</string>
+    <string name="pd_startUploading">Nahrávání snímků zahájeno.</string>
+    <string name="pd_completedUploading">Nahrávání snímků dokončeno.</string>
+    <string name="pd_failedUploading">Nahrávání snímků selhalo.</string>
+    <string name="pd_deleteDialogTitle">Potvrdit smazání</string>
+    <string name="pd_deleteDialogText">Opravdu si přejete smazat tuto samostatnou fotografii?</string>
+    <string name="pd_noteHint">Napište poznámku</string>
+    <string name="pd_sendDialogTitle">Potvrdit odeslání</string>
+    <string name="pd_sendDialogText">Opravdu chcete odeslat tuto fotografii?\n\nPo odeslání již nelze měnit.</string>
+    <string name="pd_lockedPhotoTitle">Fotografie je uzamčena</string>
+    <string name="pd_lockedPhotoText">Fotografie bude uzamčena, dokud nebude odeslána bez chyb nebo synchronizována se stabilním stavem na serveru, pokud na serveru již existuje.</string>
+
+    <!-- UnownedPhotoOverviewActivity -->
+    <string name="un_alertNothingToUploadTitle">Žádné fotografie</string>
+    <string name="un_alertNothingToUploadText">Žádné fotografie pro odeslání, které ještě nebyly odeslány.</string>
+    <string name="un_uploadDialogTitle">Potvrdit odeslání</string>
+    <string name="un_uploadDialogText">Opravdu si přejete odeslat všechny neodeslané fotografie (celkem %1$s)?\n\nPo odeslání je již nelze měnit.</string>
+
+    <!-- Dialogs -->
+    <string name="dl_OK">OK</string>
+    <string name="dl_Cancel">Zrušit</string>
+
+    <!-- BasicInfo -->
+    <string name="bi_basicInfo">Základní informace</string>
+    <string name="bi_deviceCondition">Způsobilost telefonu</string>
+    <string name="bi_phoneManufacturer">Výrobce telefonu</string>
+    <string name="bi_phoneModel">Model telefonu</string>
+    <string name="bi_sensorCompassGyroscopeCheck">Dostupnost kompasu a gyroskopu</string>
+    <string name="bi_galileoSignalCheck">Dostupnost Galileo</string>
+    <string name="bi_dualFrequencySignalCheck">Dostupnost duální freqence</string>
+    <string name="bi_EGNOSSignalCheck">Dostupnost EGNOS</string>
+    <string name="bi_galileoNavigationMessageSignalCheck">Dostupnost navigačních zpráv Galileo</string>
+    <string name="bi_info">Aplikace bude fungovat, pokud svítí\nsemafor “Způsobilost telefonu” zeleně.</string>
+
+</resources>

@@ -1,0 +1,86 @@
+{% extends "base.html.twig" %}
+{% block title %}{{ title }}{% endblock %}
+{% block body %}
+  <h2>{{farmer_name}} {{ header }}</h2>
+  <div class="p-2">
+    <a href="{{ ret_url }}" class="btn btn-secondary text-capitalize">{{ back }}</a>
+    <a href="{{ pdf_url }}" target="_blank" class="btn btn-secondary text-capitalize">{{ pdf_export }}</a>
+  </div>
+  <table class="w-100 table">
+    <thead>
+      <tr>
+        <th>{{ status }}</th>
+        {% if agency %}
+          <th>{{ photos_verified }}</th>
+        {% endif %}
+        <th>{{ type }}</th>
+        <th>{{ name }}</th>
+        <th>{{ note }}</th>
+        <th>{{ description }}</th>
+        <th>{{ note_returned }}</th>
+        {% if tasks[0].flag_id == 2 %}
+          <th>{{ note_declined }}</th>
+        {% endif %}
+        <th>{{ created }}</th>
+        <th>{{ due_date }}</th>
+        {% if agency %}
+          <th>{{ action }}</th>
+        {% endif %}
+      </tr>
+      </thead>
+      <tbody>
+      {% for task in tasks %}
+        <tr class="js_task_id" data-href="{{ task.id }}">
+          <td>{{ task.status }}</td>
+          {% if agency %}
+            <td class="js_task_detail" data-href="{{task.id}}">
+            {% if attribute(tasks_verified, task.id) == 'verified' %}
+              <i class="fas fa-check text_color_1"></i>
+            {% elseif  attribute(tasks_verified, task.id) == 'not_verified' %}
+              <i class="fas fa-times text_color_0"></i>
+            {% endif %}
+            </td>
+          {% endif %}
+          <td>{{ task.type_name }}</td>
+          <td>{{ task.name }}</td>
+          <td>{{ task.note }}</td>
+          <td>{{ task.text }}</td>
+          <td>{{ task.text_returned }}</td>
+          {% if task.flag_id == 2  %}
+            <td>{{ task.text_reason }}</td>
+          {% endif %}
+          <td>{{ task.date_created }}</td>
+          <td>{{ task.task_due_date }}</td>
+          <input type="hidden" value="{{ task.id }}" class="js_search_input">
+          {% if agency %}
+          <td>
+            {% if task.flag_id == 1 %}
+              <div class="btn btn-success" >{{ ack }}</div>
+            {% elseif  task.flag_id == 2 %}
+              <div class="btn btn-danger" >{{ decline }}</div>
+            {% elseif  task.status == 'data provided' %}
+              <a class="btn btn-success js_ack" ><i class="fas fa-check"></i></a>
+              <a class="btn btn-danger js_decline"><i class="fas fa-times"></i></a>
+              <a class="btn btn-danger js_return"><i class="fas fa-reply"></i></a>
+            {% endif %}
+            {% if task.status == 'new' and show_trash %}
+              <a class="btn btn-danger js_delete"><i class="fas fa-trash"></i></a>
+            {% endif %}
+            {% if task.status == 'open' %}
+              <a class="btn btn-success js_move_from_open"><i class="fas fa-sign-out-alt"></i></a>
+            {% endif %}
+          </td>
+          {% endif %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% block galery %}
+  {% endblock %}
+  <div class="float-left w-100 p-2">
+    <div id="map"></div>
+  </div>
+
+  <script src="https://unpkg.com/@google/markerclustererplus@5.1.0/dist/markerclustererplus.min.js"></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ map_api_key }}&callback=initMap&libraries=geometry"></script>
+{% endblock %}

@@ -1,0 +1,11 @@
+<div class="js_popup" data-task_id="{{ task_id }}" data-photo_id="{{ photo_id }}">
+  <div>{{ farmer_name }}</div>
+  <div>{{ task_name }}</div>
+  <div class=js_popup_border>
+    <div class="marker_image"><img style="transform: rotate({{ photos[0].rotation }}deg);" src="{{ photos[0].path }}{{ photos[0].file_name }}" ></div>
+    <img class="marker_border" src="img/icon_photo.png" >
+  <div>
+</div>
+<div class="js_azimuth" style=" transform: rotate({{ azimut[0].magnetic_azimuth }}deg)">
+  <img class="azimuth" src="img/icon_azimuth.png">
+</div>

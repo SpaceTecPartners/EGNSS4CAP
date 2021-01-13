@@ -1,0 +1,81 @@
+{% extends "base.html.twig" %}
+{% block title %}{{ title }}{% endblock %}
+{% block body %}
+<h2>{{ pa_name }} - {{ heading }}</h2>
+
+<div class="w-100">
+  <a href="{{ ret_url }}" class="btn btn-secondary text-capitalize">{{ back }}</a>
+  <input class="js_search_input" type="hidden" value="{{ pa_id }}">
+  <nav class="navbar navbar-light pl-md-0">
+    <button class="js_new_farmer_show mt-2 float-right mb-2 btn btn-primary" data-userid="0" data-formheader="{{ new_farmer_header }}">{{ new_farmer }}</button>
+  </nav>
+  <div class="js_new_farmer_inputs">
+    <h2 id="js_fi_header">{{ new_farmer_header }}</h2>
+    <form id="new_farmer_form" method="POST" action="index.php">
+    <input type="hidden" name="act" id="js_fi_act" value="new_farmer">
+    <input type="hidden" class="not_clear" name="role" id="js_fi_role" value="2">
+    <input type="hidden" class="not_clear" name="agency_id" id="js_fi_agency_id" value="{{ pa_id }}">
+    <input type="hidden" name="user_id" id="js_fi_uid" value="0">
+      <table>
+        <thead>
+          <tr>
+            <th>{{ login }}</th>
+            <th>{{ password }}</th>
+          </tr>
+          <tr>
+            <td><input id="js_fi_login" type="text" name="login" required></td>
+            <td><input id="js_fi_pass" type="password" name="password" required></td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th class="not_required">{{ name }}</th>
+            <th class="not_required">{{ surname }}</th>
+          </tr>
+          <tr>
+            <td><input id="js_fi_name" type="text" name="name"></td>
+            <td><input id="js_fi_surname" type="text" name="surname"></td>
+          </tr>
+          <tr>
+            <th class="not_required">{{ email }}</th>
+            <th></th>
+          </tr>
+          <tr>
+            <td><input id="js_fi_email" type="email" name="email"></td>
+            <td></td>
+          </tr>
+          <tr>
+            <th class="not_required">{{ ji }}</th>
+            <th class="not_required">{{ vat }}</th>
+          </tr>
+          <tr>
+            <td><input id="js_fi_in" type="number" name="identification_number"></td>
+            <td><input id="js_fi_vat" type="text" name="vat"></td>
+          </tr>
+          <tr>
+            <td>
+              <button class="js_new_farmer btn btn-primary" type="submit">{{ save }}</button>
+              <button class="js_button_close_farmer_edit btn btn-secondary" type="button">{{ close }}</button>
+            </td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+  </div>
+  <div class="w-100 float-md-left">
+    <table class="w-100 table float-md-left js_table">
+      <thead>
+        <tr>
+          <th>{{ officer_login_text }}</th>
+          <th>{{ officer_name_text }}</th>
+          <th>{{ officer_surname_text }}</th>
+          <th>{{ officer_actions_text }}</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

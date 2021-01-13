@@ -1,0 +1,84 @@
+{% extends "base.html.twig" %}
+{% block title %}{{ title }}{% endblock %}
+{% block body %}
+<h2>{{ heading }}</h2>
+
+<h3>{{ web_heading }}</h3>
+<div class="w-100 float-md-left">
+  <table class="w-100 table float-md-left js_table">
+    <thead>
+      <tr>
+        <th style="width: 15%;">{{ version }}</th>
+        <th style="width: 85%;">{{ text }}</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for release in web %}
+      <tr>
+        <td style="width: 15%;">{{ release.version }}</td>
+        <td style="width: 85%;">
+          <ul>
+            {% autoescape %}
+            {{ release.note|raw }}
+            {% endautoescape %}
+          </ul>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<h3>{{ ios_heading }}</h3>
+<div class="w-100 float-md-left">
+  <table class="w-100 table float-md-left js_table">
+    <thead>
+      <tr>
+        <th style="width: 15%;">{{ version }}</th>
+        <th style="width: 85%;">{{ text }}</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for release in ios %}
+      <tr>
+        <td style="width: 15%;">{{ release.version }}</td>
+        <td style="width: 85%;">
+          <ul>
+            {% autoescape %}
+            {{ release.note|raw }}
+            {% endautoescape %}
+          </ul>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<h3>{{ android_heading }}</h3>
+<div class="w-100 float-md-left">
+  <table class="w-100 table float-md-left js_table">
+    <thead>
+      <tr>
+        <th style="width: 15%;">{{ version }}</th>
+        <th style="width: 85%;">{{ text }}</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for release in android %}
+      <tr>
+        <td style="width: 15%;">{{ release.version }}</td>
+        <td style="width: 85%;">
+          <ul>
+            {% autoescape %}
+            {{ release.note|raw }}
+            {% endautoescape %}
+          </ul>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

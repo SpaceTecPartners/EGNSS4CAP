@@ -1,0 +1,26 @@
+body{
+  margin-top: 20%;
+}
+.overlap{
+  background: url('../../img/EGNSS4CAP_banner_1920x1080.png') center no-repeat;
+  content: " ";
+  background-size: cover;
+  height: 100vh;
+  width: 100vw;
+  opacity: .3;
+  top: 0;
+  left: 0;
+  position: absolute;
+}
+
+.login{
+  height: 50vh;
+  width: 50vw;
+  background-color: transparent;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  margin-left: 17%;
+  margin-top: 5%;
+}

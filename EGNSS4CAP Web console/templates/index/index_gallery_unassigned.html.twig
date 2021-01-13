@@ -1,0 +1,148 @@
+{% extends "base.html.twig" %}
+{% block title %}{{ title }}{% endblock %}
+{% block body %}
+<h2>{{ heading }}</h2>
+<div>
+  <a href="{{ ret_url }}" class="btn btn-secondary text-capitalize">{{ back }}</a>
+  {% if not task_select %}
+    <a href="{{ pdf_url }}" target="_blank" class="btn btn-secondary text-capitalize">{{ pdf_export }}</a>
+  {% endif %}
+</div>
+
+<div class="float-left w-100 p-2 m-2">
+  <div id="map"></div>
+  <input type="hidden" class="js_search_input" value="{{ user_id }}">
+</div>
+{% if not task_select %}
+  <div class="float-left w-100">
+    <a href="#" class="js_select_all_photos btn btn-secondary text-capitalize">{{ select_all }}</a>
+    <a href="#" class="js_deselect_all_photos btn btn-secondary text-capitalize">{{ deselect_all }}</a>
+    <button type="button" class="js_button_open_task_select mt-2 mb-2 btn btn-primary">{{ choose_task_button }}</button>
+    <button type="button" class="js_photo_multi_delete btn btn-secondary text-capitalize"><i class="fas fa-trash"></i> {{ pht_multi_delete }}</button>
+  </div>
+{% endif %}
+<div class="float-left w-100">
+  <div class="w-100 float-md-left">
+    <div class="farmer_unassigned_photos">
+      <form method="POST" action="index.php" id="assign_photos_form">
+      {% if task_select %}
+        <input type="hidden" name="act" value="assign_photos_to_task">
+      {% else %}
+        <input type="hidden" name="act" value="gallery_unassigned">
+        <input type="hidden" name="task_select" value="true">
+      {% endif %}
+      <input type="hidden" name="user_id" value="{{ user_id }}">
+      <input type="hidden" name="id" value="{{ user_id }}">
+      {% for photo in photos %}
+        <div class="thumb">
+          <input class="assign_photo_input" id="assign_photo_input_{{ photo.id }}" type="checkbox" name="photos[]" value="{{ photo.id }}" {% if task_select %}checked="checked"{% endif %}>
+          <label for="assign_photo_input_{{ photo.id }}" class="thumbnail" data-photo_db_id="{{ photo.id }}" data-rotation="{{ photo.rotation }}"
+          data-image-id="" data-toggle="modal" data-title="" data-image="{{ photo.src }}" data-target="#image-gallery"
+          style="transform: rotate({{ photo.rotation }}deg);" id="photo_{{ photo.id }}" >
+            <img src="{{ photo.src }}">
+          </label>
+          <div class="js_photo_metadata_popup">
+            <div class="top_action_bar">
+              {% if not task_select %}
+                <div class="js_photo_delete" data-photo_db_id="{{ photo.id }}"><i class="fas fa-trash"></i> {{ pht_delete }}</div>
+              {% endif %}
+            </div>
+            <!--<label><b>{{ photo_meta_head }}</b></label>-->
+            <label title="{{ pht_lat_title }}">{{ pht_lat }}: {{ photo.lat }}</label>
+            <label title="{{ pht_lng_title }}">{{ pht_lng }}: {{ photo.lng }}</label>
+            <label title="{{ pht_alt_title }}">{{ pht_altitude }}: {{ photo.altitude }}</label>
+            <label title="{{ pht_azimuth_title }}">{{ pht_azimuth }}: {{ photo.azimuth }}</label>
+            <label title="{{ pht_angle_title }}">{{ pht_angle }}: {{ photo.photo_angle }}</label>
+            <label title="{{ pht_note_title }}">{{ pht_note }}: {{ photo.note }}</label>
+            <label></label>
+            <label title="{{ pht_device_title }}">{{ pht_device }}: {{ photo.device }}</label>
+            <label title="{{ pht_accuracy_title }}">{{ pht_accuracy }}: {{ photo.accuracy }}</label>
+            <label title="{{ pht_distance_title }}">{{ pht_distance }}: {{ photo.distance }}</label>
+            <label></label>
+            <label title="{{ pht_timestamp_title }}">{{ pht_timestamp }}: {{ photo.timestamp }}</label>
+            <label title="{{ pht_created_date_title }}">{{ pht_created_date }}: {{ photo.created_date }}</label>
+            <label></label>
+            {% if agency %}
+              <label title="{{ flg_checked_location_title }}" class="text_color_{{ photo.flg_checked_location }}">
+                {% if photo.flg_checked_location is same as(1) %}
+                  {{ pht_checked_location_ok }}
+                {% elseif  photo.flg_checked_location is same as(0) %}
+                  {{ pht_checked_location_fail }}
+                {% else %}
+                  {{ pht_checked_location_notvf }}
+                {% endif %}
+              </label>
+              <label title="{{ flg_original_title }}" class="text_color_{{ photo.flg_original }}">
+                {% if photo.flg_original is same as(1) %}
+                  {{ pht_original_ok }}
+                {% elseif  photo.flg_original is same as(0) %}
+                  {{ pht_original_fail }}
+                {% else %}
+                  {{ pht_original_notvf }}
+                {% endif %}
+              </label>
+            {% endif %}
+            <div class="js_photo_rotate">
+              {% if not task_select %}
+                <div class="js_photo_rotate_left" data-pht_id="photo_{{ photo.id }}"><i class="fas fa-sync"></i> {{ pht_rotate_left }}</div>
+                <div class="js_photo_rotate_right" data-pht_id="photo_{{ photo.id }}"><i class="fas fa-sync"></i> {{ pht_rotate_right }}</div>
+                <div class="js_photo_select" data-checkbox_id="assign_photo_input_{{ photo.id }}" ><i class="fas fa-check"></i> {{ pht_select }}</div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      {% if task_select %}
+        <div class="js_assign_photos_task_select">
+          <div>
+            <select name="task_id" id="js_assign_photo_task_id_select">
+              {% for task in tasks %}
+                <option value="{{ task.id }}">{{ task.name }}</option>
+              {% endfor %}
+            </select>
+            <button type="button" class="mt-2 mb-2 btn btn-primary js_button_confirm_task_select">{{ assign_photos_button }}</button>
+          </div>
+        </div>
+      {% endif %}
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade w-100" id="image-gallery" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="image-gallery-title"></h4>
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+            class="sr-only"></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <a id="image-gallery-zoom" href="" target="_blank">
+          <img id="image-gallery-image" data-photo_db_id="0" data-rotation="0" class="img-responsive col-md-12" src="">
+        </a>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary float-left" id="show-previous-image">
+          <i class="fa fa-arrow-left"></i>
+        </button>
+        <div class="js_photo_rotate">
+          {% if not task_select %}
+            <div class="js_photo_rotate_left" data-pht_id="image-gallery-image"><i class="fas fa-sync"></i> {{ pht_rotate_left }}</div>
+            <div class="js_photo_rotate_right" data-pht_id="image-gallery-image"><i class="fas fa-sync"></i> {{ pht_rotate_right }}</div>
+          {% endif %}
+        </div>
+        <button type="button" id="show-next-image" class="btn btn-secondary float-right"><i
+            class="fa fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<input type="hidden" value="{{ photo_ids }}" class="js_photo_ids">
+<script src="https://unpkg.com/@google/markerclustererplus@5.1.0/dist/markerclustererplus.min.js"></script>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key={{ map_api_key }}&callback=initMap&libraries=geometry"></script>
+{% endblock %}

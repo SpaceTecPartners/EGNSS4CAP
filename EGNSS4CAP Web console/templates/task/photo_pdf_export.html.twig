@@ -1,0 +1,105 @@
+<link rel="stylesheet" href="css/pdf/pdf.css" type="text/css" />
+
+<h2>{{ user.name }} {{ user.surname }} -
+{% if unassigned %}
+  {{ heading }}
+{% else %}
+  {{ header }} {{ task.name }}
+{% endif %}
+</h2>
+{% if not unassigned %}
+<div class="pdf_header">
+  <table class="pdf_header_table">
+      <thead>
+        <tr>
+          <th>{{ status }}</th>
+          <th>{{ photos_verified }}</th>
+          <th>{{ type }}</th>
+          <th>{{ name }}</th>
+          <th>{{ note }}</th>
+          <th>{{ description }}</th>
+          <th>{{ note_returned }}</th>
+          {% if task.flag_id == 2 %}
+            <th>{{ note_declined }}</th>
+          {% endif %}
+          <th>{{ created }}</th>
+          <th>{{ due_date }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ task.status }}</td>
+          <td>
+          {% if tasks_verified == 'verified' %}
+            {{ yes }}
+          {% elseif  tasks_verified == 'not_verified' %}
+            {{ no }}
+          {% endif %}
+          </td>
+          <td>{{ task.type_name }}</td>
+          <td>{{ task.name }}</td>
+          <td>{{ task.note }}</td>
+          <td>{{ task.text }}</td>
+          <td>{{ task.text_returned }}</td>
+          {% if task.flag_id == 2  %}
+            <td>{{ task.text_reason }}</td>
+          {% endif %}
+          <td>{{ task.date_created }}</td>
+          <td>{{ task.task_due_date }}</td>
+        </tr>
+      </tbody>
+  </table>
+</div>
+{% endif %}
+{% for image in images %}
+<div class="pdf_image_row">
+  <table class="pdf_image_row_table">
+    <tr>
+      <td class="pdf_image_row_table_td1">
+        <img src="photo_detail.php?justimg=1&rotation={{ image.rotation }}&img={{ image.path }}{{ image.file_name }}">
+      </td>
+      <td class="pdf_image_row_table_td2">
+        <table>
+          <tr>
+            <td class="metadata">
+              <label>{{ pht_lat }}: {{ image.lat }}</label><br/>
+              <label>{{ pht_lng }}: {{ image.lng }}</label><br/>
+              <label>{{ pht_altitude }}: {{ image.altitude }}</label><br/>
+              <label>{{ pht_azimuth }}: {{ image.azimuth }}</label><br/>
+              <label>{{ pht_angle }}: {{ image.photo_angle }}</label><br/>
+              <label>{{ pht_note }}: {{ image.note }}</label><br/>
+              <label></label><br/>
+              <label>{{ pht_device }}: {{ image.device }}</label><br/>
+              <label>{{ pht_accuracy }}: {{ image.accuracy }}</label><br/>
+              <label>{{ pht_distance }}: {{ image.distance }}</label><br/>
+            </td>
+            <td class="metadata">
+              <label>{{ pht_timestamp }}: {{ image.timestamp }}</label><br/>
+              <label>{{ pht_created_date }}: {{ image.created_date }}</label><br/>
+              <label></label><br/>
+              <label class="text_color_{{ image.flg_checked_location }}">
+                {% if image.flg_checked_location is same as(1) %}
+                  {{ pht_checked_location_ok }}
+                {% elseif  image.flg_checked_location is same as(0) %}
+                  {{ pht_checked_location_fail }}
+                {% else %}
+                  {{ pht_checked_location_notvf }}
+                {% endif %}
+              </label><br/>
+              <label class="text_color_{{ image.flg_original }}">
+                {% if image.flg_original is same as(1) %}
+                  {{ pht_original_ok }}
+                {% elseif  image.flg_original is same as(0) %}
+                  {{ pht_original_fail }}
+                {% else %}
+                  {{ pht_original_notvf }}
+                {% endif %}
+              </label>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</div>
+{% endfor %}

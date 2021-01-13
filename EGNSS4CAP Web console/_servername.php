@@ -1,0 +1,3 @@
+<?php
+define('SERVER', 'LOCALHOST');
+?>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menuItem_syncAll"
+        android:title="@string/menu_syncTasks" />
+    <item
+        android:id="@+id/menuItem_home"
+        android:title="@string/menu_home"
+        android:visible="false" />
+    <item
+        android:id="@+id/menuItem_taskOverview"
+        android:title="@string/menu_taskOverview" />
+    <item
+        android:id="@+id/menuItem_unownedPhoto"
+        android:title="@string/menu_unownedPhoto" />
+    <item
+        android:id="@+id/menuItem_map"
+        android:title="@string/menu_map" />
+    <item
+        android:id="@+id/menuItem_settings"
+        android:title="@string/menu_settings" />
+    <item
+        android:id="@+id/menuItem_gnssRawData"
+        android:title="@string/menu_gnssRawData" />
+    <item
+        android:id="@+id/menuItem_about"
+        android:title="@string/menu_about" />
+    <item
+        android:id="@+id/menuItem_logout"
+        android:title="@string/menu_logout" />
+</menu>

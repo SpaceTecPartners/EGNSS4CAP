@@ -1,0 +1,66 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
+    defaultConfig {
+        minSdkVersion 23
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+}
+
+afterEvaluate {
+    publishing {
+        repositories {
+            maven {
+                name = 'foxRepo'
+                url = "file://${buildDir}/repo"
+            }
+        }
+
+        publications {
+            def def_groupId = 'eu.foxcom.convex_hull'
+            def def_artifactId = 'convex_hull'
+            def def_version = '1.0';
+
+            release(MavenPublication) {
+                from components.release
+
+                groupId = def_groupId
+                artifactId = def_artifactId
+                version = def_version
+            }
+
+            debug(MavenPublication) {
+                from components.debug
+
+                groupId = def_groupId
+                artifactId = def_artifactId
+                version = def_version
+            }
+        }
+    }
+}

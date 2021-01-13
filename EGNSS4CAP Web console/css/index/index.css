@@ -1,0 +1,198 @@
+.js_new_farmer_inputs{
+  display: none;
+  padding: 20px;
+  border: 1px solid #7878;
+}
+.js_new_agency_inputs{
+  display: none;
+  padding: 20px;
+  border: 1px solid #7878;
+}
+.clickable:hover{
+  background-color: #458B45;
+}
+.js_new_task_inputs{
+  display: none;
+  padding: 20px;
+  border: 1px solid #7878;
+}
+.farmer_unassigned_photos form {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 20px;
+  justify-content: space-around;
+  align-items: baseline;
+}
+.farmer_unassigned_photos .thumb {
+  position: relative;
+}
+.farmer_unassigned_photos .thumb > label{
+  margin: 5px;
+  border: 4px solid #dee2e6;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.farmer_unassigned_photos .thumb > label > img {
+  margin: 3px;
+  width: 300px;
+  max-height: 300px;
+  object-fit: scale-down;
+}
+.farmer_unassigned_photos .thumb > label:hover{
+  opacity: 0.8;
+  border: 4px solid rgba(220, 53, 69,0.3);
+}
+.js_assign_photos_task_select{
+  /*display: none;*/
+  width: 100%;
+}
+.js_assign_photos_task_select > div{
+  padding: 20px;
+  border: 1px solid #7878;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.js_assign_photos_task_select > div select{
+  width: 250px;
+  border-radius: 4px;
+  border: 2px solid #787878;
+}
+.assign_photo_input{
+  display: none;
+}
+.farmer_unassigned_photos .thumb > input:checked + label{
+  border: 4px solid #dc3545;
+}
+
+.thumb{
+  margin-top: 15px;
+  margin-bottom: 15px;
+  display: flex;
+  max-width: unset;
+  justify-content: center;
+  align-items: center;
+  padding: 25px 0;
+}
+.thumb > .thumbnail > .img-thumbnail {
+  width: 300px;
+  max-height: 300px;
+  object-fit: scale-down;
+  transition: 0.3s ease;
+}
+.js_photo_metadata_popup{
+  font-size: 10px;
+  flex-wrap: wrap;
+  flex-direction: column;
+  background: rgba(255,255,255,0.8);
+  padding: 5px;
+  border-radius: 0.25rem;
+  border: 1px solid #7878;
+  z-index: 50;
+  height: 250px;
+  width: 400px;
+  display: flex;
+  position: relative;
+}
+.js_photo_metadata_popup .top_action_bar {
+  position: absolute;
+  right: 0px;
+  top: -35px;
+  cursor: pointer;
+  display: flex;
+  font-size: 17px;
+}
+
+#image-gallery .js_photo_rotate{
+  cursor: pointer;
+  display: flex;
+  font-size: 17px;
+}
+.js_photo_metadata_popup .js_photo_rotate{
+  position: absolute;
+  left: 7px;
+  bottom: -38px;
+  cursor: pointer;
+  display: flex;
+  font-size: 17px;
+}
+#image-gallery .modal-footer{
+  display: flex;
+  justify-content: space-between;
+}
+#image-gallery #image-gallery-image{
+  transition: 0.3s ease;
+  max-width: 740px;
+  max-height: 740px;
+  object-fit: scale-down;
+}
+.modal-body{
+  overflow: hidden;
+}
+#image-gallery .js_photo_rotate div, .js_photo_metadata_popup .js_photo_rotate div{
+  transition: 0.15s ease;
+  user-select: none;
+}
+#image-gallery .js_photo_rotate div:hover, .js_photo_metadata_popup .js_photo_rotate div:hover {
+  transform: scale(1.05);
+}
+#image-gallery .js_photo_rotate div:hover:active, .js_photo_metadata_popup .js_photo_rotate div:hover:active {
+  transition: 0.05s ease;
+  transform: scale(1.01);
+}
+#image-gallery .js_photo_rotate i, .js_photo_metadata_popup .js_photo_rotate i {
+  font-size: 20px;
+}
+#image-gallery .js_photo_rotate .js_photo_rotate_left > i, .js_photo_metadata_popup .js_photo_rotate .js_photo_rotate_left > i {
+  transform: scaleX(-1);
+}
+#image-gallery .js_photo_rotate .js_photo_rotate_right, .js_photo_metadata_popup .js_photo_rotate .js_photo_rotate_right {
+  margin: 0 10px;
+}
+.js_photo_metadata_popup > label {
+  max-width: 220px;
+}
+.clicksort{
+  cursor: pointer;
+  transition: 0.3s ease;
+  position: relative;
+}
+.clicksort:hover{
+  background: rgba(0,0,0,0.1);
+}
+.clicksort:hover .sortflag{
+  display: block;
+  opacity: 0.3;
+  transform: rotate(180deg);
+}
+.clicksort .sortflag{
+  position: absolute;
+  right: 5px;
+  top: 0px;
+  display: none;
+}
+.clicksort.ASC{ background: rgba(165, 223, 0, 0.3); }
+.clicksort.DESC{ background: rgba(165, 223, 0, 0.3); }
+.clicksort.ASC .sortflag{
+  display: block;
+  transform: rotate(180deg);
+}
+.clicksort.DESC .sortflag{
+  display: block;
+}
+.js_button_open_user_edit{
+  min-width: 105px;
+}
+
+.filter_section { margin: 10px 0; border-bottom: 1px solid; border-top: 1px solid; }
+.filter_section .status_filters { display: flex; flex-direction: row; padding: 10px 0; flex-wrap: wrap; border-bottom: 1px solid; }
+.filter_section .status_filters div { width: 140px; }
+.filter_section .advanced_sorting { display: flex; flex-direction: row; padding: 10px 0; flex-wrap: wrap; }
+.filter_section .advanced_sorting div { width: 200px; }
+.filter_section div div { border: 1px solid #787878; border-radius: 5px; margin-right: 7px; margin-bottom: 4px; }
+.filter_section div div:hover { background: #d9d9d9; }
+.filter_section div div label { width: calc(100% - 25px); margin: 0; padding: 2px; text-align: center; cursor: pointer; }
+
+.js_path_delete { cursor: pointer; }

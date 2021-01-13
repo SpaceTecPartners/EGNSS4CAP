@@ -1,0 +1,4 @@
+include ':convex_hull'
+include ':gnss_scan'
+rootProject.name='EGNSS4CAP'
+include ':app'
