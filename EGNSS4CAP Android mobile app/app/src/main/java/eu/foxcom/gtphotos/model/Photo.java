@@ -13,6 +13,7 @@ import android.util.Base64;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import org.apache.commons.io.FileUtils;
@@ -30,9 +31,60 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.Phaser;
 
-@Entity
+import eu.foxcom.gtphotos.model.ekf.EkfCalculationModule;
+import eu.foxcom.gtphotos.model.ekf.EkfController;
+import eu.foxcom.gtphotos.model.ekf.EkfData;
+
+@Entity(indices = {@Index(value = {"realId"}, unique = true)})
 public class Photo {
+
+    public static abstract class UpdatePhotoReceiver extends UpdateReceiver {
+
+        private boolean isAutoSuccessDBSave = true;
+
+        public UpdatePhotoReceiver() {
+            super();
+        }
+
+        public UpdatePhotoReceiver(SyncQueue syncQueue) {
+            super(syncQueue);
+        }
+
+        public UpdatePhotoReceiver(Phaser phaser) {
+            super(phaser);
+        }
+
+        protected final void successExec(AppDatabase appDatabase, Photo photo) {
+            if (isAutoSuccessDBSave) {
+                photo.refreshToDB(appDatabase);
+            }
+            success(appDatabase, photo);
+            finishExec(true);
+        }
+
+        protected abstract void success(AppDatabase appDatabase, Photo photo);
+
+        @Override
+        protected void failedExec(String error) {
+            failed(error);
+            finishExec(false);
+        }
+
+        // region get, set
+
+        public boolean isAutoSuccessDBSave() {
+            return isAutoSuccessDBSave;
+        }
+
+        public void setAutoSuccessDBSave(boolean autoSuccessDBSave) {
+            isAutoSuccessDBSave = autoSuccessDBSave;
+        }
+
+
+        // endregion
+    }
 
     // otherwise to database
     public static final boolean TO_FILE = true;
@@ -52,6 +104,7 @@ public class Photo {
     /* interní id, neodpovídá serverové databázi*/
     @PrimaryKey(autoGenerate = true)
     private Long id;
+    private Long realId;
     private String taskId;
     private String userId;
     private boolean isSent = false;
@@ -82,6 +135,35 @@ public class Photo {
     private JSONObject networkInfo;
     private Double centroidLat;
     private Double centroidLng;
+    /* EKF data */
+    private Double efkLatGpsL1;
+    private Double efkLatGpsL5;
+    private Double efkLatGpsIf;
+    private Double efkLatGalE1;
+    private Double efkLatGalE5;
+    private Double efkLatGalIf;
+
+    private Double efkLngGpsL1;
+    private Double efkLngGpsL5;
+    private Double efkLngGpsIf;
+    private Double efkLngGalE1;
+    private Double efkLngGalE5;
+    private Double efkLngGalIf;
+
+    private Double efkAltGpsL1;
+    private Double efkAltGpsL5;
+    private Double efkAltGpsIf;
+    private Double efkAltGalE1;
+    private Double efkAltGalE5;
+    private Double efkAtlGalIf;
+
+    private DateTime efkTimeGpsL1;
+    private DateTime efkTimeGpsL5;
+    private DateTime efkTimeGpsIf;
+    private DateTime efkTimeGalE1;
+    private DateTime efkTimeGalE5;
+    private DateTime efkTimeGalIf;
+    /**/
     @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
     private byte[] photoBytes;
     private String digest;
@@ -90,7 +172,7 @@ public class Photo {
     // indikace chyby při posledním odesílání na server
     // přidává mezistav pro nové odeslání samostatné fotografie bez možnosti změn
     // pro fotografie v tasku není využíváno (nutný refaktor celé synchronizace)
-     @ColumnInfo(defaultValue = "0")
+    @ColumnInfo(defaultValue = "0")
     private boolean isLastSendFailed = false;
 
     public static Photo createFromAppDatabase(long photoId, AppDatabase appDatabase, Context context) {
@@ -99,7 +181,7 @@ public class Photo {
         return photo;
     }
 
-    public static Photo createFromResponse(JSONObject jsonObject, String taskId, int indx, Context context, AppDatabase appDatabase) throws JSONException, IOException {
+    public static Photo createFromResponse(JSONObject jsonObject, Long realId, String taskId, int indx, Context context, AppDatabase appDatabase) throws JSONException, IOException {
         Double lat = jsonObject.isNull("lat") ? null : jsonObject.getDouble("lat");
         Double lng = jsonObject.isNull("lng") ? null : jsonObject.getDouble("lng");
         DateTime created = jsonObject.isNull("created") ? null : DateTime.parse(jsonObject.getString("created"), DateTimeFormat.forPattern(DATETIME_RECEIVED_FORMAT));
@@ -137,7 +219,7 @@ public class Photo {
         if (jsonObject.has("photo_heading") && !jsonObject.isNull("photo_heading")) {
             photoHeading = jsonObject.getDouble("photo_heading");
         }
-        Photo photo = new Photo(taskId, userId, lat, lng, altitude, azim, photoHeading, created, path, photoBytes, indx, context);
+        Photo photo = new Photo(realId, taskId, userId, lat, lng, altitude, azim, photoHeading, created, path, photoBytes, indx, context);
         photo.isSent = true;
         String note = null;
         if (jsonObject.has("note") && !jsonObject.isNull("note")) {
@@ -207,6 +289,53 @@ public class Photo {
         photo.centroidLng = photoDataController.getCentroidLongitude();
         photo.tilt = photoDataController.computeTilt(photoDataController.getLastScreenRotation());
 
+        /* ekf data */
+        EkfController ekfController = photoDataController.getEkfController();
+        EkfData gpsL1 = ekfController.getModule(EkfCalculationModule.DEFAULT_MODULE.GPS_L1).getEkfData();
+        EkfData gpsL5 = ekfController.getModule(EkfCalculationModule.DEFAULT_MODULE.GPS_L5).getEkfData();
+        EkfData gpsIf = ekfController.getModule(EkfCalculationModule.DEFAULT_MODULE.GPS_IF).getEkfData();
+        EkfData galileoE1 = ekfController.getModule(EkfCalculationModule.DEFAULT_MODULE.GALILEO_E1).getEkfData();
+        EkfData galileoE5 = ekfController.getModule(EkfCalculationModule.DEFAULT_MODULE.GALILEO_E5A).getEkfData();
+        EkfData galileoIf = ekfController.getModule(EkfCalculationModule.DEFAULT_MODULE.GALILEO_IF).getEkfData();
+        if (gpsL1 != null) {
+            photo.efkLatGpsL1 = gpsL1.getLatitude();
+            photo.efkLngGpsL1 = gpsL1.getLongitude();
+            photo.efkAltGpsL1 = gpsL1.getAltitude();
+            photo.efkTimeGpsL1 = gpsL1.getReferenceTime();
+        }
+        if (gpsL5 != null) {
+            photo.efkLatGpsL5 = gpsL5.getLatitude();
+            photo.efkLngGpsL5 = gpsL5.getLongitude();
+            photo.efkAltGpsL5 = gpsL5.getAltitude();
+            photo.efkTimeGpsL5 = gpsL5.getReferenceTime();
+        }
+        if (gpsIf != null) {
+            photo.efkLatGpsIf = gpsIf.getLatitude();
+            photo.efkLngGpsIf = gpsIf.getLongitude();
+            photo.efkAltGpsIf = gpsIf.getAltitude();
+            photo.efkTimeGpsIf = gpsIf.getReferenceTime();
+        }
+        if (galileoE1 != null) {
+            photo.efkLatGalE1 = galileoE1.getLatitude();
+            photo.efkLngGalE1 = galileoE1.getLongitude();
+            photo.efkAltGalE1 = galileoE1.getAltitude();
+            photo.efkTimeGalE1 = galileoE1.getReferenceTime();
+        }
+
+        if (galileoE5 != null) {
+            photo.efkLatGalE5 = galileoE5.getLatitude();
+            photo.efkLngGalE5 = galileoE5.getLongitude();
+            photo.efkAltGalE5 = galileoE5.getAltitude();
+            photo.efkTimeGalE5 = galileoE5.getReferenceTime();
+        }
+        if (galileoIf != null) {
+            photo.efkLatGalIf = galileoIf.getLatitude();
+            photo.efkLngGalIf = galileoIf.getLongitude();
+            photo.efkAtlGalIf = galileoIf.getAltitude();
+            photo.efkTimeGalIf = galileoIf.getReferenceTime();
+        }
+        /**/
+
         DateTime original = photo.created;
         photo.saveToExif(original);
 
@@ -215,7 +344,7 @@ public class Photo {
         return createBaseFactory(photo);
     }
 
-    private static int findNewIndx(String taskId, AppDatabase appDatabase) {
+    public static int findNewIndx(String taskId, AppDatabase appDatabase) {
         Integer maxIndx;
         if (taskId != null) {
             maxIndx = appDatabase.photoDao().selectMaxIndx(taskId);
@@ -297,7 +426,8 @@ public class Photo {
         return image;
     }
 
-    private Photo(String taskId, String userId, Double lat, Double lng, Double altitude, Double azimuth, Double photoHeading, DateTime created, String photoPath, byte[] photoBytes, int indx, Context context) throws IOException {
+    private Photo(Long realId, String taskId, String userId, Double lat, Double lng, Double altitude, Double azimuth, Double photoHeading, DateTime created, String photoPath, byte[] photoBytes, int indx, Context context) throws IOException {
+        this.realId = realId;
         this.taskId = taskId;
         this.userId = userId;
         this.lat = lat;
@@ -487,6 +617,35 @@ public class Photo {
         jsonObject.put("photo", getBASE64Photo());
         jsonObject.put("digest", digest);
         jsonObject.put("note", note);
+        /* ekf data */
+        jsonObject.put("efkLatGpsL1", efkLatGpsL1);
+        jsonObject.put("efkLatGpsL5", efkLatGpsL5);
+        jsonObject.put("efkLatGpsIf", efkLatGpsIf);
+        jsonObject.put("efkLatGalE1", efkLatGalE1);
+        jsonObject.put("efkLatGalE5", efkLatGalE5);
+        jsonObject.put("efkLatGalIf", efkLatGalIf);
+
+        jsonObject.put("efkLngGpsL1", efkLngGpsL1);
+        jsonObject.put("efkLngGpsL5", efkLngGpsL5);
+        jsonObject.put("efkLngGpsIf", efkLngGpsIf);
+        jsonObject.put("efkLngGalE1", efkLngGalE1);
+        jsonObject.put("efkLngGalE5", efkLngGalE5);
+        jsonObject.put("efkLngGalIf", efkLngGalIf);
+
+        jsonObject.put("efkAltGpsL1", efkAltGpsL1);
+        jsonObject.put("efkAltGpsL5", efkAltGpsL5);
+        jsonObject.put("efkAltGpsIf", efkAltGpsIf);
+        jsonObject.put("efkAltGalE1", efkAltGalE1);
+        jsonObject.put("efkAltGalE5", efkAltGalE5);
+        jsonObject.put("efkAtlGalIf", efkAtlGalIf);
+
+        jsonObject.put("efkTimeGpsL1", efkTimeGpsL1 == null ? null : efkTimeGpsL1.toString());
+        jsonObject.put("efkTimeGpsL1", efkTimeGpsL5 == null ? null : efkTimeGpsL5.toString());
+        jsonObject.put("efkTimeGpsIf", efkTimeGpsIf == null ? null : efkTimeGpsIf.toString());
+        jsonObject.put("efkTimeGalE1", efkTimeGalE1 == null ? null : efkTimeGalE1.toString());
+        jsonObject.put("efkTimeGalE5", efkTimeGalE5 == null ? null : efkTimeGalE5.toString());
+        jsonObject.put("efkTimeGalIf", efkTimeGalIf == null ? null : efkTimeGalIf.toString());
+        /**/
         return jsonObject;
     }
 
@@ -801,5 +960,209 @@ public class Photo {
         this.tilt = tilt;
     }
 
+    public Double getEfkLatGpsL1() {
+        return efkLatGpsL1;
+    }
+
+    public void setEfkLatGpsL1(Double efkLatGpsL1) {
+        this.efkLatGpsL1 = efkLatGpsL1;
+    }
+
+    public Double getEfkLatGpsL5() {
+        return efkLatGpsL5;
+    }
+
+    public void setEfkLatGpsL5(Double efkLatGpsL5) {
+        this.efkLatGpsL5 = efkLatGpsL5;
+    }
+
+    public Double getEfkLatGpsIf() {
+        return efkLatGpsIf;
+    }
+
+    public void setEfkLatGpsIf(Double efkLatGpsIf) {
+        this.efkLatGpsIf = efkLatGpsIf;
+    }
+
+    public Double getEfkLatGalE1() {
+        return efkLatGalE1;
+    }
+
+    public void setEfkLatGalE1(Double efkLatGalE1) {
+        this.efkLatGalE1 = efkLatGalE1;
+    }
+
+    public Double getEfkLatGalE5() {
+        return efkLatGalE5;
+    }
+
+    public void setEfkLatGalE5(Double efkLatGalE5) {
+        this.efkLatGalE5 = efkLatGalE5;
+    }
+
+    public Double getEfkLatGalIf() {
+        return efkLatGalIf;
+    }
+
+    public void setEfkLatGalIf(Double efkLatGalIf) {
+        this.efkLatGalIf = efkLatGalIf;
+    }
+
+    public Double getEfkLngGpsL1() {
+        return efkLngGpsL1;
+    }
+
+    public void setEfkLngGpsL1(Double efkLngGpsL1) {
+        this.efkLngGpsL1 = efkLngGpsL1;
+    }
+
+    public Double getEfkLngGpsL5() {
+        return efkLngGpsL5;
+    }
+
+    public void setEfkLngGpsL5(Double efkLngGpsL5) {
+        this.efkLngGpsL5 = efkLngGpsL5;
+    }
+
+    public Double getEfkLngGpsIf() {
+        return efkLngGpsIf;
+    }
+
+    public void setEfkLngGpsIf(Double efkLngGpsIf) {
+        this.efkLngGpsIf = efkLngGpsIf;
+    }
+
+    public Double getEfkLngGalE1() {
+        return efkLngGalE1;
+    }
+
+    public void setEfkLngGalE1(Double efkLngGalE1) {
+        this.efkLngGalE1 = efkLngGalE1;
+    }
+
+    public Double getEfkLngGalE5() {
+        return efkLngGalE5;
+    }
+
+    public void setEfkLngGalE5(Double efkLngGalE5) {
+        this.efkLngGalE5 = efkLngGalE5;
+    }
+
+    public Double getEfkLngGalIf() {
+        return efkLngGalIf;
+    }
+
+    public void setEfkLngGalIf(Double efkLngGalIf) {
+        this.efkLngGalIf = efkLngGalIf;
+    }
+
+    public Double getEfkAltGpsL1() {
+        return efkAltGpsL1;
+    }
+
+    public void setEfkAltGpsL1(Double efkAltGpsL1) {
+        this.efkAltGpsL1 = efkAltGpsL1;
+    }
+
+    public Double getEfkAltGpsL5() {
+        return efkAltGpsL5;
+    }
+
+    public void setEfkAltGpsL5(Double efkAltGpsL5) {
+        this.efkAltGpsL5 = efkAltGpsL5;
+    }
+
+    public Double getEfkAltGpsIf() {
+        return efkAltGpsIf;
+    }
+
+    public void setEfkAltGpsIf(Double efkAltGpsIf) {
+        this.efkAltGpsIf = efkAltGpsIf;
+    }
+
+    public Double getEfkAltGalE1() {
+        return efkAltGalE1;
+    }
+
+    public void setEfkAltGalE1(Double efkAltGalE1) {
+        this.efkAltGalE1 = efkAltGalE1;
+    }
+
+    public Double getEfkAltGalE5() {
+        return efkAltGalE5;
+    }
+
+    public void setEfkAltGalE5(Double efkAltGalE5) {
+        this.efkAltGalE5 = efkAltGalE5;
+    }
+
+    public Double getEfkAtlGalIf() {
+        return efkAtlGalIf;
+    }
+
+    public void setEfkAtlGalIf(Double efkAtlGalIf) {
+        this.efkAtlGalIf = efkAtlGalIf;
+    }
+
+    public DateTime getEfkTimeGpsL1() {
+        return efkTimeGpsL1;
+    }
+
+    public void setEfkTimeGpsL1(DateTime efkTimeGpsL1) {
+        this.efkTimeGpsL1 = efkTimeGpsL1;
+    }
+
+    public DateTime getEfkTimeGpsL5() {
+        return efkTimeGpsL5;
+    }
+
+    public void setEfkTimeGpsL5(DateTime efkTimeGpsL5) {
+        this.efkTimeGpsL5 = efkTimeGpsL5;
+    }
+
+    public DateTime getEfkTimeGpsIf() {
+        return efkTimeGpsIf;
+    }
+
+    public void setEfkTimeGpsIf(DateTime efkTimeGpsIf) {
+        this.efkTimeGpsIf = efkTimeGpsIf;
+    }
+
+    public DateTime getEfkTimeGalE1() {
+        return efkTimeGalE1;
+    }
+
+    public void setEfkTimeGalE1(DateTime efkTimeGalE1) {
+        this.efkTimeGalE1 = efkTimeGalE1;
+    }
+
+    public DateTime getEfkTimeGalE5() {
+        return efkTimeGalE5;
+    }
+
+    public void setEfkTimeGalE5(DateTime efkTimeGalE5) {
+        this.efkTimeGalE5 = efkTimeGalE5;
+    }
+
+    public DateTime getEfkTimeGalIf() {
+        return efkTimeGalIf;
+    }
+
+    public void setEfkTimeGalIf(DateTime efkTimeGalIf) {
+        this.efkTimeGalIf = efkTimeGalIf;
+    }
+
+    public Long getRealId() {
+        return realId;
+    }
+
+    public void setRealId(Long realId) {
+        this.realId = realId;
+    }
+
     // endregion
 }
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

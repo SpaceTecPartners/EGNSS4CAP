@@ -15,12 +15,12 @@ body{
 
 .login{
   height: 50vh;
-  width: 50vw;
+  width: 304px;
   background-color: transparent;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   position: absolute;
-  margin-left: 17%;
-  margin-top: 5%;
+  white-space: nowrap;
 }
+/*Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu*/

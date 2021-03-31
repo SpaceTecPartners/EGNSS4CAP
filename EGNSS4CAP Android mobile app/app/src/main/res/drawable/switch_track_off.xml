@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:top="5dp"
+        android:bottom="5dp"
+        android:start="10dp"
+        android:end="10dp">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <solid android:color="@color/switchTrackInactive"/>
+            <corners android:radius="100dp"/>
+        </shape>
+    </item>
+</layer-list>
+
+    <!-- Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu -->

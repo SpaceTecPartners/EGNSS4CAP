@@ -6,3 +6,5 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 </manifest>
+
+    <!-- Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu -->

@@ -278,16 +278,18 @@ class index_model {
       return $return;
   }
 
-  public static function setDefaultListFilter($sqlver = true){
-    unset($_SESSION['task_list_filter']);
-    $_SESSION['task_list_filter']['filter'] = array('status' => array('new' => 1,'open' => 1,'data provided' => 1, 'data checked' => 1, 'closed' => 1, 'returned' => 1), 'flag' => array('1' => 1, '2' => 1));
-    $_SESSION['task_list_filter']['search'] = "";
-    if ($sqlver) return index_model::setListFilter($_SESSION['task_list_filter']['filter']);
+  public static function setDefaultListFilter($sqlver = true, $page = "task_list"){
+    unset($_SESSION[$page.'_filter']);
+    if ($page == 'task_list') {
+        $_SESSION['task_list_filter']['filter'] = array('status' => array('new' => 1,'open' => 1,'data provided' => 1, 'data checked' => 1, 'closed' => 1, 'returned' => 1), 'flag' => array('1' => 1, '2' => 1));
+        $_SESSION[$page.'_filter']['search'] = "";
+    }
+    if ($sqlver) return index_model::setListFilter($_SESSION[$page.'_filter']['filter']);
   }
 
   public static function get_data_from_db($fields){
     return dibi::select($fields['db_col'].' as data')->from($fields['db_table'])->where('id = %i', $fields['db_id'])->fetchSingle();
   }
 }
-
+//Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
 ?>

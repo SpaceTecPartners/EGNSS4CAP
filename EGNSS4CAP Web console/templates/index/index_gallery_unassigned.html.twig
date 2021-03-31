@@ -1,24 +1,27 @@
+{% set page_name = 'gallery_unassigned' %}
 {% extends "base.html.twig" %}
 {% block title %}{{ title }}{% endblock %}
 {% block body %}
 <h2>{{ heading }}</h2>
 <div>
-  <a href="{{ ret_url }}" class="btn btn-secondary text-capitalize">{{ back }}</a>
-  {% if not task_select %}
-    <a href="{{ pdf_url }}" target="_blank" class="btn btn-secondary text-capitalize">{{ pdf_export }}</a>
-  {% endif %}
+  <a href="{{ ret_url }}" class="btn btn-primary text-capitalize">{{ back|upper }}</a>
 </div>
 
-<div class="float-left w-100 p-2 m-2">
-  <div id="map"></div>
+<div class="float-left w-100 mt-3">
+  <div class="row map_dropdown"><div class="col"><div id="map"></div><div class="map_dropdown_btn">&boxh; &boxh;&boxh; &boxh;&boxh;&boxh; <span class="btn_hide">&#x25ba; {{hide_map|upper}} &#x25c4;</span><span class="btn_show">&#x25c4; {{show_map|upper}} &#x25ba;</span> &boxh;&boxh;&boxh; &boxh;&boxh; &boxh;</div></div></div>
   <input type="hidden" class="js_search_input" value="{{ user_id }}">
 </div>
+
 {% if not task_select %}
   <div class="float-left w-100">
-    <a href="#" class="js_select_all_photos btn btn-secondary text-capitalize">{{ select_all }}</a>
-    <a href="#" class="js_deselect_all_photos btn btn-secondary text-capitalize">{{ deselect_all }}</a>
-    <button type="button" class="js_button_open_task_select mt-2 mb-2 btn btn-primary">{{ choose_task_button }}</button>
-    <button type="button" class="js_photo_multi_delete btn btn-secondary text-capitalize"><i class="fas fa-trash"></i> {{ pht_multi_delete }}</button>
+    <a href="#" class="js_select_all_photos btn btn-outline-secondary text-capitalize mb-2">{{ select_all|upper }}</a>
+    <a href="#" class="js_deselect_all_photos btn btn-outline-secondary text-capitalize mb-2">{{ deselect_all|upper }}</a>
+    <button type="button" class="js_button_open_task_select mb-2 btn btn-primary">{{ choose_task_button|upper }}</button>
+    <button style="margin: 0 50px 0 0;" type="button" class="js_photo_multi_delete btn btn-outline-secondary text-capitalize mb-2"><i class="fas fa-trash"></i> {{ pht_multi_delete|upper }}</button>
+    {% if not task_select %}
+      <a id="unassigned_pdf_export" href="{{ pdf_url }}" target="_blank" class="btn btn-primary text-capitalize mb-2">{{ pdf_export|upper }}</a>
+      <a id="unassigned_pdf_export_selected" href="{{ pdf_url }}" target="_blank" class="btn btn-primary text-capitalize mb-2">{{ pdf_export_selected|upper }}</a>
+    {% endif %}
   </div>
 {% endif %}
 <div class="float-left w-100">
@@ -35,6 +38,17 @@
       <input type="hidden" name="id" value="{{ user_id }}">
       {% for photo in photos %}
         <div class="thumb">
+          <div class="top_action_bar">
+            {% if not task_select %}
+              <div class="icon_cont js_photo_delete" data-photo_db_id="{{ photo.id }}"><i class="fas fa-trash"></i></div>
+            {% endif %}
+            {% if not task_select %}
+              <div class="js_photo_rotate">
+                <div class="icon_cont js_photo_rotate_left" data-pht_id="photo_{{ photo.id }}"><i class="fas fa-sync"></i></div>
+                <div class="icon_cont js_photo_rotate_right" data-pht_id="photo_{{ photo.id }}"><i class="fas fa-sync"></i></div>
+              </div>
+            {% endif %}
+          </div>
           <input class="assign_photo_input" id="assign_photo_input_{{ photo.id }}" type="checkbox" name="photos[]" value="{{ photo.id }}" {% if task_select %}checked="checked"{% endif %}>
           <label for="assign_photo_input_{{ photo.id }}" class="thumbnail" data-photo_db_id="{{ photo.id }}" data-rotation="{{ photo.rotation }}"
           data-image-id="" data-toggle="modal" data-title="" data-image="{{ photo.src }}" data-target="#image-gallery"
@@ -42,25 +56,74 @@
             <img src="{{ photo.src }}">
           </label>
           <div class="js_photo_metadata_popup">
-            <div class="top_action_bar">
-              {% if not task_select %}
-                <div class="js_photo_delete" data-photo_db_id="{{ photo.id }}"><i class="fas fa-trash"></i> {{ pht_delete }}</div>
-              {% endif %}
-            </div>
+            {% if not task_select %}
+              <div class="js_photo_select" data-checkbox_id="assign_photo_input_{{ photo.id }}" ><i class="fas fa-check"></i> {{ pht_select }}</div>
+            {% endif %}
             <!--<label><b>{{ photo_meta_head }}</b></label>-->
+            <table class="table">
+              <tbody>
+                <tr><td><label title="{{ pht_lat_title }}">{{ pht_lat }}</label></td><td><label title="{{ pht_lat_title }}">{{ photo.lat }}</label></td></tr>
+                <tr><td><label title="{{ pht_lng_title }}">{{ pht_lng }}</label></td><td><label title="{{ pht_lng_title }}">{{ photo.lng }}</label></td></tr>
+                <tr><td><label title="{{ pht_alt_title }}">{{ pht_altitude }}</label></td><td><label title="{{ pht_alt_title }}">{{ photo.altitude }} m</label></td></tr>
+                <tr><td><label title="{{ pht_azimuth_title }}">{{ pht_azimuth }}</label></td><td><label title="{{ pht_azimuth_title }}">{{ photo.azimuth }}</label></td></tr>
+                <tr><td><label title="{{ pht_angle_title }}">{{ pht_angle }}</label></td><td><label title="{{ pht_angle_title }}">{{ photo.photo_angle }}</label></td></tr>
+                <tr><td><label title="{{ pht_note_title }}">{{ pht_note }}</label></td><td><label title="{{ pht_note_title }}">{{ photo.note }}</label></td></tr>
+                <tr><td><label title="{{ pht_device_title }}">{{ pht_device }}</label></td><td><label title="{{ pht_device_title }}">{{ photo.device }}</label></td></tr>
+                <tr><td><label title="{{ pht_accuracy_title }}">{{ pht_accuracy }}</label></td><td><label title="{{ pht_accuracy_title }}">{% if photo.accuracy is not empty %} {{ photo.accuracy }} m{% endif %}</label></td></tr>
+                <tr><td><label title="{{ pht_distance_title }}">{{ pht_distance }}</label></td><td><label title="{{ pht_distance_title }}">{% if photo.distance is not empty %} {{ photo.distance }} m{% endif %}</label></td></tr>
+                <tr><td><label title="{{ pht_distance_nmea_title }}">{{ pht_distance_nmea }}</label></td><td><label title="{{ pht_distance_nmea_title }}">{% if photo.nmea_distance is not empty %} {{ photo.nmea_distance }} m{% endif %}</label></td></tr>
+                <tr><td><label title="{{ pht_timestamp_title }}">{{ pht_timestamp }}</label></td><td><label title="{{ pht_timestamp_title }}">{{ photo.timestamp }}</label></td></tr>
+                <tr><td><label title="{{ pht_created_date_title }}">{{ pht_created_date }}</label></td><td><label title="{{ pht_created_date_title }}">{{ photo.created_date }}</label></td></tr>
+                <tr><td></td><td><label class="js_open_ekf" data-id="{{ photo.id }}">{{ show_ekf_metadata }}</label></td></tr>
+                {% if agency %}
+                  <tr>
+                    <td></td>
+                    <td>
+                      <label title="{{ flg_checked_location_title }}" class="text_color_{{ photo.flg_checked_location }}">
+                        {% if photo.flg_checked_location is same as(1) %}
+                          {{ pht_checked_location_ok }}
+                        {% elseif  photo.flg_checked_location is same as(0) %}
+                          {{ pht_checked_location_fail }}
+                        {% else %}
+                          {{ pht_checked_location_notvf }}
+                        {% endif %}
+                      </label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>
+                      <label title="{{ flg_original_title }}" class="text_color_{{ photo.flg_original }}">
+                        {% if photo.flg_original is same as(1) %}
+                          {{ pht_original_ok }}
+                        {% elseif  photo.flg_original is same as(0) %}
+                          {{ pht_original_fail }}
+                        {% else %}
+                          {{ pht_original_notvf }}
+                        {% endif %}
+                      </label>
+                    </td>
+                  </tr>
+                {% endif %}
+              </tbody>
+            </table>
+            {# OLD TEMPLATE:
             <label title="{{ pht_lat_title }}">{{ pht_lat }}: {{ photo.lat }}</label>
             <label title="{{ pht_lng_title }}">{{ pht_lng }}: {{ photo.lng }}</label>
-            <label title="{{ pht_alt_title }}">{{ pht_altitude }}: {{ photo.altitude }}</label>
+            <label title="{{ pht_alt_title }}">{{ pht_altitude }}: {{ photo.altitude }} m</label>
             <label title="{{ pht_azimuth_title }}">{{ pht_azimuth }}: {{ photo.azimuth }}</label>
             <label title="{{ pht_angle_title }}">{{ pht_angle }}: {{ photo.photo_angle }}</label>
             <label title="{{ pht_note_title }}">{{ pht_note }}: {{ photo.note }}</label>
             <label></label>
             <label title="{{ pht_device_title }}">{{ pht_device }}: {{ photo.device }}</label>
-            <label title="{{ pht_accuracy_title }}">{{ pht_accuracy }}: {{ photo.accuracy }}</label>
-            <label title="{{ pht_distance_title }}">{{ pht_distance }}: {{ photo.distance }}</label>
+            <label title="{{ pht_accuracy_title }}">{{ pht_accuracy }}:{% if photo.accuracy is not empty %} {{ photo.accuracy }} m{% endif %}</label>
+            <label title="{{ pht_distance_title }}">{{ pht_distance }}:{% if photo.distance is not empty %} {{ photo.distance }} m{% endif %}</label>
+            <label title="{{ pht_distance_nmea_title }}">{{ pht_distance_nmea }}:{% if photo.nmea_distance is not empty %} {{ photo.nmea_distance }} m{% endif %}</label>
             <label></label>
             <label title="{{ pht_timestamp_title }}">{{ pht_timestamp }}: {{ photo.timestamp }}</label>
             <label title="{{ pht_created_date_title }}">{{ pht_created_date }}: {{ photo.created_date }}</label>
+            <label></label>
+            <label class="js_open_ekf">{{ show_ekf_metadata }}</label>
             <label></label>
             {% if agency %}
               <label title="{{ flg_checked_location_title }}" class="text_color_{{ photo.flg_checked_location }}">
@@ -82,25 +145,69 @@
                 {% endif %}
               </label>
             {% endif %}
-            <div class="js_photo_rotate">
-              {% if not task_select %}
-                <div class="js_photo_rotate_left" data-pht_id="photo_{{ photo.id }}"><i class="fas fa-sync"></i> {{ pht_rotate_left }}</div>
-                <div class="js_photo_rotate_right" data-pht_id="photo_{{ photo.id }}"><i class="fas fa-sync"></i> {{ pht_rotate_right }}</div>
-                <div class="js_photo_select" data-checkbox_id="assign_photo_input_{{ photo.id }}" ><i class="fas fa-check"></i> {{ pht_select }}</div>
-              {% endif %}
-            </div>
+            #}
           </div>
+        </div>
+        <div class="js_hidden_ekf" data-id="{{ photo.id }}">
+          <span class="close_popup"><i class="fas fa-times-circle" style="background: white;"></i></span>
+          <table>
+          <tr>
+            <td></td>
+            <td class="bold">GPS L1</td>
+            <td class="bold">GPS L5</td>
+            <td class="bold">GPS Iono Free (L1/L5)</td>
+            <td class="bold">Galileo E1</td>
+            <td class="bold">Galileo E5a</td>
+            <td class="bold">Galileo Iono Free (E1/E5a)</td>
+          </tr>
+          <tr>
+            <td class="bold">{{ pht_latitude }}</td>
+            <td>{{ photo.efkLatGpsL1 }}</td>
+            <td>{{ photo.efkLatGpsL5 }}</td>
+            <td>{{ photo.efkLatGpsIf }}</td>
+            <td>{{ photo.efkLatGalE1 }}</td>
+            <td>{{ photo.efkLatGalE5 }}</td>
+            <td>{{ photo.efkLatGalIf }}</td>
+          </tr>
+          <tr>
+            <td class="bold">{{ pht_longitude }}</td>
+            <td>{{ photo.efkLngGpsL1 }}</td>
+            <td>{{ photo.efkLngGpsL5 }}</td>
+            <td>{{ photo.efkLngGpsIf }}</td>
+            <td>{{ photo.efkLngGalE1 }}</td>
+            <td>{{ photo.efkLngGalE5 }}</td>
+            <td>{{ photo.efkLngGalIf }}</td>
+          </tr>
+          <tr>
+            <td class="bold">{{ pht_altitude }}</td>
+            <td>{{ photo.efkAltGpsL1 }}</td>
+            <td>{{ photo.efkAltGpsL5 }}</td>
+            <td>{{ photo.efkAltGpsIf }}</td>
+            <td>{{ photo.efkAltGalE1 }}</td>
+            <td>{{ photo.efkAltGalE5 }}</td>
+            <td>{{ photo.efkAltGalIf }}</td>
+          </tr>
+          <tr>
+            <td class="bold">{{ pht_ref_time }}</td>
+            <td>{{ photo.efkTimeGpsL1 }}</td>
+            <td>{{ photo.efkTimeGpsL5 }}</td>
+            <td>{{ photo.efkTimeGpsIf }}</td>
+            <td>{{ photo.efkTimeGalE1 }}</td>
+            <td>{{ photo.efkTimeGalE5 }}</td>
+            <td>{{ photo.efkTimeGalIf }}</td>
+          </tr>
+          </table>
         </div>
       {% endfor %}
       {% if task_select %}
         <div class="js_assign_photos_task_select">
           <div>
-            <select name="task_id" id="js_assign_photo_task_id_select">
+            <select class="form-select" name="task_id" id="js_assign_photo_task_id_select">
               {% for task in tasks %}
                 <option value="{{ task.id }}">{{ task.name }}</option>
               {% endfor %}
             </select>
-            <button type="button" class="mt-2 mb-2 btn btn-primary js_button_confirm_task_select">{{ assign_photos_button }}</button>
+            <button type="button" class="mt-2 mb-2 btn btn-primary js_button_confirm_task_select">{{ assign_photos_button|upper }}</button>
           </div>
         </div>
       {% endif %}
@@ -109,40 +216,9 @@
   </div>
 </div>
 
-<div class="modal fade w-100" id="image-gallery" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title" id="image-gallery-title"></h4>
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
-            class="sr-only"></span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <a id="image-gallery-zoom" href="" target="_blank">
-          <img id="image-gallery-image" data-photo_db_id="0" data-rotation="0" class="img-responsive col-md-12" src="">
-        </a>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary float-left" id="show-previous-image">
-          <i class="fa fa-arrow-left"></i>
-        </button>
-        <div class="js_photo_rotate">
-          {% if not task_select %}
-            <div class="js_photo_rotate_left" data-pht_id="image-gallery-image"><i class="fas fa-sync"></i> {{ pht_rotate_left }}</div>
-            <div class="js_photo_rotate_right" data-pht_id="image-gallery-image"><i class="fas fa-sync"></i> {{ pht_rotate_right }}</div>
-          {% endif %}
-        </div>
-        <button type="button" id="show-next-image" class="btn btn-secondary float-right"><i
-            class="fa fa-arrow-right"></i>
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
 <input type="hidden" value="{{ photo_ids }}" class="js_photo_ids">
 <script src="https://unpkg.com/@google/markerclustererplus@5.1.0/dist/markerclustererplus.min.js"></script>
 
 <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ map_api_key }}&callback=initMap&libraries=geometry"></script>
+<!--Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu-->
 {% endblock %}

@@ -22,10 +22,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import eu.foxcom.gtphotos.model.gnss.NMEAParserApp;
 import eu.foxcom.gnss_scan.NMEAParser;
 import eu.foxcom.gnss_scan.NMEAScanner;
 import eu.foxcom.gnss_scan.NetworkInfoScanner;
+import eu.foxcom.gtphotos.model.ekf.EKFStartExeception;
+import eu.foxcom.gtphotos.model.ekf.EkfController;
+import eu.foxcom.gtphotos.model.ekf.EkfCreateException;
+import eu.foxcom.gtphotos.model.gnss.NMEAParserApp;
 
 public class PhotoDataController {
 
@@ -68,9 +71,13 @@ public class PhotoDataController {
     private int lastScreenRotation;
     private double lastTilt;
 
-    public PhotoDataController(Context context) {
+    private EkfController ekfController;
+
+    public PhotoDataController(Context context) throws EkfCreateException {
         this.context = context;
         this.positionSensorController = new PositionSensorController(context);
+        this.ekfController = new EkfController(context);
+        ekfController.addDefaultModules();
         this.cameraController = new CameraController(context);
         this.networkInfoScanner = new NetworkInfoScanner(context);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -96,8 +103,9 @@ public class PhotoDataController {
         refreshLocationsHandler.postDelayed(refreshLocationsRunnable, LOCATIONS_INTERVALS_REFRESH_MILS);
     }
 
-    public void startImmediately() {
+    public void startImmediately() throws EKFStartExeception {
         positionSensorController.start();
+        ekfController.start();
     }
 
     public void startSnapShot() {
@@ -162,7 +170,10 @@ public class PhotoDataController {
 
     @Deprecated
     public void start() {
-        startImmediately();
+        try {
+            startImmediately();
+        } catch (EKFStartExeception ekfStartExeception) {
+        }
         startSnapShot();
     }
 
@@ -173,6 +184,8 @@ public class PhotoDataController {
             nmeaScanner.stopScan();
             nmeaScanner.unregisterAllReceivers();
         }
+        ekfController.stop();
+        ekfController.release();
     }
 
 
@@ -359,5 +372,13 @@ public class PhotoDataController {
         return extraSatNumber;
     }
 
+    public EkfController getEkfController() {
+        return ekfController;
+    }
+
     // endregion
 }
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

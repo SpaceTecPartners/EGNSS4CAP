@@ -1,6 +1,7 @@
 package eu.foxcom.gtphotos.model.pathTrack;
 
 import android.location.Location;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
@@ -18,18 +19,72 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import eu.foxcom.gtphotos.model.AppDatabase;
 import eu.foxcom.gtphotos.model.LoggedUser;
+import eu.foxcom.gtphotos.model.Requestor;
+import eu.foxcom.gtphotos.model.Util;
 
 @Entity(indices = {@Index(value = {"realId"}, unique = true)})
 public class PTPath {
 
+    private class UploadExecutor {
+
+        private AppDatabase appDatabase;
+        private UploadReceiver uploadReceiver;
+
+        private UploadExecutor(AppDatabase appDatabase, UploadReceiver uploadReceiver) {
+            this.appDatabase = appDatabase;
+            this.uploadReceiver = uploadReceiver;
+        }
+
+        private void success() {
+            isLastSendFailed = false;
+            if (uploadReceiver != null) {
+                uploadReceiver.success();
+            }
+            complete();
+        }
+
+        private void failed(String errMsg) {
+            isLastSendFailed = true;
+            if (uploadReceiver != null) {
+                uploadReceiver.failed(errMsg);
+            }
+            complete();
+        }
+
+        private void complete() {
+            saveToDB(appDatabase);
+            if (uploadReceiver != null) {
+                uploadReceiver.complete();
+            }
+        }
+    }
+
+    public static abstract class UploadReceiver {
+        protected abstract void success();
+
+        protected abstract void failed(String errMsg);
+
+        protected abstract void complete();
+    }
+
     public static final String DATETIME_RECEIVED_FORMAT = "yyyy-MM-dd HH:mm:ss";
     private static final double EARTH_RADIUS = 6378137;
     public static final DecimalFormat AREA_FORMAT = new DecimalFormat("#.##");
+
+    public static int getUnsentCount(AppDatabase appDatabase) {
+        return appDatabase.PTDao().selectPTPathsUnsentCount(LoggedUser.createFromAppDatabase(appDatabase).getId());
+    }
+
+    public static int getUploadingOpenedCount(AppDatabase appDatabase) {
+        return appDatabase.PTDao().selectPTPathsUploadingOpenedCount(LoggedUser.createFromAppDatabase(appDatabase).getId());
+    }
 
     public static PTPath createNew(AppDatabase appDatabase) {
         PTPath ptPath = new PTPath(LoggedUser.createFromAppDatabase(appDatabase).getId());
@@ -40,8 +95,8 @@ public class PTPath {
         PTPath ptPath = appDatabase.PTDao().selectPTPathByAutoId(autoId);
         if (ptPath != null) {
             ptPath.loadPoints(appDatabase);
+            lazyCreateSettings(appDatabase, Arrays.asList(ptPath));
         }
-        lazyCreateSettings(appDatabase, Arrays.asList(ptPath));
         return ptPath;
     }
 
@@ -63,9 +118,11 @@ public class PTPath {
 
     }
 
-    public static List<PTPath> createListFromAppDatabase(AppDatabase appDatabase) {
+    public static List<PTPath> createListFromAppDatabase(AppDatabase appDatabase, boolean isLoadPoints) {
         List<PTPath> ptPaths = appDatabase.PTDao().selectAllPTPathsByUserId(LoggedUser.createFromAppDatabase(appDatabase).getId());
-        loadPoints(appDatabase, ptPaths);
+        if (isLoadPoints) {
+            loadPoints(appDatabase, ptPaths);
+        }
         lazyCreateSettings(appDatabase, ptPaths);
         return ptPaths;
     }
@@ -78,7 +135,7 @@ public class PTPath {
     }
 
     private static void lazyCreateSettings(AppDatabase appDatabase, List<PTPath> paths) {
-        for (PTPath ptPath: paths) {
+        for (PTPath ptPath : paths) {
             if (ptPath.area == null) {
                 ptPath.calculateArea();
                 ptPath.saveToDB(appDatabase);
@@ -98,11 +155,16 @@ public class PTPath {
 
     @Ignore
     private List<PTPoint> points = new ArrayList<>();
+    @Ignore
+    private boolean isPointsLoaded = false;
 
     @PrimaryKey(autoGenerate = true)
     private Long autoId;
     // nullovost značí stav neodeslání (= i neúspěšné odeslání); ošetření duplicit je na straně serveru
     private Long realId;
+    // = true - označuje stav nepotvrzeného odeslání (mezistav)
+    private boolean isUploadingOpened = false;
+    private boolean isLastSendFailed = false;
     @NonNull
     private String userId;
     private String name;
@@ -110,13 +172,18 @@ public class PTPath {
     private DateTime endT;
     private boolean byCentroids = false;
     private Double area;
+    private String deviceManufacture;
+    private String deviceModel;
+    private String devicePlatform;
+    private String deviceVersion;
 
     public PTPath(String userId) {
         this.userId = userId;
     }
 
-    private void loadPoints(AppDatabase appDatabase) {
+    public void loadPoints(AppDatabase appDatabase) {
         points = appDatabase.PTDao().selectPTPointsByPathId(autoId);
+        isPointsLoaded = true;
     }
 
     public void saveToDB(AppDatabase appDatabase) {
@@ -125,6 +192,73 @@ public class PTPath {
             ptPoint.setPathId(autoId);
             ptPoint.saveToDB(appDatabase);
         }
+    }
+
+    public void upload(AppDatabase appDatabase, Requestor requestor, UploadReceiver uploadReceiver) {
+        isUploadingOpened = true;
+        saveToDB(appDatabase);
+        if (!isPointsLoaded) {
+            loadPoints(appDatabase);
+        }
+        UploadExecutor uploadExecutor = this.new UploadExecutor(appDatabase, uploadReceiver);
+        String errMsgTitle = "uploadPath failed (autoId = " + autoId + "; realId = " + realId + "; name = " + name + ")";
+        requestor.requestAuth("https://egnss4cap-uat.foxcom.eu/ws/comm_path.php", response -> {
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+                if (jsonObject.has("status")) {
+                    isUploadingOpened = false;
+                    saveToDB(appDatabase);
+                }
+                String status = jsonObject.getString("status").trim();
+                /* DEBUGCOM
+                if (autoId == 474) {
+                    status = "error";
+                    jsonObject.put("error_msg", "pokusná chyba");
+                }
+                /**/
+                if (!status.equals("ok")) {
+                    String errMsg = jsonObject.getString("error_msg");
+                    uploadExecutor.failed(errMsgTitle + ", bad status\n" + errMsg);
+                    return;
+                }
+                setRealId(jsonObject.getLong("path_id"));
+                uploadExecutor.success();
+            } catch (JSONException jsonException) {
+                uploadExecutor.failed(errMsgTitle + ", response json error\n" + jsonException.getMessage());
+            } finally {
+                Log.d("UPLOAD PATH", "ptPath: " + getAutoId() + "upload end");
+            }
+        }, error -> {
+            uploadExecutor.failed(errMsgTitle + ", network error\n" + Util.volleyErrorMsg(error));
+            Log.d("UPLOAD PATH", "ptPath: " + getAutoId() + "uploaded");
+        }, new Requestor.Req() {
+            @Override
+            public Map<String, String> getParams() {
+                try {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("user_id", LoggedUser.createFromAppDatabase(appDatabase).getId());
+                    params.put("name", getName());
+                    params.put("start", getStartT().toString(DATETIME_RECEIVED_FORMAT));
+                    params.put("end", getEndT().toString(DATETIME_RECEIVED_FORMAT));
+                    params.put("area", getArea() == null ? "0" : AREA_FORMAT.format(getArea()));
+                    params.put("deviceManufacture", getDeviceManufacture());
+                    params.put("deviceModel", getDeviceModel());
+                    params.put("devicePlatform", getDevicePlatform());
+                    params.put("deviceVersion", getDeviceVersion());
+                    params.put("points", pointsToJSONArray().toString());
+                    return params;
+                } catch (JSONException jsonException) {
+                    this.forceCancel = true;
+                    uploadExecutor.failed(errMsgTitle + ", params json error\n" + jsonException.getMessage());
+                    Log.d("UPLOAD PATH", "ptPath: " + getAutoId() + "uploaded");
+                    return null;
+                }
+            }
+        });
+    }
+
+    public boolean isLocked() {
+        return isLastSendFailed;
     }
 
     public void addPoint(Location location) {
@@ -169,6 +303,13 @@ public class PTPath {
         this.area = Math.max(area, -area);
     }
 
+    public void setDeviceInfos() {
+        deviceManufacture = Util.getPhoneManufacturer();
+        deviceModel = Util.getPhoneModel();
+        devicePlatform = Util.getOSName();
+        deviceVersion = Util.getOSVersion();
+    }
+
     // region get, set
     public List<PTPoint> getPoints() {
         return points;
@@ -188,6 +329,14 @@ public class PTPath {
 
     public void setRealId(Long realId) {
         this.realId = realId;
+    }
+
+    public boolean isUploadingOpened() {
+        return isUploadingOpened;
+    }
+
+    public void setUploadingOpened(boolean uploadingOpened) {
+        isUploadingOpened = uploadingOpened;
     }
 
     public String getUserId() {
@@ -236,6 +385,50 @@ public class PTPath {
 
     public void setArea(Double area) {
         this.area = area;
+    }
+
+    public String getDeviceManufacture() {
+        return deviceManufacture;
+    }
+
+    public void setDeviceManufacture(String deviceManufacture) {
+        this.deviceManufacture = deviceManufacture;
+    }
+
+    public String getDeviceModel() {
+        return deviceModel;
+    }
+
+    public void setDeviceModel(String deviceModel) {
+        this.deviceModel = deviceModel;
+    }
+
+    public String getDevicePlatform() {
+        return devicePlatform;
+    }
+
+    public void setDevicePlatform(String devicePlatform) {
+        this.devicePlatform = devicePlatform;
+    }
+
+    public String getDeviceVersion() {
+        return deviceVersion;
+    }
+
+    public void setDeviceVersion(String deviceVersion) {
+        this.deviceVersion = deviceVersion;
+    }
+
+    public boolean isLastSendFailed() {
+        return isLastSendFailed;
+    }
+
+    public void setLastSendFailed(boolean lastSendFailed) {
+        isLastSendFailed = lastSendFailed;
+    }
+
+    public boolean isPointsLoaded() {
+        return isPointsLoaded;
     }
 
     // endregion

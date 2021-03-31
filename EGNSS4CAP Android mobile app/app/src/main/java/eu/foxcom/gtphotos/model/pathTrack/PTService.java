@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
@@ -35,7 +37,7 @@ import eu.foxcom.gtphotos.model.PersistData;
 import eu.foxcom.gtphotos.model.convexHullUtil.CHService;
 
 /**
- * P1 = služba pro cestu z centroidů dočasně zrušena
+ * P1 = centroid travel service canceled indefinitely
  */
 
 public class PTService extends LifecycleService implements ServiceInit {
@@ -58,11 +60,13 @@ public class PTService extends LifecycleService implements ServiceInit {
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
     MutableLiveData<Boolean> isTracking = new MutableLiveData<>(false);
+    MutableLiveData<Boolean> isPause = new MutableLiveData<>(false);
     MutableLiveData<Exception> lastStartException = new MutableLiveData<>(null);
     MutableLiveData<Exception> lastStopException = new MutableLiveData<>(null);
     MutableLiveData<Exception> noPointException = new MutableLiveData<>(null);
     private boolean isTrackingStarting = false;
     private Queue<IsTrackingDisposable> isTrackingDisposableQueue = new ArrayDeque<>();
+    private ToneGenerator toneGenerator;
 
     PTPath currentPath;
     MutableLiveData<PTPoint> lastPoint = new MutableLiveData<>(null);
@@ -106,6 +110,8 @@ public class PTService extends LifecycleService implements ServiceInit {
             }
         };
 
+        toneGenerator = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
+
         /* P1
         if (PersistData.getPhotoWithCentroiLocation(this)) {
             chServiceController = new ServiceController(this, new ServiceGetter() {
@@ -144,6 +150,8 @@ public class PTService extends LifecycleService implements ServiceInit {
 
             lastStartException.setValue(null);
             this.appDatabase = appDatabase;
+
+            isPause.setValue(false);
 
             /* P1 */
             withCentroid = PersistData.getPhotoWithCentroiLocation(this);
@@ -189,6 +197,7 @@ public class PTService extends LifecycleService implements ServiceInit {
     private void stopTrackingComplete() {
         if (currentPath.getPoints().size() > 0) {
             currentPath.setEndT(DateTime.now());
+            currentPath.setDeviceInfos();
             currentPath.calculateArea();
             currentPath.saveToDB(appDatabase);
         } else {
@@ -288,10 +297,6 @@ public class PTService extends LifecycleService implements ServiceInit {
         stopTrackingComplete();
     }
 
-
-
-
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -322,8 +327,14 @@ public class PTService extends LifecycleService implements ServiceInit {
     }
 
     private void receiveNewLocation(Location location) {
+        if (isPause.getValue()) {
+            return;
+        }
         if (location == null) {
             return;
+        }
+        if (PersistData.getBeepPathPoint(this)) {
+            toneGenerator.startTone(ToneGenerator.TONE_PROP_BEEP);
         }
         lastLocation.setValue(location);
         currentPath.addPoint(location);

@@ -39,7 +39,7 @@ class task_action_router extends \action_router{
       'images' => $model->load_task_photos($params['id']),
       'farmer_name' => $users_credencials['surname'] . ' ' . $users_credencials['name'],
       "ret_url" => "index.php?act=agency_user_tasks_list&id=".$users_credencials['id']."#".$params['id'],
-      "pdf_url" => "pdf_export.php?user_id=".$users_credencials['id']."&task_id=".$params['id']
+      "pdf_url" => "pdf_export.php?act=prepare&user_id=".$users_credencials['id']."&task_id=".$params['id']
     );
     if ($tasks[0]['deleted'] === 1){
       header("Location: index.php?act=agency_user_tasks_list&id=".$users_credencials['id']);
@@ -129,5 +129,5 @@ class task_action_router extends \action_router{
   }
 
 }
-
+//Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
 ?>

@@ -22,13 +22,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".model.mock.EkfMock"></activity>
         <activity android:name=".model.mock.LocationMock" />
 
         <service
             android:name=".model.pathTrack.PTService"
             android:enabled="true"
             android:exported="false" />
-
         <service
             android:name=".model.convexHullUtil.CHService"
             android:enabled="true"
@@ -39,6 +39,8 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/map_key" />
+
+        <meta-data android:name="@string/meta_appMode_name" android:value="@string/meta_appMode_gsa"/>
 
         <activity
             android:name=".StartActivity"
@@ -88,7 +90,7 @@
             android:label="@string/title_pathTrackingOverview"
             android:launchMode="singleTask"
             android:parentActivityName=".MapActivity"
-            android:screenOrientation="sensorPortrait"/>
+            android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".TaskFulfillActivity"
             android:label="@string/title_taskFulfill"
@@ -109,11 +111,11 @@
             android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".UnownedPhotoDetailActivity"
-            android:configChanges="orientation|screenSize"
             android:label="@string/title_photoDetail"
             android:launchMode="singleTask"
             android:parentActivityName=".UnownedPhotoOverviewActivity"
-            android:screenOrientation="fullSensor" />
+            android:screenOrientation="fullSensor"
+            android:configChanges="orientation|keyboardHidden"/>
         <activity
             android:name=".CameraActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -122,11 +124,6 @@
             android:parentActivityName=".MainActivity"
             android:screenOrientation="fullSensor"
             android:theme="@style/FullscreenTheme" />
-        <activity
-            android:name=".TaskDetailActivity"
-            android:launchMode="singleTask"
-            android:parentActivityName=".MainActivity"
-            android:screenOrientation="sensorPortrait" />
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_settings"
@@ -172,3 +169,5 @@
     </application>
 
 </manifest>
+
+<!-- Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu -->

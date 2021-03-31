@@ -73,6 +73,8 @@ import eu.foxcom.gtphotos.model.PhotoDataController;
 import eu.foxcom.gtphotos.model.Util;
 import eu.foxcom.gtphotos.model.component.SeekBarAPI26;
 import eu.foxcom.gtphotos.model.component.VerticalSeekBarAPI26;
+import eu.foxcom.gtphotos.model.ekf.EKFStartExeception;
+import eu.foxcom.gtphotos.model.ekf.EkfCreateException;
 
 public class CameraActivity extends BaseActivity implements CameraXConfig.Provider {
 
@@ -99,8 +101,6 @@ public class CameraActivity extends BaseActivity implements CameraXConfig.Provid
 
     private static final int SETTINGS_WIDTH_DP = 50;
     private static final int SETTINGS_HEIGHT_DP = 350;
-    private static final int SNAP_BUTTON_WIDTH_DP = 200;
-    private static final int SNAP_BUTTON_HEIGHT_DP = 50;
 
 
     public static final String INTENT_ACTION_START = "intentStart";
@@ -112,6 +112,9 @@ public class CameraActivity extends BaseActivity implements CameraXConfig.Provid
     public static final int INTERVAL_REFRESH_COUNT_DOWN_TAKE_PHOTO_MILS = 1000;
 
     public static final String TAG = CameraActivity.class.getSimpleName();
+
+    LinearLayout settingsLinearLayout;
+    ImageButton settingImageButton;
 
     private String taskId;
     private String currentPhotoPath;
@@ -154,15 +157,13 @@ public class CameraActivity extends BaseActivity implements CameraXConfig.Provid
             return;
         }
         setContentView(R.layout.activity_camera);
-        toggleMainLayout(getResources().getConfiguration());
-        getSupportActionBar().hide();
+
+        settingsLinearLayout = findViewById(R.id.ca_linearLayout_settings);
+        settingImageButton = findViewById(R.id.ca_imageButton_settingsToggle);
+
+        toggleLayouts(getResources().getConfiguration());
         ConstraintLayout mainLayout = findViewById(R.id.ca_constraintLayout_main);
-        mainLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mainClickResolver();
-            }
-        });
+        mainLayout.setOnClickListener(v -> mainClickResolver());
         display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
         isTakingPhoto = new AtomicBoolean(false);
         previewView = (PreviewView) findViewById(R.id.ca_previewView_camera);
@@ -183,7 +184,13 @@ public class CameraActivity extends BaseActivity implements CameraXConfig.Provid
         super.serviceInit();
 
         cameraViewModel = new ViewModelProvider(this).get(CameraViewModel.class);
-        cameraViewModel.init(MS);
+        try {
+            cameraViewModel.init(MS);
+        } catch (EkfCreateException e) {
+            alertEkfCreateException(e);
+        } catch (EKFStartExeception ekfStartExeception) {
+            alertEkfStartException(ekfStartExeception);
+        }
         cameraViewModel.getCurrentLocation().observe(this, new Observer<Location>() {
             @Override
             public void onChanged(Location location) {
@@ -661,7 +668,7 @@ public class CameraActivity extends BaseActivity implements CameraXConfig.Provid
                     cameraProvider.unbind(preview);
                     cameraViewModel.getPhotoDataController().stop();
                     if (checkData()) {
-                        /* manuální oprava rotace */
+                        /* manual rotation correction */
                         int rotationDegrees = image.getImageInfo().getRotationDegrees();
                         @SuppressLint("UnsafeExperimentalUsageError") Image img = image.getImage();
                         ImageProxy.PlaneProxy[] planeProxy = image.getPlanes();
@@ -685,7 +692,11 @@ public class CameraActivity extends BaseActivity implements CameraXConfig.Provid
                             alert(getString(R.string.gn_failure), getString(R.string.ca_failedSavePhoto, e.getMessage()));
                             isTakingPhoto.set(false);
                             removeInfo(INFO_MSG.TAKE_PICTURE_WAIT);
-                            cameraViewModel.getPhotoDataController().startImmediately();
+                            try {
+                                cameraViewModel.getPhotoDataController().startImmediately();
+                            } catch (EKFStartExeception ekfStartExeception) {
+                                alertEkfStartException(ekfStartExeception);
+                            }
                             cameraProviderResetToPreview();
                             return;
                         }
@@ -693,7 +704,11 @@ public class CameraActivity extends BaseActivity implements CameraXConfig.Provid
                     } else {
                         isTakingPhoto.set(false);
                         removeInfo(INFO_MSG.TAKE_PICTURE_WAIT);
-                        cameraViewModel.getPhotoDataController().startImmediately();
+                        try {
+                            cameraViewModel.getPhotoDataController().startImmediately();
+                        } catch (EKFStartExeception ekfStartExeception) {
+                            alertEkfStartException(ekfStartExeception);
+                        }
                         cameraProviderResetToPreview();
                         alert(getString(R.string.ca_pictureRejectedTitle), getString(R.string.ca_pictureRejectedText));
                     }
@@ -724,7 +739,11 @@ public class CameraActivity extends BaseActivity implements CameraXConfig.Provid
                     sendFile();
                 } else {
                     isTakingPhoto.set(false);
-                    cameraViewModel.getPhotoDataController().startImmediately();
+                    try {
+                        cameraViewModel.getPhotoDataController().startImmediately();
+                    } catch (EKFStartExeception ekfStartExeception) {
+                        alertEkfStartException(ekfStartExeception);
+                    }
                     cameraProviderResetToPreview();
                     removeInfo(INFO_MSG.TAKE_PICTURE_WAIT);
                     alert(getString(R.string.ca_pictureRejectedTitle), getString(R.string.ca_pictureRejectedText));
@@ -752,7 +771,11 @@ public class CameraActivity extends BaseActivity implements CameraXConfig.Provid
                 alert(getString(R.string.gn_failure), getString(R.string.ca_failedSavePhoto, e.getMessage()));
                 isTakingPhoto.set(false);
                 cameraProviderResetToPreview();
-                cameraViewModel.getPhotoDataController().startImmediately();
+                try {
+                    cameraViewModel.getPhotoDataController().startImmediately();
+                } catch (EKFStartExeception ekfStartExeception) {
+                    alertEkfStartException(ekfStartExeception);
+                }
             }
             removeInfo(INFO_MSG.TAKE_PICTURE_WAIT);
         }
@@ -765,12 +788,12 @@ public class CameraActivity extends BaseActivity implements CameraXConfig.Provid
             intent.setAction(TaskFulfillActivity.INTENT_ACTION_SNAP_PHOTO);
             intent.putExtra(TaskFulfillActivity.INTENT_ACTION_START_SNAP_PHOTO_ID, photo.getId());
         } else {
-            /* přechod na overview
+            /* go to overview
             intent = new Intent(this, UnownedPhotoOverviewActivity.class);
             intent.setAction(UnownedPhotoOverviewActivity.INTENT_ACTION_REFRESH_PHOTOS);
             /**/
 
-            // přechod na detail
+            // go to detail
             intent = new Intent(this, UnownedPhotoDetailActivity.class);
             intent.setAction(UnownedPhotoDetailActivity.INTENT_ACTION_START);
             intent.putExtra(UnownedPhotoDetailActivity.INTENT_ACTION_START_PHOTO_ID, photo.getId());
@@ -866,7 +889,7 @@ public class CameraActivity extends BaseActivity implements CameraXConfig.Provid
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        toggleMainLayout(newConfig);
+        toggleLayouts(newConfig);
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -895,39 +918,51 @@ public class CameraActivity extends BaseActivity implements CameraXConfig.Provid
         }
     }
 
-    private void toggleMainLayout(Configuration newConfig) {
+    private void toggleLayouts(Configuration newConfig) {
         ConstraintLayout mainConstraintLayout = findViewById(R.id.ca_constraintLayout_main);
         ConstraintSet constraintSet = new ConstraintSet();
         constraintSet.clone(mainConstraintLayout);
+        int margin = getResources().getDimensionPixelSize(R.dimen.gn_screenMargin);
+        int buttonSize = getResources().getDimensionPixelSize(R.dimen.ca_buttonSize);
+        int snapButtonWidthHeightMargin = 2 * margin + buttonSize;
+        int statusBarMargin = getResources().getDimensionPixelSize(R.dimen.gn_statusBarHeight) + Util.dpToPixels(this, 18);
         if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            // info
+            constraintSet.constrainPercentWidth(R.id.ca_constraintLayout_info, 1);
             // message
+            Util.clearAllAnchor(constraintSet, R.id.ca_linearLayout_messages);
             constraintSet.connect(R.id.ca_linearLayout_messages, ConstraintSet.TOP, R.id.ca_constraintLayout_info, ConstraintSet.BOTTOM);
-            constraintSet.connect(R.id.ca_linearLayout_messages, ConstraintSet.END, R.id.ca_constraintLayout_main, ConstraintSet.END);
             constraintSet.connect(R.id.ca_linearLayout_messages, ConstraintSet.BOTTOM, R.id.ca_imageButton_snap, ConstraintSet.TOP);
             constraintSet.connect(R.id.ca_linearLayout_messages, ConstraintSet.START, R.id.ca_constraintLayout_main, ConstraintSet.START);
+            constraintSet.connect(R.id.ca_linearLayout_messages, ConstraintSet.END, R.id.ca_constraintLayout_main, ConstraintSet.END);
             // exit button
-            constraintSet.clear(R.id.ca_imageButton_exit, ConstraintSet.END);
+            Util.clearAllAnchor(constraintSet, R.id.ca_imageButton_exit);
             constraintSet.connect(R.id.ca_imageButton_exit, ConstraintSet.START, R.id.ca_constraintLayout_main, ConstraintSet.START);
-            constraintSet.setMargin(R.id.ca_imageButton_exit, ConstraintSet.START, Util.dpToPixels(this, 8));
+            constraintSet.setMargin(R.id.ca_imageButton_exit, ConstraintSet.START, margin);
+            constraintSet.connect(R.id.ca_imageButton_exit, ConstraintSet.BOTTOM, R.id.ca_constraintLayout_main, ConstraintSet.BOTTOM);
+            constraintSet.setMargin(R.id.ca_imageButton_exit, ConstraintSet.BOTTOM, margin);
             // snap button
+            Util.clearAllAnchor(constraintSet, R.id.ca_imageButton_snap);
             constraintSet.connect(R.id.ca_imageButton_snap, ConstraintSet.START, R.id.ca_constraintLayout_main, ConstraintSet.START);
-            constraintSet.clear(R.id.ca_imageButton_snap, ConstraintSet.TOP);
-            constraintSet.setMargin(R.id.ca_imageButton_snap, ConstraintSet.END, 0);
-            constraintSet.setMargin(R.id.ca_imageButton_snap, ConstraintSet.BOTTOM, Util.dpToPixels(this, 8));
-            constraintSet.constrainWidth(R.id.ca_imageButton_snap, Util.dpToPixels(this, SNAP_BUTTON_WIDTH_DP));
-            constraintSet.constrainHeight(R.id.ca_imageButton_snap, Util.dpToPixels(this, SNAP_BUTTON_HEIGHT_DP));
+            constraintSet.setMargin(R.id.ca_imageButton_snap, ConstraintSet.START, snapButtonWidthHeightMargin);
+            constraintSet.connect(R.id.ca_imageButton_snap, ConstraintSet.END, R.id.ca_constraintLayout_main, ConstraintSet.END);
+            constraintSet.setMargin(R.id.ca_imageButton_snap, ConstraintSet.END, snapButtonWidthHeightMargin);
+            constraintSet.connect(R.id.ca_imageButton_snap, ConstraintSet.BOTTOM, R.id.ca_constraintLayout_main, ConstraintSet.BOTTOM);
+            constraintSet.setMargin(R.id.ca_imageButton_snap, ConstraintSet.BOTTOM, margin);
+            constraintSet.constrainWidth(R.id.ca_imageButton_snap, ConstraintSet.MATCH_CONSTRAINT);
+            constraintSet.constrainHeight(R.id.ca_imageButton_snap, buttonSize);
             // exposure button
-            constraintSet.clear(R.id.ca_imageButton_settingsToggle, ConstraintSet.TOP);
+            Util.clearAllAnchor(constraintSet, R.id.ca_imageButton_settingsToggle);
             constraintSet.connect(R.id.ca_imageButton_settingsToggle, ConstraintSet.BOTTOM, R.id.ca_constraintLayout_main, ConstraintSet.BOTTOM);
-            constraintSet.setMargin(R.id.ca_imageButton_settingsToggle, ConstraintSet.BOTTOM, Util.dpToPixels(this, 8));
+            constraintSet.setMargin(R.id.ca_imageButton_settingsToggle, ConstraintSet.BOTTOM, margin);
             constraintSet.connect(R.id.ca_imageButton_settingsToggle, ConstraintSet.END, R.id.ca_constraintLayout_main, ConstraintSet.END);
-            constraintSet.setMargin(R.id.ca_imageButton_settingsToggle, ConstraintSet.END, Util.dpToPixels(this, 8));
+            constraintSet.setMargin(R.id.ca_imageButton_settingsToggle, ConstraintSet.END, margin);
             // exposure settings
-            constraintSet.clear(R.id.ca_linearLayout_settings, ConstraintSet.TOP);
-            constraintSet.clear(R.id.ca_linearLayout_settings, ConstraintSet.END);
+            Util.clearAllAnchor(constraintSet, R.id.ca_linearLayout_settings);
             constraintSet.connect(R.id.ca_linearLayout_settings, ConstraintSet.END, R.id.ca_constraintLayout_main, ConstraintSet.END);
-            constraintSet.setMargin(R.id.ca_linearLayout_settings, ConstraintSet.END, Util.dpToPixels(this, 8));
+            constraintSet.setMargin(R.id.ca_linearLayout_settings, ConstraintSet.END, margin);
             constraintSet.connect(R.id.ca_linearLayout_settings, ConstraintSet.BOTTOM, R.id.ca_imageButton_settingsToggle, ConstraintSet.TOP);
+            constraintSet.setMargin(R.id.ca_linearLayout_settings, ConstraintSet.BOTTOM, 0);
             constraintSet.constrainWidth(R.id.ca_linearLayout_settings, Util.dpToPixels(this, SETTINGS_WIDTH_DP));
             constraintSet.constrainHeight(R.id.ca_linearLayout_settings, Util.dpToPixels(this, SETTINGS_HEIGHT_DP));
             LinearLayout correctionLinearLayout = findViewById(R.id.ca_linearLayout_exposureCorrection);
@@ -935,34 +970,42 @@ public class CameraActivity extends BaseActivity implements CameraXConfig.Provid
             VerticalSeekBarAPI26 correctionBar = findViewById(R.id.ca_verticalSeekBarApi26_exposureCorrection);
             correctionBar.setRotation(0);
         } else if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            // info
+            constraintSet.constrainPercentWidth(R.id.ca_constraintLayout_info, 0.3f);
             // message
+            Util.clearAllAnchor(constraintSet, R.id.ca_linearLayout_messages);
             constraintSet.connect(R.id.ca_linearLayout_messages, ConstraintSet.TOP, R.id.ca_constraintLayout_main, ConstraintSet.TOP);
-            constraintSet.connect(R.id.ca_linearLayout_messages, ConstraintSet.END, R.id.ca_imageButton_snap, ConstraintSet.START);
             constraintSet.connect(R.id.ca_linearLayout_messages, ConstraintSet.BOTTOM, R.id.ca_constraintLayout_main, ConstraintSet.BOTTOM);
             constraintSet.connect(R.id.ca_linearLayout_messages, ConstraintSet.START, R.id.ca_constraintLayout_info, ConstraintSet.END);
+            constraintSet.connect(R.id.ca_linearLayout_messages, ConstraintSet.END, R.id.ca_imageButton_snap, ConstraintSet.START);
             // exit button
-            constraintSet.clear(R.id.ca_imageButton_exit, ConstraintSet.START);
+            Util.clearAllAnchor(constraintSet, R.id.ca_imageButton_exit);
             constraintSet.connect(R.id.ca_imageButton_exit, ConstraintSet.END, R.id.ca_constraintLayout_main, ConstraintSet.END);
-            constraintSet.setMargin(R.id.ca_imageButton_exit, ConstraintSet.END, Util.dpToPixels(this, 8));
+            constraintSet.setMargin(R.id.ca_imageButton_exit, ConstraintSet.END, margin);
+            constraintSet.connect(R.id.ca_imageButton_exit, ConstraintSet.BOTTOM, R.id.ca_constraintLayout_main, ConstraintSet.BOTTOM);
+            constraintSet.setMargin(R.id.ca_imageButton_exit, ConstraintSet.BOTTOM, margin);
             // snap button
+            Util.clearAllAnchor(constraintSet, R.id.ca_imageButton_snap);
             constraintSet.connect(R.id.ca_imageButton_snap, ConstraintSet.TOP, R.id.ca_constraintLayout_main, ConstraintSet.TOP);
-            constraintSet.clear(R.id.ca_imageButton_snap, ConstraintSet.START);
-            constraintSet.setMargin(R.id.ca_imageButton_snap, ConstraintSet.BOTTOM, 0);
-            constraintSet.setMargin(R.id.ca_imageButton_snap, ConstraintSet.END, Util.dpToPixels(this, 8));
-            constraintSet.constrainWidth(R.id.ca_imageButton_snap, Util.dpToPixels(this, SNAP_BUTTON_HEIGHT_DP));
-            constraintSet.constrainHeight(R.id.ca_imageButton_snap, Util.dpToPixels(this, SNAP_BUTTON_WIDTH_DP));
+            constraintSet.setMargin(R.id.ca_imageButton_snap, ConstraintSet.TOP, snapButtonWidthHeightMargin - margin + statusBarMargin);
+            constraintSet.connect(R.id.ca_imageButton_snap, ConstraintSet.BOTTOM, R.id.ca_constraintLayout_main, ConstraintSet.BOTTOM);
+            constraintSet.setMargin(R.id.ca_imageButton_snap, ConstraintSet.BOTTOM, snapButtonWidthHeightMargin);
+            constraintSet.connect(R.id.ca_imageButton_snap, ConstraintSet.END, R.id.ca_constraintLayout_main, ConstraintSet.END);
+            constraintSet.setMargin(R.id.ca_imageButton_snap, ConstraintSet.END, margin);
+            constraintSet.constrainWidth(R.id.ca_imageButton_snap, buttonSize);
+            constraintSet.constrainHeight(R.id.ca_imageButton_snap, ConstraintSet.MATCH_CONSTRAINT);
             // exposure button
-            constraintSet.clear(R.id.ca_imageButton_settingsToggle, ConstraintSet.BOTTOM);
+            Util.clearAllAnchor(constraintSet, R.id.ca_imageButton_settingsToggle);
             constraintSet.connect(R.id.ca_imageButton_settingsToggle, ConstraintSet.TOP, R.id.ca_constraintLayout_main, ConstraintSet.TOP);
-            constraintSet.setMargin(R.id.ca_imageButton_settingsToggle, ConstraintSet.TOP, Util.dpToPixels(this, 8));
+            constraintSet.setMargin(R.id.ca_imageButton_settingsToggle, ConstraintSet.TOP, statusBarMargin);
             constraintSet.connect(R.id.ca_imageButton_settingsToggle, ConstraintSet.END, R.id.ca_constraintLayout_main, ConstraintSet.END);
-            constraintSet.setMargin(R.id.ca_imageButton_settingsToggle, ConstraintSet.END, Util.dpToPixels(this, 8));
+            constraintSet.setMargin(R.id.ca_imageButton_settingsToggle, ConstraintSet.END, margin);
             // exposure settings
-            constraintSet.clear(R.id.ca_linearLayout_settings, ConstraintSet.BOTTOM);
-            constraintSet.clear(R.id.ca_linearLayout_settings, ConstraintSet.END);
+            Util.clearAllAnchor(constraintSet, R.id.ca_linearLayout_settings);
             constraintSet.connect(R.id.ca_linearLayout_settings, ConstraintSet.END, R.id.ca_imageButton_settingsToggle, ConstraintSet.START);
+            constraintSet.setMargin(R.id.ca_linearLayout_settings, ConstraintSet.END, 0);
             constraintSet.connect(R.id.ca_linearLayout_settings, ConstraintSet.TOP, R.id.ca_constraintLayout_main, ConstraintSet.TOP);
-            constraintSet.setMargin(R.id.ca_linearLayout_settings, ConstraintSet.TOP, Util.dpToPixels(this, 8));
+            constraintSet.setMargin(R.id.ca_linearLayout_settings, ConstraintSet.TOP, statusBarMargin);
             constraintSet.constrainWidth(R.id.ca_linearLayout_settings, Util.dpToPixels(this, SETTINGS_HEIGHT_DP));
             constraintSet.constrainHeight(R.id.ca_linearLayout_settings, Util.dpToPixels(this, SETTINGS_WIDTH_DP));
             LinearLayout correctionLinearLayout = findViewById(R.id.ca_linearLayout_exposureCorrection);
@@ -971,6 +1014,24 @@ public class CameraActivity extends BaseActivity implements CameraXConfig.Provid
             correctionBar.setRotation(90);
         }
         constraintSet.applyTo(mainConstraintLayout);
+        adjustSettingsLayouts(newConfig);
+    }
+
+    private void adjustSettingsLayouts(Configuration newConfig) {
+        int settingsBackgroundId;
+        int buttonBackgroundId;
+        if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            settingsBackgroundId = R.drawable.background_button_white_round_top_r22;
+            buttonBackgroundId = R.drawable.background_button_white_round_bottom_r22;
+        } else {
+            settingsBackgroundId = R.drawable.background_button_white_round_start_r22;
+            buttonBackgroundId = R.drawable.background_button_white_round_end_r22;
+        }
+        if (!isSettingsShown()) {
+            buttonBackgroundId = R.drawable.background_button_white_r22;
+        }
+        settingImageButton.setBackgroundResource(buttonBackgroundId);
+        settingsLinearLayout.setBackgroundResource(settingsBackgroundId);
     }
 
     public void exit(View view) {
@@ -995,31 +1056,46 @@ public class CameraActivity extends BaseActivity implements CameraXConfig.Provid
     }
 
     public void toggleCameraSettings(View view) {
-        LinearLayout settingsLinearLayout = findViewById(R.id.ca_linearLayout_settings);
-        if (settingsLinearLayout.getVisibility() == View.VISIBLE) {
+        if (isSettingsShown()) {
             hideCameraSettings();
         } else {
             showCameraSettings();
         }
     }
 
+    private boolean isSettingsShown() {
+        return settingsLinearLayout.getVisibility() == View.VISIBLE;
+    }
+
     private void hideCameraSettings() {
-        LinearLayout settingsLinearLayout = findViewById(R.id.ca_linearLayout_settings);
-        if (settingsLinearLayout.getVisibility() == View.GONE) {
+        if (!isSettingsShown()) {
             return;
         }
         settingsLinearLayout.setVisibility(View.GONE);
+        adjustSettingsLayouts(getResources().getConfiguration());
     }
 
     private void showCameraSettings() {
-        LinearLayout settingsLinearLayout = findViewById(R.id.ca_linearLayout_settings);
-        if (settingsLinearLayout.getVisibility() == View.VISIBLE) {
+        if (isSettingsShown()) {
             return;
         }
         settingsLinearLayout.setVisibility(View.VISIBLE);
+        adjustSettingsLayouts(getResources().getConfiguration());
     }
 
     private void mainClickResolver() {
         hideCameraSettings();
     }
+
+    private void alertEkfCreateException(EkfCreateException e) {
+        alert(getString(R.string.ca_ekfCreateExceptionTitle), getString(R.string.ca_ekfCreateExceptionText, e.getMessage()));
+    }
+
+    private void alertEkfStartException(EKFStartExeception e) {
+        alert(getString(R.string.ca_ekfStartExceptionTitle), getString(R.string.ca_ekfStartExceptionText, e.getMessage()));
+    }
 }
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

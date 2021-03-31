@@ -2,6 +2,7 @@ package eu.foxcom.gtphotos;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -42,6 +43,7 @@ public class SettingFilterActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_filter);
+        setToolbar(R.id.toolbar);
 
         filterActiveSwitch = findViewById(R.id.sef_switch_filterActive);
         minHdopSeekBar = findViewById(R.id.sef_seekBar_hdopMin);
@@ -129,4 +131,13 @@ public class SettingFilterActivity extends BaseActivity {
         minMeanSnrSeekBar.setProgress(DEFAULT_MIN_MEAN_SNR);
         minFixSeekBar.setProgress(DEFAULT_MIN_FIX);
     }
+
+    public void filterActiveToggle(View view) {
+        filterActiveSwitch.performClick();
+    }
 }
+
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

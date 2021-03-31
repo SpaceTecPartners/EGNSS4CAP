@@ -27,7 +27,6 @@ class index_view{
   public function load_index_farmers_tasks_html_page(array $twig_array){
     $twig = $this->getTwig();
     $twig->use_jquery();
-    $twig->pushCss($this->getCSS_PATH() . 'index.css');
     $twig->pushJavascript($this->getJS_PATH() . 'index.js');
     $twig->pushJavascript($this->getJS_PATH() . 'index_task_list.js');
     $twig->use_map_js();
@@ -38,7 +37,6 @@ class index_view{
   public function load_index_gallery_unassigned_html_page(array $twig_array){
     $twig = $this->getTwig();
     $twig->use_jquery();
-    $twig->pushCss($this->getCSS_PATH() . 'index.css');
     $twig->pushJavascript($this->getJS_PATH() . 'index.js');
     $twig->pushJavascript($this->getJS_PATH() . 'index_users_gallery.js');
     $twig->use_map_js();
@@ -49,7 +47,6 @@ class index_view{
   public function load_index_user_paths_html_page(array $twig_array){
     $twig = $this->getTwig();
     $twig->use_jquery();
-    $twig->pushCss($this->getCSS_PATH() . 'index.css');
     $twig->pushJavascript($this->getJS_PATH() . 'index.js');
     $twig->pushJavascript($this->getJS_PATH() . 'index_user_paths.js');
     $twig->use_map_js();
@@ -60,7 +57,6 @@ class index_view{
   public function load_index_release_notes_html_page(array $twig_array){
     $twig = $this->getTwig();
     $twig->use_jquery();
-    $twig->pushCss($this->getCSS_PATH() . 'index.css');
     $this->getTwig()->setPage_id(self::RELEASE_NOTES_PAGE_ID);
     return $twig->render($this->getTEMPLATES_PATH() . 'index_release_notes.html.twig', $twig_array, true, $_SESSION['lang'], self::RELEASE_NOTES_PAGE_ID);
   }
@@ -68,7 +64,6 @@ class index_view{
   public function load_index_agency_farmers_html_page(array $twig_array){
     $twig = $this->getTwig();
     $twig->use_jquery();
-    $twig->pushCss($this->getCSS_PATH() . 'index.css');
     $twig->pushJavascript($this->getJS_PATH() . 'index.js');
     $twig->pushJavascript($this->getJS_PATH() . 'index_users.js');
     $twig->use_map_js();
@@ -79,7 +74,6 @@ class index_view{
   public function load_index_agency_html_page(array $twig_array){
     $twig = $this->getTwig();
     $twig->use_jquery();
-    $twig->pushCss($this->getCSS_PATH() . 'index.css');
     $twig->pushJavascript($this->getJS_PATH() . 'index.js');
     $twig->pushJavascript($this->getJS_PATH() . 'index_agency.js');
     //$twig->use_map_js();
@@ -90,7 +84,6 @@ class index_view{
   public function load_index_pa_officers_html_page(array $twig_array){
     $twig = $this->getTwig();
     $twig->use_jquery();
-    $twig->pushCss($this->getCSS_PATH() . 'index.css');
     $twig->pushJavascript($this->getJS_PATH() . 'index.js');
     $twig->pushJavascript($this->getJS_PATH() . 'index_pa_officers.js');
     //$twig->use_map_js();
@@ -115,7 +108,7 @@ class index_view{
 
   public function load_table_of_tasks(array $twig_array){
     $twig = $this->getTwig();
-    return $twig->render($this->getTEMPLATES_PATH() . 'index_farmers_tasks_table.html.twig', $twig_array, false);
+    return $twig->render($this->getTEMPLATES_PATH() . 'index_farmers_tasks_table.html.twig', $twig_array, false, $_SESSION['lang'], self::TASKS_PAGE_ID);
   }
 
   public function getTwig(): \twig_controler{
@@ -150,5 +143,5 @@ class index_view{
     $this->CSS_PATH = $CSS_PATH;
   }
 }
-
+//Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
 ?>

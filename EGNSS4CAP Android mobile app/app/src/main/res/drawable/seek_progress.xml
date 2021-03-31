@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_enabled="true">
+        <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+            <item android:id="@android:id/background" android:bottom="5dp" android:top="5dp">
+                <shape xmlns:android="http://schemas.android.com/apk/res/android">
+                    <solid android:color="@color/switchTrackInactive" />
+                    <corners android:radius="100dp" />
+                </shape>
+            </item>
+
+            <item android:id="@android:id/progress" android:bottom="5dp" android:top="5dp">
+                <clip>
+                    <shape xmlns:android="http://schemas.android.com/apk/res/android">
+                        <solid android:color="@color/switchTrackActive" />
+                        <corners android:radius="100dp" />
+                    </shape>
+                </clip>
+            </item>
+        </layer-list>
+    </item>
+
+    <item android:state_enabled="false">
+        <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+            <item android:id="@android:id/background" android:bottom="5dp" android:top="5dp">
+                <shape xmlns:android="http://schemas.android.com/apk/res/android">
+                    <solid android:color="@color/switchTrackInactive" />
+                    <corners android:radius="100dp" />
+                </shape>
+            </item>
+
+            <item android:id="@android:id/progress" android:bottom="5dp" android:top="5dp">
+                <clip>
+                    <shape xmlns:android="http://schemas.android.com/apk/res/android">
+                        <solid android:color="@color/switchTrackInactive" />
+                        <corners android:radius="100dp" />
+                    </shape>
+                </clip>
+            </item>
+        </layer-list>
+    </item>
+</selector>
+
+    <!-- Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu -->

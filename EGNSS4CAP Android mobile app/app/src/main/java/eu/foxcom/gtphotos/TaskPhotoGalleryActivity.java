@@ -2,10 +2,12 @@ package eu.foxcom.gtphotos;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -103,6 +105,11 @@ public class TaskPhotoGalleryActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_photo_gallery_v1);
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            setToolbar(R.id.toolbar);
+        } else {
+            this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
 
         this.savedInstanceState = savedInstanceState;
 
@@ -145,7 +152,7 @@ public class TaskPhotoGalleryActivity extends BaseActivity {
                 return false;
             }
             task = Task.createFromAppDatabase(taskId, MS.getAppDatabase());
-            photoList = PhotoList.createFromAppDatabase(MS.getAppDatabase(), taskId, this);
+            photoList = PhotoList.createFromAppDatabaseByTaskGroup(MS.getAppDatabase(), taskId, this);
             if (savedInstanceState != null && savedInstanceState.containsKey(SAVED_INSTANCE_STATE_INIT_PHOTO_INDX)) {
                 initPhotoIndx = savedInstanceState.getInt(SAVED_INSTANCE_STATE_INIT_PHOTO_INDX, 0);
             } else if (intent.hasExtra(INTENT_ACTION_START_INIT_PHOTO_INDX)) {
@@ -264,3 +271,8 @@ public class TaskPhotoGalleryActivity extends BaseActivity {
     }
 
 }
+
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

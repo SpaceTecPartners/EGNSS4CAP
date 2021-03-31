@@ -26,6 +26,8 @@ public class PTPoint {
         ptPoint.created = new DateTime(location.getTime());
         ptPoint.latitude = location.getLatitude();
         ptPoint.longitude = location.getLongitude();
+        ptPoint.altitude = location.getAltitude();
+        ptPoint.accuracy = (double) location.getAccuracy();
         return ptPoint;
     }
 
@@ -39,6 +41,16 @@ public class PTPoint {
         ptPoint.created = DateTime.parse(jsonObject.getString("created"), DateTimeFormat.forPattern(DATETIME_RECEIVED_FORMAT));
         ptPoint.latitude = jsonObject.getDouble("lat");
         ptPoint.longitude = jsonObject.getDouble("lng");
+        try {
+            ptPoint.altitude = jsonObject.getDouble("altitude");
+        } catch (JSONException jsonException) {
+            ptPoint.altitude = null;
+        }
+        try {
+            ptPoint.accuracy = jsonObject.getDouble("accuracy");
+        }catch (JSONException jsonException) {
+            ptPoint.accuracy = null;
+        }
         return ptPoint;
     }
 
@@ -50,6 +62,8 @@ public class PTPoint {
     private Integer index;
     private Double latitude;
     private Double longitude;
+    private Double altitude;
+    private Double accuracy;
     private DateTime created;
 
     public void saveToDB(AppDatabase appDatabase) {
@@ -60,6 +74,8 @@ public class PTPoint {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("lat", latitude);
         jsonObject.put("lng", longitude);
+        jsonObject.put("altitude", altitude);
+        jsonObject.put("accuracy", accuracy);
         jsonObject.put("created", created.toString(DATETIME_RECEIVED_FORMAT));
         return jsonObject;
     }
@@ -113,6 +129,22 @@ public class PTPoint {
 
     public void setCreated(DateTime created) {
         this.created = created;
+    }
+
+    public Double getAltitude() {
+        return altitude;
+    }
+
+    public void setAltitude(Double altitude) {
+        this.altitude = altitude;
+    }
+
+    public Double getAccuracy() {
+        return accuracy;
+    }
+
+    public void setAccuracy(Double accuracy) {
+        this.accuracy = accuracy;
     }
 
     // endregion

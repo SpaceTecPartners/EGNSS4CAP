@@ -25,7 +25,9 @@ public class PersistData {
         BUTTON_SNAPSHOT_ACTIVE("buttonSnapshotActive"),
         BUTTON_SNAPSHOT_KEY_CODE("buttonSnapshotKeyCode"),
         EXPOSURE_CORRECTION("exposureCorrection"),
-        MANUAL_BRIGHTNESS_ACTIVE("manualBrightnessActive");
+        MANUAL_BRIGHTNESS_ACTIVE("manualBrightnessActive"),
+        AUTO_PAN_ACTIVE("AUTO_PAN_ACTIVE"),
+        BEEP_PATH_POINT_ACTIVE("BEEP_PATH_POINT_ACTIVE");
 
         public final String ID;
 
@@ -191,7 +193,7 @@ public class PersistData {
 
     public static int getButtonSnapshotKeyCode(Context context) {
         SharedPreferences sharedPreferences = getSharedPreferences(context);
-        return sharedPreferences.getInt(PREFERENCES.BUTTON_SNAPSHOT_KEY_CODE.ID, 0);
+        return sharedPreferences.getInt(PREFERENCES.BUTTON_SNAPSHOT_KEY_CODE.ID, -1);
     }
 
     public static int getExposureCorrection(Context context) {
@@ -215,4 +217,30 @@ public class PersistData {
         editor.putString(PREFERENCES.MANUAL_BRIGHTNESS_ACTIVE.ID, value.name());
         editor.apply();
     }
+
+    public static boolean getAutoPan(Context context) {
+        SharedPreferences sharedPreferences = getSharedPreferences(context);
+        return sharedPreferences.getBoolean(PREFERENCES.AUTO_PAN_ACTIVE.ID, true);
+    }
+
+    public static void saveAutoPan(Context context, boolean active) {
+        SharedPreferences.Editor editor = getEditor(context);
+        editor.putBoolean(PREFERENCES.AUTO_PAN_ACTIVE.ID, active);
+        editor.apply();
+    }
+
+    public static boolean getBeepPathPoint(Context context) {
+        SharedPreferences sharedPreferences = getSharedPreferences(context);
+        return sharedPreferences.getBoolean(PREFERENCES.BEEP_PATH_POINT_ACTIVE.ID, true);
+    }
+
+    public static void saveBeepPathPoint(Context context, boolean active) {
+        SharedPreferences.Editor editor = getEditor(context);
+        editor.putBoolean(PREFERENCES.BEEP_PATH_POINT_ACTIVE.ID, active);
+        editor.apply();
+    }
 }
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

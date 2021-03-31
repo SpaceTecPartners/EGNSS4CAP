@@ -22,6 +22,7 @@ public class AboutActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
+        setToolbar(R.id.toolbar);
     }
 
     @Override
@@ -61,3 +62,7 @@ public class AboutActivity extends BaseActivity {
         gnssStatusUnit.stopScan();
     }
 }
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

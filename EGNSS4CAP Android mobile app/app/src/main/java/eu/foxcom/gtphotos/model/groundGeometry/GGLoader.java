@@ -23,7 +23,7 @@ class GGLoader {
         this.ggManager = ggManager;
         this.requestor = requestor;
         DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-        // ! server neumět česky
+        // ! server do not know Czech
         symbols.setDecimalSeparator('.');
         // ! emty char
         symbols.setGroupingSeparator('\u0000');
@@ -31,7 +31,7 @@ class GGLoader {
     }
 
     void load(GGRegion ggRegion) {
-            requestor.requestAuth("https://server/ws/comm_shapes.php", response -> {
+            requestor.requestAuth("https://egnss4cap-uat.foxcom.eu/ws/comm_shapes.php", response -> {
             try {
                 JSONObject jsonObject = new JSONObject(response);
                 String status = jsonObject.getString("status");
@@ -66,3 +66,7 @@ class GGLoader {
     }
 
 }
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

@@ -1,25 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/panelMin"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/background_section_secondary_border"
-    android:orientation="vertical"
-    android:padding="5dp">
+    android:orientation="vertical">
 
     <TextView
-        android:id="@+id/pt_textView_infoCurTitle"
+        android:id="@+id/pt_textView_PTinfoCurTitle"
+        style="@style/textBold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="@string/pt_infoCurPathTitleRecording"
+        android:textSize="14sp"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/pt_textView_infoCurPathCentroidsNote"
-        android:layout_width="match_parent"
+        android:id="@+id/pt_textView_PTinfoCurPathCentroidsNote"
+        style="@style/textNormal"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:text="@string/pt_infoCurPathCentroidsNote"
         android:textAlignment="center"
+        android:textSize="14sp"
+        android:textStyle="italic" />
+
+    <TextView
+        android:id="@+id/pt_textView_PTinfoCurPathPause"
+        style="@style/textNormal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/pt_infoCurPathPause"
+        android:textAlignment="center"
+        android:textColor="#E53935"
+        android:textSize="14sp"
         android:textStyle="italic" />
 
     <TableLayout
@@ -32,15 +48,19 @@
 
             <TextView
                 android:id="@+id/textView102"
+                style="@style/textNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
-                android:text="@string/pt_infoCurPathId" />
+                android:text="@string/pt_infoCurPathId"
+                android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/pt_textView_infoCurPathId"
+                android:id="@+id/pt_textView_PTinfoCurPathId"
+                style="@style/textBold"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textSize="14sp" />
         </TableRow>
 
         <TableRow
@@ -49,17 +69,23 @@
 
             <TextView
                 android:id="@+id/textView104"
+                style="@style/textNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
-                android:text="@string/pt_infoCurPathName" />
+                android:text="@string/pt_infoCurPathName"
+                android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/pt_textView_infoCurPathName"
+                android:id="@+id/pt_textView_PTinfoCurPathName"
+                style="@style/textBold"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textSize="14sp" />
         </TableRow>
 
     </TableLayout>
 
 </LinearLayout>
+
+    <!-- Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu -->

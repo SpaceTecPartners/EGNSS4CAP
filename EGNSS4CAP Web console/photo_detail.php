@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 function correctImageOrientation($filename) {
   if (function_exists('exif_read_data')) {
     $exif = @exif_read_data($filename);
@@ -76,8 +76,7 @@ function clearTmpFolder($folder){
 }
 
 //if user is not logged in -> go to login page
-session_start();
-if (!isset($_SESSION['user_id'])) { header("Location: index.php"); }
+if (!isset($_SESSION['user_id']) && (!isset($_GET['justimg']) || $_GET['justimg'] == '0')) { header("Location: index.php"); }
 
 if (isset($_GET['img']) && isset($_GET['rotation'])){
   $src = $_GET['img'];
@@ -134,4 +133,6 @@ $(document).ready(function(){
   </div>
 </div>
 
-<?php } ?>
+<?php }
+//Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+?>

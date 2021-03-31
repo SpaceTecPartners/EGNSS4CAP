@@ -46,6 +46,8 @@ import java.util.concurrent.Phaser;
 
 import eu.foxcom.gtphotos.model.AppDatabase;
 import eu.foxcom.gtphotos.model.LoggedUser;
+import eu.foxcom.gtphotos.model.Photo;
+import eu.foxcom.gtphotos.model.PhotoList;
 import eu.foxcom.gtphotos.model.Requestor;
 import eu.foxcom.gtphotos.model.SyncQueue;
 import eu.foxcom.gtphotos.model.Task;
@@ -62,11 +64,21 @@ public class MainService extends Service {
     public enum BROADCAST_MSG {
         BROADCAST_ID("mainServiceBroadcast"),
         TYPE("brodcastId"),
+
+        /* excplicit */
+        EXPLICIT("EXPLICIT"),
+        /**/
+
+        /* implicit */
         STARTED("started"),
         REFRESH_TASKS_STARTED("refreshTasksStarted"),
-        REFRESH_TASKS("refreshTasks"),
+        REFRESH_TASKS_FINISHED("refreshTasks"),
         UPLOAD_TASK_STATUS("uploadTaskStatus"),
-        REFRESH_PHOTOS("refreshPhoto");
+        REFRESH_PHOTOS("refreshPhoto"),
+        SYNC_STARTED("SYNC_STARTED"),
+        SYNC_FINISHED("SYNC_FINISHED"),
+        SYNC_PROGRESS("SYNC_PROGRESS");
+        /**/
 
         public static BROADCAST_MSG createFromID(String id) {
             for (BROADCAST_MSG broadcast_msg : BROADCAST_MSG.values()) {
@@ -80,6 +92,17 @@ public class MainService extends Service {
         public final String ID;
 
         BROADCAST_MSG(String id) {
+            ID = id;
+        }
+    }
+
+    public enum BROADCAST_EXPLICIT_PARAMS {
+        CLASS_NAME("CLASS_NAME"),
+        ACTION("ACTION");
+
+        public final String ID;
+
+        BROADCAST_EXPLICIT_PARAMS(String id) {
             ID = id;
         }
     }
@@ -117,6 +140,43 @@ public class MainService extends Service {
         }
     }
 
+    public enum BROADCAST_SYNC_PROGRESS_PARAMS {
+        PROGRESS("PROGRESS");
+
+        public final String ID;
+
+        BROADCAST_SYNC_PROGRESS_PARAMS(String id) {
+            ID = id;
+        }
+    }
+
+    private class SyncNotifier {
+        private int maxUnit;
+        private int processedUnit = 0;
+        private int progress = 0;
+
+        SyncNotifier(int maxUnit) {
+            this.maxUnit = maxUnit;
+        }
+
+        void addUnits(int unitCount) {
+            processedUnit += unitCount;
+
+            if (maxUnit != 0) {
+                progress = 100 * processedUnit / maxUnit;
+            } else {
+                progress = 100;
+            }
+
+            notifyProgress();
+        }
+
+        void notifyProgress() {
+            syncNotifyProgress();
+        }
+
+    }
+
     public static final String TAG = MainService.class.getSimpleName();
 
     public static final boolean IS_FOREGROUND = false;
@@ -136,6 +196,8 @@ public class MainService extends Service {
     private List<String> lastSyncErrors = new ArrayList<>();
     private Boolean isSync = false;
     private Phaser syncPhaser;
+    private SyncNotifier taskSyncNotifier;
+    private SyncNotifier pathSyncNotifier;
 
     private Handler tasksUpdaterHandler;
     private Runnable tasksUpdaterRunnable;
@@ -144,6 +206,9 @@ public class MainService extends Service {
     private LocationCallback locationCallback;
     private LocationRequest locationRequest;
     private Location currentLocation;
+
+    // determines the global path / path recording status
+    private boolean isPathsUploading = false;
 
     public class LocalBinder extends Binder {
         public MainService getService() {
@@ -216,12 +281,17 @@ public class MainService extends Service {
                 return;
             }
             isSync = true;
+            sendBroadcastMessage(createBroadcastImplicitIntent(BROADCAST_MSG.SYNC_STARTED));
         }
         syncErrorClear();
 
+        pathSyncNotifier = null;
+        taskSyncNotifier = null;
+        syncNotifyProgress();
+
         syncPhaser = new Phaser(3);
-        syncTasks();
         syncPaths();
+        syncTasks();
 
         Handler joiner = new Handler(Looper.getMainLooper());
         Executors.newSingleThreadExecutor().submit(() -> {
@@ -229,6 +299,7 @@ public class MainService extends Service {
             joiner.post(() -> {
                 synchronized (isSync) {
                     isSync = false;
+                    sendBroadcastMessage(createBroadcastImplicitIntent(BROADCAST_MSG.SYNC_FINISHED));
                     Log.d("SYNC", "finished all");
                 }
             });
@@ -236,14 +307,14 @@ public class MainService extends Service {
     }
 
     public void syncTasks() {
-        sendBroadcastMessage(createBroadcastIntent(BROADCAST_MSG.REFRESH_TASKS_STARTED));
+        sendBroadcastMessage(createBroadcastImplicitIntent(BROADCAST_MSG.REFRESH_TASKS_STARTED));
         TaskList currentTaskList = TaskList.createFromAppDatabase(appDatabase);
         final SyncQueue syncQ = new SyncQueue("syncTasks");
         Task.UpdateTaskReceiver updateTaskReceiver = new Task.UpdateTaskReceiver() {
 
             @Override
             public void success(AppDatabase appDatabase, Task task) {
-                sendBroadcastMessage(createBroadcastIntent(BROADCAST_MSG.UPLOAD_TASK_STATUS)
+                sendBroadcastMessage(createBroadcastImplicitIntent(BROADCAST_MSG.UPLOAD_TASK_STATUS)
                         .putExtra(BROADCAST_UPLOAD_TASK_STATUS_PARAMS.SUCCESS.ID, true));
             }
 
@@ -255,7 +326,7 @@ public class MainService extends Service {
             @Override
             public void failed(String error) {
                 syncErrorAdd("SyncTasks failed\n" + error);
-                sendBroadcastMessage(createBroadcastIntent(BROADCAST_MSG.UPLOAD_TASK_STATUS)
+                sendBroadcastMessage(createBroadcastImplicitIntent(BROADCAST_MSG.UPLOAD_TASK_STATUS)
                         .putExtra(BROADCAST_UPLOAD_TASK_STATUS_PARAMS.SUCCESS.ID, false)
                         .putExtra(BROADCAST_UPLOAD_TASK_STATUS_PARAMS.ERROR_MSG.ID, error));
             }
@@ -282,7 +353,7 @@ public class MainService extends Service {
     }
 
     private void loadTasks(final SyncQueue syncQueue) {
-        requestor.requestAuth("https://server/ws/comm_tasks.php", new Response.Listener<String>() {
+        requestor.requestAuth("https://egnss4cap-uat.foxcom.eu/ws/comm_tasks.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -291,73 +362,139 @@ public class MainService extends Service {
                     if (!status.equals("ok")) {
                         String errMsg = jsonObject.getString("error_msg");
                         syncErrorAdd(errMsg);
-                        sendBroadcastMessage(createBroadcastIntent(BROADCAST_MSG.REFRESH_TASKS).putExtra(BROADCAST_REFRESH_TASKS_PARAMS.SUCCESS.ID, false)
+                        sendBroadcastMessage(createBroadcastImplicitIntent(BROADCAST_MSG.REFRESH_TASKS_FINISHED).putExtra(BROADCAST_REFRESH_TASKS_PARAMS.SUCCESS.ID, false)
                                 .putExtra(BROADCAST_REFRESH_TASKS_PARAMS.ERROR_MSG.ID, errMsg));
                     }
                     final TaskList taskList = TaskList.createFromJSONArray(appDatabase, jsonObject.getJSONArray("tasks"), LoggedUser.createFromAppDatabase(appDatabase).getId());
                     taskList.refreshToDB();
                     String userId = LoggedUser.createFromAppDatabase(appDatabase).getId();
 
-                    Task virtualTask = Task.createFromAppDatabaseSpecialUnownedPhotos(appDatabase, userId);
-                    virtualTask.setOnlySentPhotos(true);
-                    virtualTask.deletePhotos(appDatabase, getApplicationContext());
-                    taskList.addTask(virtualTask);
-
-                    taskList.updatePhotos(syncQueue, new Task.UpdateTaskReceiver(syncQueue) {
-                        @Override
-                        protected void success(AppDatabase appDatabase, Task task) {
-                            sendBroadcastMessage(createBroadcastIntent(BROADCAST_MSG.REFRESH_PHOTOS)
-                                    .putExtra(BROADCAST_REFRESH_PHOTOS_PARAMS.SUCCESS.ID, true));
-                        }
-
-                        @Override
-                        protected void success(AppDatabase appDatabase) {
-                            // not used
-                        }
-
-                        @Override
-                        protected void failed(String error) {
-                            syncErrorAdd(error);
-                            sendBroadcastMessage(createBroadcastIntent(BROADCAST_MSG.REFRESH_PHOTOS)
-                                    .putExtra(BROADCAST_REFRESH_PHOTOS_PARAMS.SUCCESS.ID, false)
-                                    .putExtra(BROADCAST_REFRESH_PHOTOS_PARAMS.ERROR_MSG.ID, error));
-                        }
-
-                        @Override
-                        protected void finish(boolean success) {
-                            // nothing
-                        }
-                    }, requestor, MainService.this);
                     syncQueue.addAsyncExecutor(new SyncQueue.AsyncExecutor() {
                         @Override
                         protected void run() {
-                            if (syncSuccess) {
-                                sendBroadcastMessage(createBroadcastIntent(BROADCAST_MSG.REFRESH_TASKS).putExtra(BROADCAST_REFRESH_TASKS_PARAMS.SUCCESS.ID, true));
+                            try {
+                                Task virtualTask = Task.createFromAppDatabaseSpecialUnownedPhotos(appDatabase, userId);
+                                virtualTask.downloadUnassignedPhotoRealIds(appDatabase, MainService.this, requestor, new Task.UpdateTaskReceiver(syncQueue) {
+                                    @Override
+                                    protected void success(AppDatabase appDatabase, Task task) {
+
+                                    }
+
+                                    @Override
+                                    protected void success(AppDatabase appDatabase) {
+
+                                    }
+
+                                    @Override
+                                    protected void failed(String error) {
+                                        syncErrorAdd(error);
+                                        addEndChainTaskSync(syncQueue, error);
+                                    }
+
+                                    @Override
+                                    protected void finish(boolean success) {
+
+                                    }
+                                });
+                                taskList.addTask(virtualTask);
+                            } catch (JSONException e) {
+                                syncErrorAdd(e.getMessage());
                             }
-                            finishTaskSync();
-                            syncQueue.executionFinish();
                         }
                     });
+
+                    syncQueue.addAsyncExecutor(new SyncQueue.AsyncExecutor() {
+                        @Override
+                        protected void run() {
+                            taskList.prepareRealIdsForProcessing(appDatabase);
+                            taskSyncNotifier = new SyncNotifier(taskList.getCountToUpdatePhotoRealId());
+                            taskSyncNotifier.notifyProgress();
+
+                            taskList.updatePhotosByRealIds(MainService.this, requestor, new Photo.UpdatePhotoReceiver() {
+                                @Override
+                                protected void success(AppDatabase appDatabase, Photo photo) {
+                                    taskSyncNotifier.addUnits(1);
+                                }
+
+                                @Override
+                                protected void success(AppDatabase appDatabase) {
+
+                                }
+
+                                @Override
+                                protected void failed(String error) {
+                                    syncErrorAdd(error);
+                                }
+
+                                @Override
+                                protected void finish(boolean success) {
+
+                                }
+                            }, new Task.UpdateTaskReceiver() {
+                                @Override
+                                protected void success(AppDatabase appDatabase, Task task) {
+                                    PhotoList photoList = PhotoList.createFromAppDatabaseByTaskGroup(appDatabase, task.getId(), MainService.this);
+                                    photoList.deleteDuplicatePhotosInDatabaseByDigest();
+                                    photoList.unlockAllImmediately();
+                                }
+
+                                @Override
+                                protected void success(AppDatabase appDatabase) {
+
+                                }
+
+                                @Override
+                                protected void failed(String error) {
+                                    syncErrorAdd(error);
+                                }
+
+                                @Override
+                                protected void finish(boolean success) {
+
+                                }
+                            }, new Task.UpdateTaskReceiver(syncQueue) {
+                                @Override
+                                protected void success(AppDatabase appDatabase, Task task) {
+                                    sendBroadcastMessage(createBroadcastImplicitIntent(BROADCAST_MSG.REFRESH_PHOTOS)
+                                            .putExtra(BROADCAST_REFRESH_PHOTOS_PARAMS.SUCCESS.ID, true));
+                                }
+
+                                @Override
+                                protected void success(AppDatabase appDatabase) {
+
+                                }
+
+                                @Override
+                                protected void failed(String error) {
+                                    syncErrorAdd(error);
+                                    sendBroadcastMessage(createBroadcastImplicitIntent(BROADCAST_MSG.REFRESH_PHOTOS)
+                                            .putExtra(BROADCAST_REFRESH_PHOTOS_PARAMS.SUCCESS.ID, false)
+                                            .putExtra(BROADCAST_REFRESH_PHOTOS_PARAMS.ERROR_MSG.ID, error));
+                                }
+
+                                @Override
+                                protected void finish(boolean success) {
+                                    Log.d("DEBUG", "FINISH");
+                                }
+                            });
+                        }
+                    });
+
+                    addEndChainTaskSync(syncQueue, null);
+
                 } catch (JSONException e) {
                     syncErrorAdd(e.getMessage());
-                    sendBroadcastMessage(createBroadcastIntent(BROADCAST_MSG.REFRESH_TASKS).putExtra(BROADCAST_REFRESH_TASKS_PARAMS.SUCCESS.ID, false)
-                            .putExtra(BROADCAST_REFRESH_TASKS_PARAMS.ERROR_MSG.ID, e.getMessage()));
+                    addEndChainTaskSync(syncQueue, e.getMessage());
                 } finally {
-                    if (syncQueue.isLastRunning()) {
-                        finishTaskSync();
-                    }
                     syncQueue.executionFinish();
                 }
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                syncErrorAdd(error.getMessage());
-                sendBroadcastMessage(createBroadcastIntent(BROADCAST_MSG.REFRESH_TASKS).putExtra(BROADCAST_REFRESH_TASKS_PARAMS.SUCCESS.ID, false)
-                        .putExtra(BROADCAST_REFRESH_TASKS_PARAMS.ERROR_MSG.ID, error.getMessage()));
-                finishTaskSync();
-                syncQueue.executionFinish();
-            }
+        }, error -> {
+            syncErrorAdd(error.getMessage());
+            sendBroadcastMessage(createBroadcastImplicitIntent(BROADCAST_MSG.REFRESH_TASKS_FINISHED).putExtra(BROADCAST_REFRESH_TASKS_PARAMS.SUCCESS.ID, false)
+                    .putExtra(BROADCAST_REFRESH_TASKS_PARAMS.ERROR_MSG.ID, error.getMessage()));
+            finishTaskSync();
+            syncQueue.executionFinish();
         }, new Requestor.Req() {
             @Override
             public Map<String, String> getParams() {
@@ -368,12 +505,39 @@ public class MainService extends Service {
         });
     }
 
+    private void addEndChainTaskSync(SyncQueue syncQueue, String endErrMsg) {
+        syncQueue.addAsyncExecutor(new SyncQueue.AsyncExecutor() {
+            @Override
+            protected void run() {
+                if (syncSuccess) {
+                    sendBroadcastMessage(createBroadcastImplicitIntent(BROADCAST_MSG.REFRESH_TASKS_FINISHED).putExtra(BROADCAST_REFRESH_TASKS_PARAMS.SUCCESS.ID, true));
+                } else {
+                    String errMsg = endErrMsg;
+                    if (errMsg == null && lastSyncErrors.size() > 0) {
+                        errMsg = lastSyncErrors.get(lastSyncErrors.size() - 1);
+                    }
+                    sendBroadcastMessage(createBroadcastImplicitIntent(BROADCAST_MSG.REFRESH_TASKS_FINISHED).putExtra(BROADCAST_REFRESH_TASKS_PARAMS.SUCCESS.ID, false)
+                            .putExtra(BROADCAST_REFRESH_TASKS_PARAMS.ERROR_MSG.ID, errMsg));
+                }
+                finishTaskSync();
+                syncQueue.executionFinishTotal();
+            }
+        });
+    }
+
     private void syncPaths() {
-        downloadPaths();
+        if (PTPath.getUploadingOpenedCount(appDatabase) > 0) {
+            syncErrorAdd(getString(R.string.pt_downloadRestrictedError));
+            finishPathSync();
+        } else {
+            downloadPaths();
+        }
     }
 
     private void downloadPaths() {
-        requestor.requestAuth("https://server/ws/comm_get_paths.php", new Response.Listener<String>() {
+        pathSyncNotifier = new SyncNotifier(1);
+        pathSyncNotifier.notifyProgress();
+        requestor.requestAuth("https://egnss4cap-uat.foxcom.eu/ws/comm_get_paths.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -389,7 +553,12 @@ public class MainService extends Service {
                     for (int i = 0; i < jsonPaths.length(); ++i) {
                         PTPath.createFromJSON(appDatabase, jsonPaths.getJSONObject(i)).saveToDB(appDatabase);
                     }
-                    uploadPaths();
+
+                    /* auto upload - deprecated */
+                    // uploadPaths();
+                    pathSyncNotifier.addUnits(1);
+                    finishPathSync();
+                    /**/
                 } catch (JSONException jsonException) {
                     syncErrorAdd("downloadPaths failed, json error\n" + jsonException.getMessage());
                     finishPathSync();
@@ -414,58 +583,28 @@ public class MainService extends Service {
         });
     }
 
+    @Deprecated
     private void uploadPaths() {
         List<PTPath> unsentPaths = PTPath.createListFromAppDatabaseUnsent(appDatabase);
         Phaser phaser = new Phaser(unsentPaths.size() + 1);
+        PTPath.UploadReceiver uploadReceiver = new PTPath.UploadReceiver() {
+            @Override
+            protected void success() {
+                // nothing
+            }
+
+            @Override
+            protected void failed(String errMsg) {
+                syncErrorAdd(errMsg);
+            }
+
+            @Override
+            protected void complete() {
+                phaser.arriveAndDeregister();
+            }
+        };
         for (PTPath ptPath : unsentPaths) {
-            requestor.requestAuth("https://server/ws/comm_path.php", new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    try {
-                        JSONObject jsonObject = new JSONObject(response);
-                        String status = jsonObject.getString("status").trim();
-                        if (!status.equals("ok")) {
-                            String errMsg = jsonObject.getString("error_msg");
-                            syncErrorAdd("uploadPaths failed, bad status\n" + errMsg);
-                            return;
-                        }
-                        ptPath.setRealId(jsonObject.getLong("path_id"));
-                        ptPath.saveToDB(appDatabase);
-                    } catch (JSONException jsonException) {
-                        syncErrorAdd("uploadPaths failed, response json error\n" + jsonException.getMessage());
-                    } finally {
-                        Log.d("SYNC PATH", "ptPath: " + ptPath.getAutoId() + "uploaded");
-                        phaser.arriveAndDeregister();
-                    }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    syncErrorAdd("uploadPaths failed, network error\n" + Util.volleyErrorMsg(error));
-                    Log.d("SYNC PATH", "ptPath: " + ptPath.getAutoId() + "uploaded");
-                    phaser.arriveAndDeregister();
-                }
-            }, new Requestor.Req() {
-                @Override
-                public Map<String, String> getParams() {
-                    try {
-                        Map<String, String> params = new HashMap<>();
-                        params.put("user_id", LoggedUser.createFromAppDatabase(appDatabase).getId());
-                        params.put("name", ptPath.getName());
-                        params.put("start", ptPath.getStartT().toString(PTPath.DATETIME_RECEIVED_FORMAT));
-                        params.put("end", ptPath.getEndT().toString(PTPath.DATETIME_RECEIVED_FORMAT));
-                        params.put("area", ptPath.getArea() == null ? "0" : PTPath.AREA_FORMAT.format(ptPath.getArea()));
-                        params.put("points", ptPath.pointsToJSONArray().toString());
-                        return params;
-                    } catch (JSONException jsonException) {
-                        this.forceCancel = true;
-                        syncErrorAdd("uploadPaths failed, params json error\n" + jsonException.getMessage());
-                        Log.d("SYNC PATH", "ptPath: " + ptPath.getAutoId() + "uploaded");
-                        phaser.arriveAndDeregister();
-                        return null;
-                    }
-                }
-            });
+            ptPath.upload(appDatabase, requestor, uploadReceiver);
         }
 
         Handler joiner = new Handler(Looper.getMainLooper());
@@ -485,6 +624,18 @@ public class MainService extends Service {
         lastSyncErrors.clear();
     }
 
+    private void syncNotifyProgress() {
+        int progress = 0;
+        if (taskSyncNotifier != null) {
+            progress += 90 * taskSyncNotifier.progress / 100;
+        }
+        if (pathSyncNotifier != null) {
+            progress += 10 * pathSyncNotifier.progress / 100;
+        }
+        sendBroadcastMessage(createBroadcastImplicitIntent(BROADCAST_MSG.SYNC_PROGRESS)
+                .putExtra(BROADCAST_SYNC_PROGRESS_PARAMS.PROGRESS.ID, progress));
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (isRunnig) {
@@ -500,31 +651,12 @@ public class MainService extends Service {
                 .setContentIntent(pendingIntent)
                 .build();
 
-        /* DEBUGCOM
-        // testování neodchycených výjímek
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                throw new RuntimeException("BAF BAF BAF");
-            }
-        }, 10000);
-        /**/
-
-        // region example for simple background notification
-        /*
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        // notificationId is a unique int for each notification that you must define
-        notificationManager.notify(111, notification);
-        /**/
-        // endregion
-
         if (IS_FOREGROUND) {
             startForeground(FOREGROUND_SERVICE_ID, notification);
         }
 
         isRunnig = true;
-        sendBroadcastMessage(createBroadcastIntent(BROADCAST_MSG.STARTED));
+        sendBroadcastMessage(createBroadcastImplicitIntent(BROADCAST_MSG.STARTED));
         return MODE_START;
     }
 
@@ -541,9 +673,17 @@ public class MainService extends Service {
     }
 
 
-    public Intent createBroadcastIntent(BROADCAST_MSG broadcast_msg) {
+    public Intent createBroadcastImplicitIntent(BROADCAST_MSG broadcast_msg) {
         Intent intent = new Intent(BROADCAST_MSG.BROADCAST_ID.ID);
         intent.putExtra(BROADCAST_MSG.TYPE.ID, broadcast_msg.ID);
+        return intent;
+    }
+
+    public Intent createBroadcastExplicitIntent(Class targetClass, String action) {
+        Intent intent = new Intent(BROADCAST_MSG.BROADCAST_ID.ID);
+        intent.putExtra(BROADCAST_MSG.TYPE.ID, BROADCAST_MSG.EXPLICIT.ID);
+        intent.putExtra(BROADCAST_EXPLICIT_PARAMS.CLASS_NAME.ID, targetClass.getName());
+        intent.putExtra(BROADCAST_EXPLICIT_PARAMS.ACTION.ID, action);
         return intent;
     }
 
@@ -630,5 +770,17 @@ public class MainService extends Service {
         return new ArrayList<>(lastSyncErrors);
     }
 
+    public boolean isPathsUploading() {
+        return isPathsUploading;
+    }
+
+    public void setPathsUploading(boolean pathsUploading) {
+        isPathsUploading = pathsUploading;
+    }
+
     // endregion
 }
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

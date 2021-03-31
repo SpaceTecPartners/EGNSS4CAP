@@ -14,16 +14,20 @@
   {% for js in javascript %}
   <script type="text/javascript" src="{{ js }}?v={{ app_version }}"></script>
   {% endfor %}
+  <script type="text/javascript" src="js/lowscreen.js"></script>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
   integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
 </head>
 
-<body class="d-flex flex-column">
+<body class="d-flex flex-column" id="{{page_name}}">
   <header>
-    <nav class="navbar navbar-expand-md navbar-light fixed-top navbar-green">
-      <a class="navbar-brand" href="index.php">EGNSS4CAP</a>
+    <nav class="navbar navbar-expand-sm navbar-dark fixed-top">
+      <a class="navbar-brand" href="index.php">EGNSS<span style="opacity: 0.5;">4</span>CAP</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
       <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav mr-auto">
+        <ul class="navbar_left navbar-nav mr-auto">
           <li class="nav-item active">
             <a class="nav-link" href="index.php">{{ home }}</a>
           </li>
@@ -31,25 +35,94 @@
             <a class="nav-link" href="index.php?act=load_release_notes">{{ release_notes }}</a>
           </li>
         </ul>
-      </div>
-      <div>
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item"><a id="cz" class="nav-link {% if lang == 'cz' %} active {% endif %} js_lang" href="#">CZ</a></li>
-          <li class="nav-item"><a id="en" class="nav-link {% if lang == 'en' %} active {% endif %} js_lang" href="#">EN</a></li>
-          <li class="nav-item"> <span class="active nav-link" >{{ user_name }}</span></li>
-          <li class="nav-item"><a class="nav-link" href="login.php?act=logout">{{ logout }}</a></li>
-        </ul>
+        <div class="navbar_right">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item"><a id="cz" class="nav-link {% if lang == 'cz' %} active {% endif %} js_lang" href="#">CZ</a></li>
+            <li class="nav-item"><a id="en" class="nav-link {% if lang == 'en' %} active {% endif %} js_lang" href="#">EN</a></li>
+            <li class="nav-item"> <span class="active nav-link" >{{ user_name }}</span></li>
+            <li class="nav-item"><a class="nav-link" href="login.php?act=logout">{{ logout }}</a></li>
+          </ul>
+        </div>
       </div>
     </nav>
   </header>
   <div class="overlap"></div>
   <main role="main" class="w-100 pl-2 pt-2 pr-2">
-    <div class="pl-2 pt-5 w-100 h-100">
+    <div class="w-100 h-100">
       {% block body %}{% endblock %}
     </div>
   </main>
   <!--<div class="w-100 footer">
     <img src="../img/footer_grass.jpg" alt="footer grass">
   </div>-->
+
+  {#if displayed inside <main>, the main's position:fixed messes with the bootstrap modal#}
+  {% if page_name == "gallery_unassigned" %}
+  <div class="modal fade w-100" id="image-gallery" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="image-gallery-title"></h4>
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+              class="sr-only"></span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <a id="image-gallery-zoom" href="" target="_blank">
+            <img id="image-gallery-image" data-photo_db_id="0" data-rotation="0" class="img-responsive col-md-12" src="">
+          </a>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary float-left" id="show-previous-image">
+            <i class="fa fa-arrow-left"></i>
+          </button>
+          <div class="js_photo_rotate">
+            {% if not task_select %}
+              <div class="js_photo_rotate_left" data-pht_id="image-gallery-image"><i class="fas fa-sync"></i> {{ pht_rotate_left }}</div>
+              <div class="js_photo_rotate_right" data-pht_id="image-gallery-image"><i class="fas fa-sync"></i> {{ pht_rotate_right }}</div>
+            {% endif %}
+          </div>
+          <button type="button" id="show-next-image" class="btn btn-primary float-right"><i
+              class="fa fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  {% if page_name == "task" %}
+  <div class="modal fade w-100" id="image-gallery" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="image-gallery-title"></h4>
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
+              class="sr-only"></span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <a id="image-gallery-zoom" href="" target="_blank">
+            <img id="image-gallery-image" data-photo_db_id="0" data-rotation="0" class="img-responsive col-md-12" src="">
+          </a>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary float-left" id="show-previous-image"><i
+              class="fa fa-arrow-left"></i>
+          </button>
+          <div class="js_photo_rotate">
+            <div class="js_photo_rotate_left" data-pht_id="image-gallery-image"><i class="fas fa-sync"></i> {{ pht_rotate_left }}</div>
+            <div class="js_photo_rotate_right" data-pht_id="image-gallery-image"><i class="fas fa-sync"></i> {{ pht_rotate_right }}</div>
+          </div>
+          <button type="button" id="show-next-image" class="btn btn-primary float-right"><i
+              class="fa fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
 </body>
 </html>
+<!--Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu-->

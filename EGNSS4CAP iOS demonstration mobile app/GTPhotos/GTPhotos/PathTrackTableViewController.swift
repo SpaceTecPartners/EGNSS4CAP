@@ -79,8 +79,10 @@ class PathTrackTableViewController: UITableViewController {
         let pathsToSend = self.pathToSend(context: db.mainMOC)
         
         let toUpload = pathsToSend.count > 0
-        let msg = toUpload ? "Are you sure you want to send all unsent paths (total \(pathsToSend.count))"
-            : "No paths to upload that have not been uploaded yet."
+        var msg = "\(pathsToSend.count) Paths not uploaded."
+        if (msg == "1 Paths not uploaded.") {
+            msg = "1 Path not uploaded."
+        }
         let snedAlert = UIAlertController(title: "Send All", message: msg, preferredStyle: .alert)
         snedAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: toUpload ? sendAll : nil))
         if toUpload {
@@ -162,7 +164,7 @@ class PathTrackTableViewController: UITableViewController {
             "points": jsonPointsString
         ]
         
-        let url = URL(string: "https://username:password@server/ws/comm_path.php")
+        let url = URL(string: "https://login:pswd@egnss4cap-uat.foxcom.eu/ws/comm_path.php")
         guard let requestUrl = url else { fatalError() }
         var request = URLRequest(url: requestUrl)
         request.httpMethod = "POST"
@@ -218,8 +220,8 @@ class PathTrackTableViewController: UITableViewController {
     func showSendAllResults() {
         db.mainMOC.refreshAllObjects()
         let success = pathToSend(context: db.mainMOC).count == 0
-        let title = success ? "Upload Succesful" : "Upload Failed"
-        let msg = success ? "All paths were sussefuly uploaded." : "Not all routes were uploaded."
+        let title = success ? "Upload Successfull" : "Upload Failed"
+        let msg = success ? "All paths were successfully uploaded." : "Not all routes were uploaded."
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
@@ -233,3 +235,5 @@ class PathTrackTableViewController: UITableViewController {
     }
     
 }
+
+// Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu

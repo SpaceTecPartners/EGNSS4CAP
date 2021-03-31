@@ -1,0 +1,35 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="323dp"
+    android:height="182dp"
+    android:viewportWidth="323"
+    android:viewportHeight="182">
+  <path
+      android:pathData="M6,0L317,0A6,6 0,0 1,323 6L323,175.688A6,6 0,0 1,317 181.688L6,181.688A6,6 0,0 1,0 175.688L0,6A6,6 0,0 1,6 0z"
+      android:fillColor="#F1F2F9"/>
+  <path
+      android:pathData="M182,76H140V112H182V76Z"
+      android:strokeWidth="2"
+      android:fillColor="#00000000"
+      android:strokeColor="#2D3142"
+      android:strokeLineCap="square"/>
+  <path
+      android:pathData="M147,70H175"
+      android:strokeWidth="2"
+      android:fillColor="#00000000"
+      android:strokeColor="#2D3142"
+      android:strokeLineCap="square"/>
+  <path
+      android:pathData="M147,105L154,95L159,99L167,88L176,105H147Z"
+      android:strokeWidth="2"
+      android:fillColor="#00000000"
+      android:strokeColor="#2D3142"
+      android:strokeLineCap="square"/>
+  <path
+      android:pathData="M154,89C155.657,89 157,87.657 157,86C157,84.343 155.657,83 154,83C152.343,83 151,84.343 151,86C151,87.657 152.343,89 154,89Z"
+      android:strokeWidth="2"
+      android:fillColor="#00000000"
+      android:strokeColor="#2D3142"
+      android:strokeLineCap="square"/>
+</vector>
+
+    <!-- Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu -->

@@ -67,7 +67,7 @@ class PhotoDetailViewController: UIViewController {
             let jsonString = String(data: jsonData, encoding: .utf8)!
             
             // Prepare URL
-            let url = URL(string: "https://username:password@server/ws/comm_photo.php")
+            let url = URL(string: "https://login:pswd@egnss4cap-uat.foxcom.eu/ws/comm_photo.php")
             guard let requestUrl = url else { fatalError() }
             // Prepare URL Request Object
             var request = URLRequest(url: requestUrl)
@@ -193,7 +193,7 @@ class PhotoDetailViewController: UIViewController {
     }
     
     func showSendingSuccess() {
-        let alert = UIAlertController(title: "Sending succesfull", message: "Photo is succesfully send.", preferredStyle: UIAlertController.Style.alert)
+        let alert = UIAlertController(title: "Sending succesfull", message: "Photo was succesfully sent.", preferredStyle: UIAlertController.Style.alert)
         alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
@@ -241,3 +241,5 @@ class PhotoDetailViewController: UIViewController {
     */
 
 }
+
+// Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu

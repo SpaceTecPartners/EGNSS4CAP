@@ -28,7 +28,7 @@ if ($task_id) {
   $task_status = get_task_status($task_id);
   if ($task_status == 'new' && $status == 'open') {
     $output = set_task_status($task_id, $status, $note);
-  } elseif (($task_status == 'new' || $task_status == 'open') && $status == 'data provided') {
+  } elseif (($task_status == 'new' || $task_status == 'open' || $task_status == 'returned') && $status == 'data provided') {
     if (check_task_photos($task_id)) {
       $output = set_task_status($task_id, $status, $note);
     } else {
@@ -44,4 +44,5 @@ echo json_encode($output);
 
 db_close();
 
+//Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
 ?>

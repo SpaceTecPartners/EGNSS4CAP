@@ -9,6 +9,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -17,23 +19,27 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Lifecycle;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import eu.foxcom.gtphotos.MainService.BROADCAST_MSG;
 import eu.foxcom.gtphotos.MainService.BROADCAST_REFRESH_TASKS_PARAMS;
-import eu.foxcom.gtphotos.model.LoggedUser;
 import eu.foxcom.gtphotos.model.FileLogger;
+import eu.foxcom.gtphotos.model.LoggedUser;
+import eu.foxcom.gtphotos.model.MyAlertDialog;
 
 public abstract class BaseActivity extends AppCompatActivity implements ServiceInit {
 
@@ -62,6 +68,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ServiceI
     protected ServiceController serviceController;
     protected MainService MS;
     private boolean isShowMenu = false;
+
     /**
      * resume -> pause
      */
@@ -74,13 +81,16 @@ public abstract class BaseActivity extends AppCompatActivity implements ServiceI
      * start -> stop
      */
     protected boolean isRunning = false;
+
     protected boolean isDestroying = false;
     protected boolean isAutoCheckPermissions = true;
+
+    protected Toolbar toolbar;
 
     private Handler syncMonitoringHandler;
     private Runnable syncMonitoringRunnable;
 
-    private AlertDialog syncDialog;
+    private MyAlertDialog syncDialog;
 
     String[] permissions = new String[]{
             Manifest.permission.ACCESS_FINE_LOCATION,
@@ -117,6 +127,9 @@ public abstract class BaseActivity extends AppCompatActivity implements ServiceI
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
+
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
         isCreated = true;
     }
 
@@ -125,7 +138,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ServiceI
         super.onStart();
 
         if (isAutoCheckPermissions) {
-            checkPermissions();
+            checkLocatiomPermissions();
         }
 
         isRunning = true;
@@ -173,6 +186,12 @@ public abstract class BaseActivity extends AppCompatActivity implements ServiceI
         }
     }
 
+    protected void setToolbar(int id) {
+        toolbar = findViewById(id);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
     protected void goToStartActivity() {
         Intent intent = new Intent(this, StartActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
@@ -207,7 +226,32 @@ public abstract class BaseActivity extends AppCompatActivity implements ServiceI
         alert(getString(R.string.bs_permissionDeniedTitle), getString(R.string.bs_permissionDeniedContent, permission));
     }
 
-    protected BROADCAST_MSG broadcastReceiver(Context context, Intent intent) {
+    private void broadcastReceiver(Context context, Intent intent) {
+        if (getLifecycle().getCurrentState().equals(Lifecycle.State.DESTROYED) || isFinishing()) {
+            return;
+        }
+
+        BROADCAST_MSG broadcastMsg = BROADCAST_MSG.createFromID(intent.getStringExtra(BROADCAST_MSG.TYPE.ID));
+        if (broadcastMsg == null) {
+            return;
+        }
+
+        if (broadcastMsg.equals(BROADCAST_MSG.EXPLICIT)) {
+            String className = intent.getStringExtra(MainService.BROADCAST_EXPLICIT_PARAMS.CLASS_NAME.ID);
+            if (this.getClass().getName().equals(className)) {
+                broadcastExplicitReceiver(context, intent);
+            }
+        } else {
+            broadcastImplicitReceiver(context, intent);
+        }
+    }
+
+    protected BROADCAST_MSG broadcastExplicitReceiver(Context context, Intent intent) {
+        // override
+        return null;
+    }
+
+    protected BROADCAST_MSG broadcastImplicitReceiver(Context context, Intent intent) {
         BROADCAST_MSG broadcastMsg = BROADCAST_MSG.createFromID(intent.getStringExtra(BROADCAST_MSG.TYPE.ID));
         if (isFinishing()) {
             return broadcastMsg;
@@ -222,11 +266,11 @@ public abstract class BaseActivity extends AppCompatActivity implements ServiceI
                 }
                 refreshTasksStarted();
                 break;
-            case REFRESH_TASKS:
+            case REFRESH_TASKS_FINISHED:
                 if (!isActive) {
                     break;
                 }
-                refreshTasks(intent);
+                refreshTasksFinished(intent);
                 break;
             case UPLOAD_TASK_STATUS:
                 if (!isActive) {
@@ -236,6 +280,15 @@ public abstract class BaseActivity extends AppCompatActivity implements ServiceI
                 break;
             case REFRESH_PHOTOS:
                 refreshPhotos(intent);
+                break;
+            case SYNC_STARTED:
+                syncStarted();
+                break;
+            case SYNC_FINISHED:
+                syncFinished();
+                break;
+            case SYNC_PROGRESS:
+                updateSyncProgress(intent);
                 break;
         }
         // override
@@ -249,35 +302,40 @@ public abstract class BaseActivity extends AppCompatActivity implements ServiceI
 
     private void syncLockActivate() {
         if (syncDialog == null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setView(R.layout.dialog_sync);
-            AlertDialog dialog = builder.create();
-            dialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.dl_OK), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                }
+            MyAlertDialog.Builder builder = new MyAlertDialog.Builder(this);
+            MyAlertDialog dialog = builder.build();
+            dialog.setCustomLayout(R.layout.dialog_sync);
+            dialog.getAlertDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.dl_OK), (dialog1, which) -> {
             });
+            dialog.setAutoButtons(false);
             syncDialog = dialog;
         }
-        syncDialog.setCancelable(false);
+        if (syncDialog.getAlertDialog().isShowing()){
+            return;
+        }
+        syncDialog.getAlertDialog().setCancelable(false);
         syncDialog.show();
-        syncDialog.getButton(DialogInterface.BUTTON_NEUTRAL).setVisibility(View.GONE);
-        TextView stateTextView = syncDialog.findViewById(R.id.dsync_textView_state);
+        syncDialog.getAlertDialog().findViewById(R.id.myAlertDialog_constraintLayout_base).setBackground(null);
+        syncDialog.getAlertDialog().findViewById(R.id.myAlertDialog_constraintLayout_base).setPadding(0, 0, 0,0);
+        syncDialog.getNeutralButton().setVisibility(View.GONE);
+        TextView stateTextView = syncDialog.getAlertDialog().findViewById(R.id.dsync_textView_state);
         stateTextView.setText(R.string.bs_syncStateProgress);
-        ConstraintLayout waitConstraintLayout = syncDialog.findViewById(R.id.dsync_constraintLayout_wait);
-        TextView errorsTextView = syncDialog.findViewById(R.id.dsync_textView_errors);
+        ConstraintLayout waitConstraintLayout = syncDialog.getAlertDialog().findViewById(R.id.dsync_constraintLayout_wait);
+        TextView errorsTextView = syncDialog.getAlertDialog().findViewById(R.id.dsync_textView_errors);
         errorsTextView.setText("");
+        updateSyncProgress(0);
         waitConstraintLayout.setVisibility(View.VISIBLE);
     }
 
     private void syncLockDeactivate() {
-        if (syncDialog != null && syncDialog.isShowing()) {
-            syncDialog.setCancelable(true);
-            TextView stateTextView = syncDialog.findViewById(R.id.dsync_textView_state);
+        if (syncDialog != null && syncDialog.getAlertDialog().isShowing()) {
+            syncDialog.getAlertDialog().setCancelable(true);
+            TextView stateTextView = syncDialog.getAlertDialog().findViewById(R.id.dsync_textView_state);
             stateTextView.setText(MS.isSyncSuccess() ? R.string.bs_syncStateCompleteSuccess : R.string.bs_syncStateCompleteError);
-            ConstraintLayout waitConstraintLayout = syncDialog.findViewById(R.id.dsync_constraintLayout_wait);
+            ConstraintLayout waitConstraintLayout = syncDialog.getAlertDialog().findViewById(R.id.dsync_constraintLayout_wait);
             waitConstraintLayout.setVisibility(View.GONE);
-            TextView errorsTextView = syncDialog.findViewById(R.id.dsync_textView_errors);
+            TextView errorsTextView = syncDialog.getAlertDialog().findViewById(R.id.dsync_textView_errors);
             if (MS.isSyncSuccess()) {
                 errorsTextView.setText("");
             } else {
@@ -287,27 +345,48 @@ public abstract class BaseActivity extends AppCompatActivity implements ServiceI
                 }
                 errorsTextView.setText(errors);
             }
-            syncDialog.getButton(DialogInterface.BUTTON_NEUTRAL).setVisibility(View.VISIBLE);
+            syncDialog.getNeutralButton().setVisibility(View.VISIBLE);
         }
     }
 
     protected void refreshTasksStarted() {
+        // nothing
+    }
+
+    protected void refreshTasksFinished(Intent intent) {
+        // nothing
+    }
+
+    private void syncStarted() {
         syncLockActivate();
     }
 
-    protected void refreshTasks(Intent intent) {
-        if (!isActive) {
+    private void syncFinished() {
+        syncLockDeactivate();
+    }
+
+    private void updateSyncProgress(Intent intent) {
+        if (!intent.hasExtra(MainService.BROADCAST_SYNC_PROGRESS_PARAMS.PROGRESS.ID)) {
             return;
         }
-        syncLockDeactivate();
-        /* disabled
-        boolean success = intent.getBooleanExtra(BROADCAST_REFRESH_TASKS_PARAMS.SUCCESS.ID, false);
-        if (success) {
-            Toast.makeText(this, getString(R.string.gn_taskRefreshSuccess), Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, getString(R.string.gn_taskRefreshError, intent.getStringExtra(BROADCAST_REFRESH_TASKS_PARAMS.ERROR_MSG.ID)), Toast.LENGTH_SHORT).show();
+        if (syncDialog == null || !syncDialog.getAlertDialog().isShowing()) {
+            return;
         }
-         */
+        ProgressBar progressBar = syncDialog.getAlertDialog().findViewById(R.id.dsync_progressBar_progress);
+        int progress = progressBar.getProgress();
+        progress = intent.getIntExtra(MainService.BROADCAST_SYNC_PROGRESS_PARAMS.PROGRESS.ID, progress);
+        updateSyncProgress(progress);
+    }
+
+    private void updateSyncProgress(int progress) {
+        if (syncDialog == null || !syncDialog.getAlertDialog().isShowing()) {
+            return;
+        }
+
+        ProgressBar progressBar = syncDialog.getAlertDialog().findViewById(R.id.dsync_progressBar_progress);
+        progressBar.setProgress(progress);
+        TextView progressTextView = syncDialog.getAlertDialog().findViewById(R.id.dsync_textView_progress);
+        progressTextView.setText(progress + "%");
     }
 
     protected void uploadTaskStatus(Intent intent) {
@@ -358,7 +437,8 @@ public abstract class BaseActivity extends AppCompatActivity implements ServiceI
         // override
     }
 
-    protected AlertDialog alertBuild(String title, String text) {
+    @Deprecated
+    protected AlertDialog alertBuild_old(String title, String text) {
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(title);
         alertDialog.setMessage(text);
@@ -371,8 +451,17 @@ public abstract class BaseActivity extends AppCompatActivity implements ServiceI
         return alertDialog;
     }
 
-    protected void alert(String title, String text) {
-        AlertDialog alertDialog = alertBuild(title, text);
+    protected MyAlertDialog alertBuild(String title, String text) {
+        MyAlertDialog alertDialog = new MyAlertDialog.Builder(this).build();
+        alertDialog.setTitle(title);
+        alertDialog.setMessage(text);
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                (dialog, which) -> dialog.dismiss());
+        return alertDialog;
+    }
+
+    public void alert(String title, String text) {
+        MyAlertDialog alertDialog = alertBuild(title, text);
         alertDialog.show();
     }
 
@@ -390,9 +479,8 @@ public abstract class BaseActivity extends AppCompatActivity implements ServiceI
         if (isShowMenu) {
             MenuInflater menuInflater = getMenuInflater();
             menuInflater.inflate(R.menu.main_menu, menu);
-            return true;
         }
-        return false;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -412,6 +500,9 @@ public abstract class BaseActivity extends AppCompatActivity implements ServiceI
                 return true;
             case R.id.menuItem_map:
                 showMap();
+                return true;
+            case R.id.menuItem_pathTracking:
+                showPathTracking();
                 return true;
             case R.id.menuItem_about:
                 showAbout();
@@ -459,6 +550,15 @@ public abstract class BaseActivity extends AppCompatActivity implements ServiceI
 
     private void showMap() {
         Intent intent = new Intent(this, MapActivity.class);
+        intent.setAction(MapActivity.INTENT_ACTION_START);
+        intent.putExtra(MapActivity.INTENT_ACTION_START_MODE, MapActivity.START_MODE.ALL_PHOTOS.name());
+        startActivity(intent);
+    }
+
+    private void showPathTracking() {
+        Intent intent = new Intent(this, MapActivity.class);
+        intent.setAction(MapActivity.INTENT_ACTION_START);
+        intent.putExtra(MapActivity.INTENT_ACTION_START_MODE, MapActivity.START_MODE.PATH_TRACKING.name());
         startActivity(intent);
     }
 
@@ -487,7 +587,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ServiceI
         finishAndRemoveTask();
     }
 
-    protected boolean checkPermissions() {
+    protected boolean checkLocatiomPermissions() {
         int result;
         List<String> listPermissionsNeeded = new ArrayList<>();
         for (String p : permissions) {
@@ -540,3 +640,7 @@ public abstract class BaseActivity extends AppCompatActivity implements ServiceI
 
     // endregion
 }
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

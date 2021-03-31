@@ -27,7 +27,7 @@ class user_model{
   }
 
   public static function get_users_gallery_unassigned(int $id, $photos = array()){
-    $photos_sql = dibi::select('concat(p.path, p.file_name) as src, p.path, p.file_name, p.id, p.note, lat, lng, altitude, bearing, photo_angle, photo_heading as azimuth, roll, pitch, orientation, horizontal_view_angle as hvangle, vertical_view_angle as vvangle, accuracy, concat(device_manufacture, " - ", device_model, " - ", device_platform, " - ", device_version) as device, sats_info, nmea_msg, network_info, distance, date_format(timestamp, "%Y-%m-%d %H:%i:%s") as timestamp, date_format(created, "%Y-%m-%d %H:%i:%s") as created_date, rotation_correction as rotation, flg_checked_location, flg_original')
+    $photos_sql = dibi::select('concat(p.path, p.file_name) as src, p.path, p.file_name, p.id, p.note, lat, lng, altitude, bearing, photo_angle, photo_heading as azimuth, roll, pitch, orientation, horizontal_view_angle as hvangle, vertical_view_angle as vvangle, accuracy, concat(device_manufacture, " - ", device_model, " - ", device_platform, " - ", device_version) as device, sats_info, nmea_msg, network_info, distance, nmea_distance, date_format(timestamp, "%Y-%m-%d %H:%i:%s") as timestamp, date_format(created, "%Y-%m-%d %H:%i:%s") as created_date, rotation_correction as rotation, flg_checked_location, flg_original, efkLatGpsL1, efkLngGpsL1, efkAltGpsL1, date_format(efkTimeGpsL1, "%Y-%m-%d %H:%i:%s") as efkTimeGpsL1, efkLatGpsL5, efkLngGpsL5, efkAltGpsL5, date_format(efkTimeGpsL5, "%Y-%m-%d %H:%i:%s") as efkTimeGpsL5, efkLatGpsIf, efkLngGpsIf, efkAltGpsIf, date_format(efkTimeGpsIf, "%Y-%m-%d %H:%i:%s") as efkTimeGpsIf, efkLatGalE1, efkLngGalE1, efkAltGalE1, date_format(efkTimeGalE1, "%Y-%m-%d %H:%i:%s") as efkTimeGalE1, efkLatGalE5, efkLngGalE5, efkAltGalE5, date_format(efkTimeGalE5, "%Y-%m-%d %H:%i:%s") as efkTimeGalE5, efkLatGalIf, efkLngGalIf, efkAltGalIf, date_format(efkTimeGalIf, "%Y-%m-%d %H:%i:%s") as efkTimeGalIf')
     ->from('photo p')
     ->where('p.user_id = %i', $id)
     ->where('p.flg_deleted = 0')
@@ -44,13 +44,14 @@ class user_model{
     ->from('task t')
     ->where('t.user_id = %i', $id)
     ->and('(t.status = %s or t.status = %s)', 'new', 'open')
+    ->and('flg_deleted = 0')
     ->orderBy('t.timestamp');
     return $tasks_sql->fetchAll();
   }
 
   public static function get_users_paths(int $id){
     $ret = array();
-    $paths = dibi::select('id, name, start, end, area')
+    $paths = dibi::select('id, name, start, end, area, concat(device_manufacture, " - ", device_model, " - ", device_platform, " - ", device_version) as device')
     ->from('path')
     ->where('user_id = %i', $id)
     ->and('flg_deleted = 0')
@@ -61,19 +62,33 @@ class user_model{
         "id" => $path['id'],
         "name" => $path['name'],
         "area" => $path['area'],
+        "device" => $path['device'],
         "start" => date_format($path['start'], 'Y-m-d H:i:s'),
         "end" => date_format($path['end'], 'Y-m-d H:i:s'),
-        "points" => SELF::get_path_points($path['id'])
+        "points" => SELF::get_path_points($path['id']),
+        "point_labels" => SELF::get_path_points_labels(),
       );
     }
     return $ret;
   }
 
   public static function get_path_points(int $id){
-    return dibi::select('lat, lng')
+    return dibi::select('lat, lng, altitude, accuracy, date_format(created, "%Y-%m-%d %H:%i:%s") as created_date')
     ->from('path_point')
     ->where('path_id = %i', $id)
-    ->orderBy('timestamp')->fetchAll();
+    ->orderBy('created')->fetchAll();
+  }
+
+  public static function get_path_points_labels(){
+    return $label_array = array(
+      "point" => SELF::get_translate_from_db("path_popup_point"),
+      "path" => SELF::get_translate_from_db("path_popup_path"),
+      "lat" => SELF::get_translate_from_db("path_popup_lat"),
+      "lng" => SELF::get_translate_from_db("path_popup_lng"),
+      "accu" => SELF::get_translate_from_db("path_popup_accu"),
+      "alt" => SELF::get_translate_from_db("path_popup_alt"),
+      "created" => SELF::get_translate_from_db("path_popup_created")
+    );
   }
 
   public static function delete_user_path($path_id, $reload){
@@ -203,5 +218,5 @@ class user_model{
     return $ret;
   }
 }
-
+//Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
 ?>

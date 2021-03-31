@@ -2,4 +2,11 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="gn_statusBarHeight">30dp</dimen>
+    <dimen name="gn_screenMargin">20dp</dimen>
+
+    <dimen name="ca_buttonSize">50dp</dimen>
 </resources>
+
+    <!-- Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu -->

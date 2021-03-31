@@ -316,3 +316,64 @@ INSERT INTO `page_lang` (`id`, `page_id`, `description`, `template_param`, `cz`,
 INSERT INTO `page_lang` (`id`, `page_id`, `description`, `template_param`, `cz`, `en`, `timestamp`) VALUES (NULL, '11', NULL, 'version', 'Verze', 'Version', CURRENT_TIMESTAMP);
 INSERT INTO `page_lang` (`id`, `page_id`, `description`, `template_param`, `cz`, `en`, `timestamp`) VALUES (NULL, '11', NULL, 'text', 'Poznámka', 'Note', CURRENT_TIMESTAMP);
 INSERT INTO `egnss4cap`.`page_lang` (page_id, description, template_param, cz, en) VALUES (6, "release notes", "release_notes", "Poznámky k verzím", "Release notes");
+
+INSERT INTO `page_lang` (page_id, description, template_param, cz, en) VALUES (8, "", "path_show", "Zobrazit na mapě", "Show on map");
+
+INSERT INTO `page_lang` (page_id, description, template_param, cz, en) VALUES (5, "", "tooltip_task_ack", "Schválit", "Accept");
+INSERT INTO `page_lang` (page_id, description, template_param, cz, en) VALUES (5, "", "tooltip_task_decline", "Zamítnout", "Decline");
+INSERT INTO `page_lang` (page_id, description, template_param, cz, en) VALUES (5, "", "tooltip_task_return", "Vrátit", "Return");
+INSERT INTO `page_lang` (page_id, description, template_param, cz, en) VALUES (5, "", "tooltip_task_delete", "Smazat", "Delete");
+INSERT INTO `page_lang` (page_id, description, template_param, cz, en) VALUES (5, "", "tooltip_task_move_from_open", "Posunout do Data provided", "Move to Data provided");
+
+INSERT INTO `page_lang` (`id`, `page_id`, `description`, `template_param`, `cz`, `en`, `timestamp`) VALUES (NULL, 91, '', 'pht_distance_nmea', 'Vzdálenost (GNSS)', 'Distance (GNSS)', CURRENT_TIMESTAMP);
+INSERT INTO `page_lang` (`id`, `page_id`, `description`, `template_param`, `cz`, `en`, `timestamp`) VALUES (NULL, 5, '', 'pht_distance_nmea', 'Vzdálenost (GNSS)', 'Distance (GNSS)', CURRENT_TIMESTAMP);
+INSERT INTO `page_lang` (`id`, `page_id`, `description`, `template_param`, `cz`, `en`, `timestamp`) VALUES (NULL, 7, '', 'pht_distance_nmea', 'Vzdálenost (GNSS)', 'Distance (GNSS)', CURRENT_TIMESTAMP);
+INSERT INTO `page_lang` (`id`, `page_id`, `description`, `template_param`, `cz`, `en`, `timestamp`) VALUES (NULL, 5, '', 'pht_distance_nmea_title', 'Vzdálenost mezi polohou dle souřadnic a polohou dle GNSS', 'Distance between location by coordinates and location by GNSS', CURRENT_TIMESTAMP);
+INSERT INTO `page_lang` (`id`, `page_id`, `description`, `template_param`, `cz`, `en`, `timestamp`) VALUES (NULL, 7, '', 'pht_distance_nmea_title', 'Vzdálenost mezi polohou dle souřadnic a polohou dle GNSS', 'Distance between location by coordinates and location by GNSS', CURRENT_TIMESTAMP);
+
+INSERT INTO `page_lang` (page_id, description, template_param, cz, en) VALUES (91, "", "export_date", "Datum exportu", "Date of export");
+INSERT INTO `page_lang` (page_id, description, template_param, cz, en) VALUES (91, "", "photo_exported", "Exportováno", "Exported");
+INSERT INTO `page_lang` (page_id, description, template_param, cz, en) VALUES (91, "", "photo_out_of", "z", "ouf of");
+INSERT INTO `page_lang` (page_id, description, template_param, cz, en) VALUES (91, "", "photo_photo", "fotek", "photos");
+INSERT INTO `page_lang` (page_id, description, template_param, cz, en) VALUES (5, "", "pdf_export_selected", "Exportovat vybrané do PDF", "Export selected to PDF");
+INSERT INTO `page_lang` (page_id, description, template_param, cz, en) VALUES (7, "", "pdf_export_selected", "Exportovat vybrané do PDF", "Export selected to PDF");
+INSERT INTO `page_lang` (page_id, description, template_param, cz, en) VALUES (5, "", "pht_select", "Vybrat", "Select");
+INSERT INTO `page_lang` (`id`, `page_id`, `description`, `template_param`, `cz`, `en`, `timestamp`) VALUES (NULL, 5, '', 'assign_photos_select_error', 'Není vybrána žádna fotografie!', 'No photo selected!', CURRENT_TIMESTAMP);
+
+INSERT INTO `page_lang` (page_id, description, template_param, cz, en) VALUES (7, "", "show_ekf_metadata", "Zobrazit EKF metadata", "Show EKF metadata");
+INSERT INTO `page_lang` (page_id, description, template_param, cz, en) VALUES (5, "", "show_ekf_metadata", "Zobrazit EKF metadata", "Show EKF metadata");
+INSERT INTO `page_lang` (page_id, description, template_param, cz, en) VALUES (7, "", "pht_ref_time", "Referenční čas", "Reference time");
+INSERT INTO `page_lang` (page_id, description, template_param, cz, en) VALUES (5, "", "pht_ref_time", "Referenční čas", "Reference time");
+INSERT INTO `page_lang` (page_id, description, template_param, cz, en) VALUES (7, "", "pht_altitude", "Nadmořská výška", "Altitude");
+INSERT INTO `page_lang` (page_id, description, template_param, cz, en) VALUES (5, "", "pht_altitude", "Nadmořská výška", "Altitude");
+INSERT INTO `page_lang` (page_id, description, template_param, cz, en) VALUES (7, "", "pht_longitude", "Zeměpisná délka", "Longitude");
+INSERT INTO `page_lang` (page_id, description, template_param, cz, en) VALUES (5, "", "pht_longitude", "Zeměpisná délka", "Longitude");
+INSERT INTO `page_lang` (page_id, description, template_param, cz, en) VALUES (7, "", "pht_latitude", "Zeměpisná šířka", "Latitude");
+INSERT INTO `page_lang` (page_id, description, template_param, cz, en) VALUES (5, "", "pht_latitude", "Zeměpisná šířka", "Latitude");
+
+INSERT INTO `page_lang` (page_id, description, template_param, cz, en) VALUES (8, "", "path_device", "Zařízení", "Device");
+INSERT INTO `page_lang` (page_id, description, template_param, cz, en) VALUES (8, "", "path_popup_point", "Bod", "Point");
+INSERT INTO `page_lang` (page_id, description, template_param, cz, en) VALUES (8, "", "path_popup_path", "Cesta", "Path");
+INSERT INTO `page_lang` (page_id, description, template_param, cz, en) VALUES (8, "", "path_popup_lat", "Zeměpisná šířka", "Latitude");
+INSERT INTO `page_lang` (page_id, description, template_param, cz, en) VALUES (8, "", "path_popup_lng", "Zeměpisná délka", "Longitude");
+INSERT INTO `page_lang` (page_id, description, template_param, cz, en) VALUES (8, "", "path_popup_accu", "Přesnost", "Accuracy");
+INSERT INTO `page_lang` (page_id, description, template_param, cz, en) VALUES (8, "", "path_popup_alt", "Nadmořská výška", "Altitude");
+INSERT INTO `page_lang` (page_id, description, template_param, cz, en) VALUES (8, "", "path_popup_created", "Čas vzniku", "Created time");
+
+INSERT INTO page_lang (page_id,template_param,cz,en) VALUES (91,'prep_heading','Generování dokumentu PDF','Generating of PDF document');
+INSERT INTO page_lang (page_id,template_param,cz,en) VALUES (91,'prep_confirm','Vygenerovat','Generate');
+
+INSERT INTO page_lang (page_id,template_param,cz,en) VALUES (2,'show_map','Zobrazit mapu','Show map');
+INSERT INTO page_lang (page_id,template_param,cz,en) VALUES (2,'hide_map','Schovat mapu','Hide map');
+INSERT INTO page_lang (page_id,template_param,cz,en) VALUES (3,'show_map','Zobrazit mapu','Show map');
+INSERT INTO page_lang (page_id,template_param,cz,en) VALUES (3,'hide_map','Schovat mapu','Hide map');
+INSERT INTO page_lang (page_id,template_param,cz,en) VALUES (5,'show_map','Zobrazit mapu','Show map');
+INSERT INTO page_lang (page_id,template_param,cz,en) VALUES (5,'hide_map','Schovat mapu','Hide map');
+INSERT INTO page_lang (page_id,template_param,cz,en) VALUES (7,'show_map','Zobrazit mapu','Show map');
+INSERT INTO page_lang (page_id,template_param,cz,en) VALUES (7,'hide_map','Schovat mapu','Hide map');
+INSERT INTO page_lang (page_id,template_param,cz,en) VALUES (8,'show_map','Zobrazit mapu','Show map');
+INSERT INTO page_lang (page_id,template_param,cz,en) VALUES (8,'hide_map','Schovat mapu','Hide map');
+
+INSERT INTO page_lang (page_id,template_param,cz,en) VALUES (91,'counter_out_of','z','out of');
+INSERT INTO page_lang (page_id,template_param,cz,en) VALUES (91,'wait','Prosím vyčkejte','Please wait');
+INSERT INTO `egnss4cap`.`page_lang` (page_id, description, template_param, cz, en) VALUES (91, "", "title", "PDF Export", "PDF Export");

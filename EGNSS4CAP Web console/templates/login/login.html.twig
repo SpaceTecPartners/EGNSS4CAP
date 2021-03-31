@@ -15,7 +15,7 @@
   {% endfor %}
 </head>
 
-<body class="w-100 h-100">
+<body class="w-100 h-100" id="login">
   <div class="overlap"></div>
   <div class="login">
     <div class="p-2 bd-highlight">
@@ -26,18 +26,18 @@
           <td>
             <label for="name" title="Login:">{{ user_name }}</label>
           </td>
-          <td><input id="name" name="login" type="text" value="" /></td>
+          <td><input class="form-control" id="name" name="login" type="text" value="" /></td>
         </tr>
         <tr>
           <td>
             <label for="pass" title="Password:">{{ password }}</label>
           </td>
-          <td><input id="pass" name="pass" type="password" value="" />
+          <td><input class="form-control" id="pass" name="pass" type="password" value="" />
             <input name="act" type="hidden" value="login" /></td>
         </tr>
       </table>
       <td>
-        <button class="btn btn-primary" type="submit" value="enter">{{ enter }}</button>
+        <button class="btn btn-primary mt-3" type="submit" value="enter">{{ enter|upper }}</button>
       </td>
       {% if fail %}
       <td>
@@ -50,3 +50,4 @@
 </body>
 
 </html>
+<!--Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu-->

@@ -8,6 +8,8 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import eu.foxcom.gtphotos.model.PhotoDataController;
+import eu.foxcom.gtphotos.model.ekf.EKFStartExeception;
+import eu.foxcom.gtphotos.model.ekf.EkfCreateException;
 
 public class CameraViewModel extends AndroidViewModel {
     public class PositionInfo {
@@ -22,7 +24,7 @@ public class CameraViewModel extends AndroidViewModel {
         super(application);
     }
 
-    public void init(MainService MS) {
+    public void init(MainService MS) throws EkfCreateException, EKFStartExeception {
         this.MS = MS;
         photoDataController = new PhotoDataController(getApplication());
         currentLocation = new MutableLiveData<>();
@@ -55,3 +57,7 @@ public class CameraViewModel extends AndroidViewModel {
 
     // endregion
 }
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

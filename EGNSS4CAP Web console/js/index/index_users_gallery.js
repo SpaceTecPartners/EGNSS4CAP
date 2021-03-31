@@ -1,4 +1,5 @@
 const FILTER_TYPE = 'users_gallery';
+const PDF_PREPARE = false;
 var map_property = {zoom: 4, popup_bool: true};
 let modalId = $('#image-gallery');
 
@@ -193,7 +194,13 @@ $(document)
     alert(alert_text);
   }
 })
-
+.on('click', '.js_open_ekf', function(){
+  console.log($(this).attr('data-id'));
+  $('.js_hidden_ekf[data-id="'+$(this).attr('data-id')+'"]').fadeIn(200);
+})
+.on('click', '.close_popup', function(){
+  $(this).parent().fadeOut(200);
+})
 
 function delete_photo($id, $reload = true){
   $.ajax({
@@ -235,3 +242,4 @@ function save_photo_rotation_to_db($photo_db_id, $rotation){
     )
   });
 }
+//Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu

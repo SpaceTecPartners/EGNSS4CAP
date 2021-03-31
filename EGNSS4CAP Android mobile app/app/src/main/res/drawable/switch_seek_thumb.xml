@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_enabled="true">
+        <shape>
+            <solid android:color="#FFFFFF" />
+            <size
+                android:width="25dp"
+                android:height="25dp" />
+            <corners android:radius="100dp" />
+        </shape>
+    </item>
+
+    <item android:state_enabled="false">
+        <shape>
+            <solid android:color="@color/stateDisabled" />
+            <size
+                android:width="25dp"
+                android:height="25dp" />
+            <corners android:radius="100dp" />
+        </shape>
+    </item>
+</selector>
+
+    <!-- Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu -->
+

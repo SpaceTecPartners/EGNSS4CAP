@@ -70,8 +70,8 @@ class GGObject {
         return ggObject;
     }
 
-    // primitivní heuristika chodící po osách procházející středem čtverce ohraničujícího polygon;
-    // při první trefě do polygonu určí centroid
+    // primitive heuristics walking along axes passing through the center of the square bounding the polygon;
+    // determines the centroid on the first hit into the polygon
     private void computeCentroid() {
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         for (LatLng point : outerPoints) {
@@ -117,7 +117,7 @@ class GGObject {
                 return;
             }
         }
-        // nedokázalo najít bod
+        // failed to find point
         centroid = center;
     }
 
@@ -177,3 +177,7 @@ class GGObject {
     // endregion
 
 }
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

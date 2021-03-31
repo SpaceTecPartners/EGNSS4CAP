@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="meta_appMode_name" translatable="false">eu.foxcom.gtphotos.meta.meta_appMode_name</string>
+    <string name="meta_appMode_szif" translatable="false">szif</string>
+    <string name="meta_appMode_gsa" translatable="false">gsa</string>
+
+</resources>
+
+    <!-- Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu -->

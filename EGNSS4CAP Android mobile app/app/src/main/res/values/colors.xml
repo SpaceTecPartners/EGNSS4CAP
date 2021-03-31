@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Deprecated -->
     <color name="colorPrimary">#FFFFFF</color>
     <color name="colorPrimaryDark">#458B45</color>
     <color name="colorAccent">#03DAC5</color>
@@ -9,4 +10,28 @@
     <color name="transparentBackground">#99D8D8D8</color>
     <color name="buttonColorBlue">#4dc5ed</color>
     <color name="buttonColorBlueTransparent">#774dc5ed</color>
+
+    <color name="mainPrimary">#009147</color>
+    <color name="mainSecondary">#04592E</color>
+    <color name="transparent">#00000000</color>
+
+    <color name="textEditBackgroundGray">#F1F2F9</color>
+
+    <color name="buttonBackgroundGreen">@color/mainPrimary</color>
+    <color name="buttonBackgroundGray">#0F090C1B</color>
+
+    <color name="textBold">#2D3142</color>
+    <color name="textNormal">#962D3142</color>
+    <color name="textRed">#E51414</color>
+    <color name="textBlue">#1814E5</color>
+    <color name="textSettingsSub">#992D3142</color>
+
+    <color name="switchTrackActive">@color/mainPrimary</color>
+    <color name="switchTrackInactive">#332D3142</color>
+
+    <color name="stateDisabled">#AAAAAA</color>
+
+    <color name="panelBackgroundGray">#0F090C1B</color>
 </resources>
+
+    <!-- Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu -->

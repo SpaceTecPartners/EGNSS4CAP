@@ -144,12 +144,20 @@ public class StartActivity extends BaseActivity {
         startActivity(intent);
         finish();
         /**/
+        /* DEBUGCOM
+        Intent intent = new Intent(this, EkfMock.class);
+        startActivity(intent);
+        finish();
+        if (true) {
+            return;
+        }
+        /**/
 
         route();
     }
 
     private void route() {
-        if (!checkPermissions()) {
+        if (!checkLocatiomPermissions()) {
             return;
         }
         routeAfterCheckPermission();
@@ -238,3 +246,8 @@ public class StartActivity extends BaseActivity {
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
     }
 }
+
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

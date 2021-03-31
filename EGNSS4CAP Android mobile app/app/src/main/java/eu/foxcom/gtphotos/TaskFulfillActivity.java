@@ -2,7 +2,6 @@ package eu.foxcom.gtphotos;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -21,6 +20,7 @@ import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import eu.foxcom.gtphotos.model.AppDatabase;
+import eu.foxcom.gtphotos.model.MyAlertDialog;
 import eu.foxcom.gtphotos.model.Photo;
 import eu.foxcom.gtphotos.model.PhotoList;
 import eu.foxcom.gtphotos.model.Task;
@@ -39,16 +39,17 @@ public class TaskFulfillActivity extends BaseActivity {
 
         abstract void deletePhoto();
 
-        final AlertDialog build() {
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle(R.string.tf_deleteDialogTitle);
-            builder.setMessage(R.string.tf_deleteDialogText);
-            builder.setNegativeButton(R.string.dl_Cancel, (dialog, which) -> {
+        final MyAlertDialog build() {
+            MyAlertDialog.Builder builder = new MyAlertDialog.Builder(context);
+            MyAlertDialog myAlertDialog = builder.build();
+            myAlertDialog.setTitle(context.getString(R.string.tf_deleteDialogTitle));
+            myAlertDialog.setMessage(context.getString(R.string.tf_deleteDialogText));
+            myAlertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, context.getString(R.string.dl_Cancel), (dialog, which) -> {
             });
-            builder.setPositiveButton(R.string.dl_OK, (dialog, which) -> {
+            myAlertDialog.setButton(AlertDialog.BUTTON_POSITIVE, context.getString(R.string.dl_OK), (dialog, which) -> {
                 deletePhoto();
             });
-            return builder.create();
+            return myAlertDialog;
         }
     }
 
@@ -72,6 +73,7 @@ public class TaskFulfillActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_fulfill);
+        setToolbar(R.id.toolbar);
 
         photoFlipper = findViewById(R.id.tf_viewFlipper_photoFlipper);
 
@@ -142,8 +144,8 @@ public class TaskFulfillActivity extends BaseActivity {
     }
 
     @Override
-    protected MainService.BROADCAST_MSG broadcastReceiver(Context context, Intent intent) {
-        MainService.BROADCAST_MSG broadcastMsg = super.broadcastReceiver(context, intent);
+    protected MainService.BROADCAST_MSG broadcastImplicitReceiver(Context context, Intent intent) {
+        MainService.BROADCAST_MSG broadcastMsg = super.broadcastImplicitReceiver(context, intent);
         switch (broadcastMsg) {
             case BROADCAST_ID:
                 break;
@@ -153,7 +155,7 @@ public class TaskFulfillActivity extends BaseActivity {
                 break;
             case REFRESH_TASKS_STARTED:
                 break;
-            case REFRESH_TASKS:
+            case REFRESH_TASKS_FINISHED:
                     restartActivity();
             case UPLOAD_TASK_STATUS:
                 break;
@@ -246,7 +248,7 @@ public class TaskFulfillActivity extends BaseActivity {
     }
 
     private void refreshPhotoFlipper() {
-        photoList = PhotoList.createFromAppDatabase(MS.getAppDatabase(), taskId, getApplicationContext());
+        photoList = PhotoList.createFromAppDatabaseByTaskGroup(MS.getAppDatabase(), taskId, getApplicationContext());
         fillPhotoFlipper();
         updatePhotoStats();
     }
@@ -270,6 +272,14 @@ public class TaskFulfillActivity extends BaseActivity {
         Intent intent = new Intent(this, CameraActivity.class);
         intent.setAction(CameraActivity.INTENT_ACTION_START);
         intent.putExtra(CameraActivity.INTENT_ACTION_START_TASK_ID, taskId);
+        startActivity(intent);
+    }
+
+    public void showMap(View view) {
+        Intent intent = new Intent(this, MapActivity.class);
+        intent.setAction(MapActivity.INTENT_ACTION_START);
+        intent.putExtra(MapActivity.INTENT_ACTION_START_MODE, MapActivity.START_MODE.TASK_PHOTOS.name());
+        intent.putExtra(MapActivity.INTENT_ACTION_START_TASK_ID, taskId);
         startActivity(intent);
     }
 
@@ -330,7 +340,9 @@ public class TaskFulfillActivity extends BaseActivity {
         TextView latTextView = findViewById(R.id.tf_textView_lat);
         TextView lngTextView = findViewById(R.id.tf_textView_lng);
         TextView photoCreatedTextView = findViewById(R.id.tf_textView_photoCreated);
+        ImageView noPhotoImageView = findViewById(R.id.tf_imageView_noPhoto);
         if (photoList.getPhotos().size() > 0) {
+            noPhotoImageView.setVisibility(View.GONE);
             Photo photo = photoList.getPhotos().get(photoFlipper.getDisplayedChild());
             latTextView.setText(photo.getLat() == null ? "" : photo.getLat().toString());
             lngTextView.setText(photo.getLng() == null ? "" : photo.getLng().toString());
@@ -342,6 +354,7 @@ public class TaskFulfillActivity extends BaseActivity {
                 deleteImageButton.setVisibility(View.GONE);
             }
         } else {
+            noPhotoImageView.setVisibility(View.VISIBLE);
             latTextView.setText("");
             lngTextView.setText("");
             photoCreatedTextView.setText("");
@@ -410,25 +423,23 @@ public class TaskFulfillActivity extends BaseActivity {
                 return;
             }
             AtomicBoolean isUploadStarted = new AtomicBoolean(false);
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(R.string.tf_sendDialogTitle);
-            builder.setMessage(R.string.tf_sendDialogText);
-            builder.setNegativeButton(R.string.dl_Cancel, (dialog, which) -> {
+            MyAlertDialog.Builder builder = new MyAlertDialog.Builder(this);
+            MyAlertDialog myAlertDialog = builder.build();
+            myAlertDialog.setTitle(getString(R.string.tf_sendDialogTitle));
+            myAlertDialog.setMessage(getString(R.string.tf_sendDialogText));
+            myAlertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.dl_Cancel), (dialog, which) -> {
                 isUploading.set(false);
             });
-            builder.setPositiveButton(R.string.dl_OK, (dialog, which) -> {
+            myAlertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.dl_OK), (dialog, which) -> {
                 isUploadStarted.set(true);
                 send();
             });
-            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialog) {
-                    if (!isUploadStarted.get()) {
-                        isUploading.set(false);
-                    }
+            myAlertDialog.getAlertDialog().setOnDismissListener(dialog -> {
+                if (!isUploadStarted.get()) {
+                    isUploading.set(false);
                 }
             });
-            builder.create().show();
+            myAlertDialog.show();
         }
     }
 
@@ -457,13 +468,8 @@ public class TaskFulfillActivity extends BaseActivity {
                 task.setStatus(lastStatus);
                 task.saveToDB(MS.getAppDatabase());
                 if (isCreated) {
-                    AlertDialog failedDialog = alertBuild(getString(R.string.tf_sendFailedTitle), errorString.toString());
-                    failedDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                            restartActivity();
-                        }
-                    });
+                    MyAlertDialog failedDialog = alertBuild(getString(R.string.tf_sendFailedTitle), errorString.toString());
+                    failedDialog.getAlertDialog().setOnDismissListener(dialog -> restartActivity());
                     failedDialog.show();
                 }
             };
@@ -472,6 +478,7 @@ public class TaskFulfillActivity extends BaseActivity {
                 @Override
                 public void success(AppDatabase appDatabase, Task task) {
                     task.setLastSendFailed(false);
+                    task.setUploadStatus(false);
                     photoList.setSent(true);
                     photoList.recreateToDB();
                     if (isCreated) {
@@ -498,7 +505,7 @@ public class TaskFulfillActivity extends BaseActivity {
                 }
             };
             try {
-                task.updateCompleteInMultipleRequest(MS.getAppDatabase(), this, finalReceiver, MS.getRequestor());
+                task.updateCompleteInMultipleRequest(MS.getAppDatabase(), this, finalReceiver, MS.getRequestor(), photoList);
             } catch (Exception e) {
                 isUploading.set(false);
                 failedProcess.accept(e.getMessage());
@@ -530,3 +537,8 @@ public class TaskFulfillActivity extends BaseActivity {
         startActivity(intent);
     }
 }
+
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 47,
-    "identityHash": "63a12877605b2e59c04a819fea68c8e9",
+    "identityHash": "6c2248512766bf54c7131843df0cb36c",
     "entities": [
       {
         "tableName": "LoggedUser",
@@ -202,7 +202,7 @@
       },
       {
         "tableName": "Photo",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `taskId` TEXT, `userId` TEXT, `isSent` INTEGER NOT NULL, `lat` REAL, `lng` REAL, `created` INTEGER, `indx` INTEGER NOT NULL, `photoPath` TEXT, `accuracy` REAL, `altitude` REAL, `bearing` REAL, `azimMagneticField` REAL, `photoHeading` REAL, `pitch` REAL, `roll` REAL, `tilt` REAL, `orientation` INTEGER, `horizontalViewAngle` REAL, `verticalViewAngle` REAL, `deviceManufacture` TEXT, `deviceModel` TEXT, `devicePlatform` TEXT, `deviceVersion` TEXT, `satsInfo` TEXT, `extraSatCount` INTEGER, `NMEAMessage` TEXT, `networkInfo` TEXT, `centroidLat` REAL, `centroidLng` REAL, `photoBytes` BLOB, `digest` TEXT, `note` TEXT, `isLastSendFailed` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `taskId` TEXT, `userId` TEXT, `isSent` INTEGER NOT NULL, `lat` REAL, `lng` REAL, `created` INTEGER, `indx` INTEGER NOT NULL, `photoPath` TEXT, `accuracy` REAL, `altitude` REAL, `bearing` REAL, `azimMagneticField` REAL, `photoHeading` REAL, `pitch` REAL, `roll` REAL, `tilt` REAL, `orientation` INTEGER, `horizontalViewAngle` REAL, `verticalViewAngle` REAL, `deviceManufacture` TEXT, `deviceModel` TEXT, `devicePlatform` TEXT, `deviceVersion` TEXT, `satsInfo` TEXT, `extraSatCount` INTEGER, `NMEAMessage` TEXT, `networkInfo` TEXT, `centroidLat` REAL, `centroidLng` REAL, `efkLatGpsL1` REAL, `efkLatGpsL5` REAL, `efkLatGpsIf` REAL, `efkLatGalE1` REAL, `efkLatGalE5` REAL, `efkLatGalIf` REAL, `efkLngGpsL1` REAL, `efkLngGpsL5` REAL, `efkLngGpsIf` REAL, `efkLngGalE1` REAL, `efkLngGalE5` REAL, `efkLngGalIf` REAL, `efkAltGpsL1` REAL, `efkAltGpsL5` REAL, `efkAltGpsIf` REAL, `efkAltGalE1` REAL, `efkAltGalE5` REAL, `efkAtlGalIf` REAL, `efkTimeGpsL1` REAL, `efkTimeGpsL5` REAL, `efkTimeGpsIf` REAL, `efkTimeGalE1` REAL, `efkTimeGalE5` REAL, `efkTimeGalIf` REAL, `photoBytes` BLOB, `digest` TEXT, `note` TEXT, `isLastSendFailed` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -385,6 +385,150 @@
             "notNull": false
           },
           {
+            "fieldPath": "efkLatGpsL1",
+            "columnName": "efkLatGpsL1",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkLatGpsL5",
+            "columnName": "efkLatGpsL5",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkLatGpsIf",
+            "columnName": "efkLatGpsIf",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkLatGalE1",
+            "columnName": "efkLatGalE1",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkLatGalE5",
+            "columnName": "efkLatGalE5",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkLatGalIf",
+            "columnName": "efkLatGalIf",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkLngGpsL1",
+            "columnName": "efkLngGpsL1",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkLngGpsL5",
+            "columnName": "efkLngGpsL5",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkLngGpsIf",
+            "columnName": "efkLngGpsIf",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkLngGalE1",
+            "columnName": "efkLngGalE1",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkLngGalE5",
+            "columnName": "efkLngGalE5",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkLngGalIf",
+            "columnName": "efkLngGalIf",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkAltGpsL1",
+            "columnName": "efkAltGpsL1",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkAltGpsL5",
+            "columnName": "efkAltGpsL5",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkAltGpsIf",
+            "columnName": "efkAltGpsIf",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkAltGalE1",
+            "columnName": "efkAltGalE1",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkAltGalE5",
+            "columnName": "efkAltGalE5",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkAtlGalIf",
+            "columnName": "efkAtlGalIf",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkTimeGpsL1",
+            "columnName": "efkTimeGpsL1",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkTimeGpsL5",
+            "columnName": "efkTimeGpsL5",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkTimeGpsIf",
+            "columnName": "efkTimeGpsIf",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkTimeGalE1",
+            "columnName": "efkTimeGalE1",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkTimeGalE5",
+            "columnName": "efkTimeGalE5",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkTimeGalIf",
+            "columnName": "efkTimeGalIf",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
             "fieldPath": "photoBytes",
             "columnName": "photoBytes",
             "affinity": "BLOB",
@@ -563,7 +707,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"63a12877605b2e59c04a819fea68c8e9\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"6c2248512766bf54c7131843df0cb36c\")"
     ]
   }
 }

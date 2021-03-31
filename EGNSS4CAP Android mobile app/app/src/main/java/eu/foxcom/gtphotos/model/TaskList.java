@@ -2,6 +2,8 @@ package eu.foxcom.gtphotos.model;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.sqlite.db.SimpleSQLiteQuery;
 import androidx.sqlite.db.SupportSQLiteQuery;
@@ -13,6 +15,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Phaser;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class TaskList {
@@ -272,6 +277,7 @@ public class TaskList {
         this.tasks = tasks;
     }
 
+    @Deprecated
     public void updatePhotos(SyncQueue syncQueue, final Task.UpdateTaskReceiver receiver, final Requestor requestor, final Context context) {
         for (final Task task : tasks) {
             syncQueue.addAsyncExecutor(new SyncQueue.AsyncExecutor("updatePhotoExecutor") {
@@ -281,6 +287,47 @@ public class TaskList {
                 }
             });
         }
+    }
+
+    public void updatePhotosByRealIds(Context context, Requestor requestor, Photo.UpdatePhotoReceiver photoReceiver, Task.UpdateTaskReceiver taskReceiver, Task.UpdateTaskReceiver finalTasksReceiver) {
+        Phaser phaser = new Phaser(tasks.size() + 1);
+        AtomicBoolean isSuccess = new AtomicBoolean(false);
+        Task.UpdateTaskReceiver innerTaskReceiver = new Task.UpdateTaskReceiver(phaser) {
+            @Override
+            protected void success(AppDatabase appDatabase, Task task) {
+                taskReceiver.successExec(appDatabase, task);
+            }
+
+            @Override
+            protected void success(AppDatabase appDatabase) {
+            }
+
+            @Override
+            protected void failed(String error) {
+                taskReceiver.failedExec(error);
+            }
+
+            @Override
+            protected void finish(boolean success) {
+                isSuccess.set(success);
+            }
+        };
+        innerTaskReceiver.setAutoSuccessDBSave(false);
+        for(Task task : tasks) {
+            task.updatePhotosByRealIds(appDatabase, context, requestor, photoReceiver, innerTaskReceiver);
+        }
+
+        Handler joinHandler = new Handler(Looper.getMainLooper());
+        Executors.newSingleThreadExecutor().submit(() -> {
+            phaser.awaitAdvance(phaser.arriveAndDeregister());
+            joinHandler.post(() -> {
+                if (isSuccess.get()) {
+                    finalTasksReceiver.successExec(appDatabase);
+                } else {
+                    finalTasksReceiver.failedExec("Failed to download photos for tasks.");
+                }
+            });
+        });
     }
 
     public void recreateToDB() {
@@ -338,6 +385,20 @@ public class TaskList {
         tasks.add(task);
     }
 
+    public void prepareRealIdsForProcessing(AppDatabase appDatabase) {
+        for (Task task : tasks) {
+            task.prepareRealIdsForProcessing(appDatabase);
+        }
+    }
+
+    public int getCountToUpdatePhotoRealId() {
+        int count = 0;
+        for (Task task : tasks) {
+            count += task.getToUpdatePhotoRealIds().size();
+        }
+        return count;
+    }
+
     // region get, set
 
     public List<Task> getTasks() {
@@ -347,3 +408,7 @@ public class TaskList {
     // endregion
 
 }
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

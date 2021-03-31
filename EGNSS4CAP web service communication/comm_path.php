@@ -16,6 +16,22 @@ if (isset($_POST['name'])) $name = $_POST['name'];
 else $name = $_GET['name'];
 $name = trim($name);
 
+if (isset($_POST['deviceManufacture'])) $device_manufacture = $_POST['deviceManufacture'];
+else $device_manufacture = $_GET['deviceManufacture'];
+$device_manufacture = trim($device_manufacture);
+
+if (isset($_POST['deviceModel'])) $device_model = $_POST['deviceModel'];
+else $device_model = $_GET['deviceModel'];
+$device_model = trim($device_model);
+
+if (isset($_POST['devicePlatform'])) $device_platform = $_POST['devicePlatform'];
+else $device_platform = $_GET['devicePlatform'];
+$device_platform = trim($device_platform);
+
+if (isset($_POST['deviceVersion'])) $device_version = $_POST['deviceVersion'];
+else $device_version = $_GET['deviceVersion'];
+$device_version = trim($device_version);
+
 if (isset($_POST['start'])) $start = gmdate('Y-m-d H:i:s', strtotime($_POST['start']));
 else $start = gmdate('Y-m-d H:i:s', strtotime($_GET['start']));
 
@@ -37,7 +53,7 @@ $output['error_msg'] = NULL;
 if ($user_id && $start && $end && $points_json) {
   $points = json_decode($points_json,true);
   if (json_last_error() === JSON_ERROR_NONE) {   
-      $output = set_path ($user_id,$name,$start,$end,$area,$points);    
+      $output = set_path ($user_id,$name,$start,$end,$area,$device_manufacture,$device_model,$device_platform,$device_version,$points);    
   } else {
     $output['status'] = 'error';
     $output['error_msg'] = 'points json decode error';
@@ -53,4 +69,5 @@ echo json_encode($output);
 
 db_close();
 
+//Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
 ?>

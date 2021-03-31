@@ -8,6 +8,7 @@ import android.util.Pair;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.android.volley.Response;
@@ -20,7 +21,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -29,6 +32,8 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.Phaser;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import eu.foxcom.gtphotos.R;
 import eu.foxcom.gtphotos.model.functionInterface.BiConsumer;
@@ -40,6 +45,8 @@ public class Task {
 
     public static abstract class UpdateTaskReceiver extends UpdateReceiver {
 
+        private boolean isAutoSuccessDBSave = true;
+
         public UpdateTaskReceiver() {
             super();
         }
@@ -48,8 +55,14 @@ public class Task {
             super(syncQueue);
         }
 
+        public UpdateTaskReceiver(Phaser phaser) {
+            super(phaser);
+        }
+
         protected final void successExec(AppDatabase appDatabase, Task task) {
-            task.saveToDB(appDatabase);
+            if (isAutoSuccessDBSave) {
+                task.saveToDB(appDatabase);
+            }
             success(appDatabase, task);
             finishExec(true);
         }
@@ -61,6 +74,18 @@ public class Task {
             failed(error);
             finishExec(false);
         }
+
+        // region get, set
+
+        public boolean isAutoSuccessDBSave() {
+            return isAutoSuccessDBSave;
+        }
+
+        public void setAutoSuccessDBSave(boolean autoSuccessDBSave) {
+            isAutoSuccessDBSave = autoSuccessDBSave;
+        }
+
+        // endregion
     }
 
     public enum STATUS {
@@ -88,6 +113,44 @@ public class Task {
             DB_VAL = dbVal;
             POINT_ID = pointId;
             NAME_ID = nameId;
+        }
+    }
+
+    private class PhotoRealIdsCollector {
+        private boolean isPhotoRealIdsPrepared = false;
+        private List<Long> photoRealIds = new ArrayList<>();
+        private List<Long> toUpdatePhotoRealIds = new ArrayList<>();
+        private List<Long> toRemovePhotoRealIds = new ArrayList<>();
+
+        void setPhotoRealIds(List<Long> photoRealIds) {
+            this.photoRealIds = photoRealIds;
+            isPhotoRealIdsPrepared = false;
+        }
+
+        void prepareRealIdsForProcessing(AppDatabase appDatabase) {
+            if (isPhotoRealIdsPrepared) {
+                return;
+            }
+            if (photoRealIds.size() == 0) {
+                isPhotoRealIdsPrepared = true;
+                return;
+            }
+
+            List<Long> newRealIds = photoRealIds;
+            List<Long> oldRealIds;
+            if (id != null) {
+                oldRealIds = appDatabase.photoDao().selectRealIdsByTaskId(id);
+            } else {
+                oldRealIds = appDatabase.photoDao().selectUnassignedIds(LoggedUser.createFromAppDatabase(appDatabase).getId());
+                List<Long> toRemoveIds = new ArrayList<>(oldRealIds);
+                toRemoveIds.removeAll(newRealIds);
+                toRemovePhotoRealIds = toRemoveIds;
+            }
+            List<Long> toUpdateIds = new ArrayList<>(newRealIds);
+            toUpdateIds.removeAll(oldRealIds);
+            toUpdatePhotoRealIds = toUpdateIds;
+
+            isPhotoRealIdsPrepared = true;
         }
     }
 
@@ -119,6 +182,9 @@ public class Task {
 
     private boolean isUploadStatus = false;
     private boolean isPhotoSync = false;
+
+    @Ignore
+    private PhotoRealIdsCollector photoRealIdsCollector = new PhotoRealIdsCollector();
 
     // indikace chyby při posledním odesílání na server
     // přidává mezistav pro nové odeslání tasku bez možnosti změn
@@ -163,6 +229,12 @@ public class Task {
             note = Util.JSONgetStringNullable(jsonObject, "note");
             flagValid = "1".equals(Util.JSONgetStringNullable(jsonObject, "flag_valid"));
             flagInvalid = "1".equals(Util.JSONgetStringNullable(jsonObject, "flag_invalid"));
+            JSONArray photoIdsJsonArray = jsonObject.getJSONArray("photos_ids");
+            List<Long> realIds = new ArrayList<>();
+            for (int i = 0; i < photoIdsJsonArray.length(); ++i) {
+                realIds.add(photoIdsJsonArray.getLong(i));
+            }
+            photoRealIdsCollector.setPhotoRealIds(realIds);
         } else {
             this.unownedPhotoId = unownedPhotoId;
         }
@@ -173,11 +245,13 @@ public class Task {
     }
 
     public void saveToDB(AppDatabase appDatabase) {
-        appDatabase.taskDao().updateTask(this);
+        if (id != null) {
+            appDatabase.taskDao().updateTask(this);
+        }
     }
 
     public void updateStatus(final AppDatabase appDatabase, Context context, final UpdateTaskReceiver receiver, Requestor requestor) {
-        requestor.requestAuth("https://server/ws/comm_update.php", new Response.Listener<String>() {
+        requestor.requestAuth("https://egnss4cap-uat.foxcom.eu/ws/comm_update.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -220,7 +294,7 @@ public class Task {
      */
     @Deprecated
     public void updateCompleteInSingleRequest(final AppDatabase appDatabase, Context context, final UpdateTaskReceiver receiver, Requestor requestor) {
-        requestor.requestAuth("https://server/ws/comm_update.php", new Response.Listener<String>() {
+        requestor.requestAuth("https://egnss4cap-uat.foxcom.eu/ws/comm_update.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -275,11 +349,11 @@ public class Task {
      * @param finalReceiver success větev je aplikována na úplném konci, po úspěchu všech reqeustů, v requestu pro update statusu
      *                      failed větev je aplikována na konci odeslání všech fotek (v případě chyby), nebo pak na konci requestu pro update statusu (v případě chyby)
      */
-    public void updateCompleteInMultipleRequest(final AppDatabase appDatabase, Context context, final UpdateTaskReceiver finalReceiver, Requestor requestor) {
+    public void updateCompleteInMultipleRequest(final AppDatabase appDatabase, Context context, final UpdateTaskReceiver finalReceiver, Requestor requestor, PhotoList photoList) {
 
         // <photoIndex, errors>
         Map<Integer, String> errors = new HashMap<>();
-        PhotoList photoList = createPhotoList(appDatabase, context);
+        //PhotoList photoList = createPhotoList(appDatabase, context);
         // <photoIndex, success>
         BlockingQueue<Pair<Integer, Boolean>> photoReqResults = new ArrayBlockingQueue<>(photoList.getPhotos().size());
         Function<VolleyError, String> volleyErrorConsumer = volleyError -> {
@@ -309,11 +383,19 @@ public class Task {
             try {
                 JSONObject jsonObject = new JSONObject(response);
                 String status = jsonObject.getString("status");
+                /* DEBUGCOM
+                if (photo.getNote().equals("C")) {
+                    status = "chyba";
+                    jsonObject.put("error_msg", status);
+                }
+                /**/
                 if (!status.equals("ok")) {
                     String errMsg = jsonObject.getString("error_msg");
                     failedPhotoExec.accept(photo, errMsg);
                     return;
                 }
+                photo.setRealId(jsonObject.getLong("photo_id"));
+                photo.refreshToDB(appDatabase);
                 photoReqResults.add(new Pair<>(photo.getIndx(), true));
             } catch (JSONException e) {
                 failedPhotoExec.accept(photo, e.getMessage());
@@ -349,7 +431,7 @@ public class Task {
         // endregion
 
         for (Photo photo : photoList.getPhotos()) {
-            requestor.requestAuth("https://server/ws/comm_photo.php",
+            requestor.requestAuth("https://egnss4cap-uat.foxcom.eu/ws/comm_photo.php",
                     photoListener.apply(photo),
                     photoErrorListener.apply(photo),
                     photoRequestor.apply(photo));
@@ -421,7 +503,7 @@ public class Task {
                                 }
                             };
                             // endregion
-                            requestor.requestAuth("https://server/ws/comm_status.php",
+                            requestor.requestAuth("https://egnss4cap-uat.foxcom.eu/ws/comm_status.php",
                                     statusListener,
                                     statusErrorListener,
                                     statusRequestor);
@@ -446,7 +528,7 @@ public class Task {
         syncQueue.addAsyncExecutor(new SyncQueue.AsyncExecutor() {
             @Override
             protected void run() {
-                requestor.requestAuth("https://server/ws/comm_update.php", new Response.Listener<String>() {
+                requestor.requestAuth("https://egnss4cap-uat.foxcom.eu/ws/comm_update.php", new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
@@ -468,7 +550,7 @@ public class Task {
                                 syncQueue.addAsyncExecutor(new SyncQueue.AsyncExecutor() {
                                     @Override
                                     protected void run() {
-                                        requestor.requestAuth("https://server/ws/comm_update.php", new Response.Listener<String>() {
+                                        requestor.requestAuth("https://egnss4cap-uat.foxcom.eu/ws/comm_update.php", new Response.Listener<String>() {
                                             @Override
                                             public void onResponse(String response) {
                                                 try {
@@ -546,12 +628,13 @@ public class Task {
         syncQueue.executeQueue();
     }
 
+    @Deprecated
     public void updatePhotos(final AppDatabase appDatabase, final Task.UpdateTaskReceiver receiver, Requestor requestor, final Context context) {
         if (isPhotoSync) {
             receiver.successExec(appDatabase, this);
             return;
         }
-        requestor.requestAuth("https://server/ws/comm_task_photos.php", new Response.Listener<String>() {
+        requestor.requestAuth("https://egnss4cap-uat.foxcom.eu/ws/comm_task_photos.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -594,6 +677,144 @@ public class Task {
         });
     }
 
+    public void updatePhotosByRealIds(AppDatabase appDatabase, Context context, Requestor requestor, Photo.UpdatePhotoReceiver photoReceiver, Task.UpdateTaskReceiver taskReceiver) {
+        if (photoRealIdsCollector.photoRealIds.size() == 0) {
+            taskReceiver.successExec(appDatabase, this);
+            return;
+        }
+        if (id == null) {
+            appDatabase.photoDao().deleteByRealIds(photoRealIdsCollector.toRemovePhotoRealIds);
+        }
+        prepareRealIdsForProcessing(appDatabase);
+        if (photoRealIdsCollector.toUpdatePhotoRealIds.size() == 0) {
+            taskReceiver.successExec(appDatabase, this);
+            return;
+        }
+
+        Phaser phaser = new Phaser(photoRealIdsCollector.toUpdatePhotoRealIds.size() + 1);
+        String errMsgTitle = "Photo downlad failed (taskId = " + id + ")";
+        AtomicBoolean isSuccess = new AtomicBoolean(false);
+        Photo.UpdatePhotoReceiver innerReceiver = new Photo.UpdatePhotoReceiver(phaser) {
+            @Override
+            protected void success(AppDatabase appDatabase, Photo photo) {
+            }
+
+            @Override
+            protected void success(AppDatabase appDatabase) {
+            }
+
+            @Override
+            protected void failed(String error) {
+            }
+
+            @Override
+            protected void finish(boolean success) {
+                isSuccess.set(success);
+            }
+        };
+        innerReceiver.setAutoSuccessDBSave(false);
+        BiConsumer<AppDatabase, Photo> successConsumer = (appDatabase1, photo) -> {
+            innerReceiver.successExec(appDatabase, photo);
+            photoReceiver.successExec(appDatabase, photo);
+        };
+        Consumer<String> failedConsumer = errMsg -> {
+            innerReceiver.failedExec(errMsgTitle + ": " + errMsg);
+            photoReceiver.failedExec(errMsgTitle + ": " + errMsg);
+        };
+        for (Long realId : photoRealIdsCollector.toUpdatePhotoRealIds) {
+            requestor.requestAuth("https://egnss4cap-uat.foxcom.eu/ws/comm_get_photo.php", response -> {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    String status = jsonObject.getString("status");
+                    if (!status.equals("ok")) {
+                        String errMsg = jsonObject.getString("error_msg");
+                        failedConsumer.accept(errMsg);
+                        return;
+                    }
+                    String taskId = Task.this.id;
+                    Photo photo = Photo.createFromResponse(jsonObject.getJSONObject("photo"), realId, taskId, Photo.findNewIndx(taskId, appDatabase), context, appDatabase);
+                    photo.refreshToDB(appDatabase);
+                    successConsumer.accept(appDatabase, photo);
+                } catch (JSONException | IOException e) {
+                    failedConsumer.accept(e.getMessage());
+                }
+            }, error -> {
+                failedConsumer.accept(Util.volleyErrorMsg(error));
+            }, new Requestor.Req() {
+                @Override
+                public Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("photo_id", String.valueOf(realId));
+                    return params;
+                }
+            });
+        }
+
+        Handler joinerHandler = new Handler(Looper.getMainLooper());
+        Executors.newSingleThreadExecutor().submit(() -> {
+            phaser.awaitAdvance(phaser.arriveAndDeregister());
+            joinerHandler.post(() -> {
+                Task task = Task.this;
+                if (isSuccess.get()) {
+                    task.isPhotoSync = true;
+                    task.saveToDB(appDatabase);
+                    taskReceiver.successExec(appDatabase, task);
+                } else {
+                    task.isPhotoSync = false;
+                    task.saveToDB(appDatabase);
+                    taskReceiver.failedExec("Download photos of task (id = " + task.id + ") failed.");
+                }
+            });
+        });
+    }
+
+    public void prepareRealIdsForProcessing(AppDatabase appDatabase) {
+        photoRealIdsCollector.prepareRealIdsForProcessing(appDatabase);
+    }
+
+    // only for unassignedPhotos
+    public void downloadUnassignedPhotoRealIds(AppDatabase appDatabase, Context context, Requestor requestor, UpdateTaskReceiver taskReceiver) {
+        // region CHECKEXCEPTIONS
+        if (id != null || unownedPhotoId != null) {
+            throw new RuntimeException("Cannot download unassigned photos ids for real task.");
+        }
+        // endregion
+
+        String errMsgTitle = "Download unassigned photo ids failed.";
+        Consumer<String> failedConsumer = errMsg -> {
+            taskReceiver.failedExec(errMsgTitle + ": " + errMsg);
+        };
+        requestor.requestAuth("https://egnss4cap-uat.foxcom.eu/ws/comm_unassigned.php", response -> {
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+                String status = jsonObject.getString("status");
+                if (!status.equals("ok")) {
+                    String errMsg = jsonObject.getString("error_msg");
+                    failedConsumer.accept(errMsg);
+                    return;
+                }
+                JSONArray photoIds = jsonObject.getJSONArray("photos_ids");
+                List<Long> realIds = new ArrayList<>();
+                for (int i = 0; i < photoIds.length(); ++i) {
+                    realIds.add(photoIds.getLong(i));
+                }
+                photoRealIdsCollector.setPhotoRealIds(realIds);
+                taskReceiver.successExec(appDatabase, Task.this);
+            } catch (JSONException e) {
+                failedConsumer.accept(e.getMessage());
+            }
+        }, error -> {
+            failedConsumer.accept(Util.volleyErrorMsg(error));
+        }, new Requestor.Req() {
+            @Override
+            public Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("user_id", LoggedUser.createFromAppDatabase(appDatabase).getId());
+                return params;
+            }
+        });
+    }
+
     public int getPhotoCount(AppDatabase appDatabase) {
         return appDatabase.photoDao().selectTaskPhotos(id).size();
     }
@@ -618,7 +839,7 @@ public class Task {
         } else if (id != null && onlySentPhotos) {
             photoList = PhotoList.createFromAppDatabaseOnlySent(appDatabase, id, context);
         } else {
-            photoList = PhotoList.createFromAppDatabase(appDatabase, id, context);
+            photoList = PhotoList.createFromAppDatabaseByTaskGroup(appDatabase, id, context);
         }
         return photoList;
     }
@@ -639,6 +860,10 @@ public class Task {
     // musí splňovat implikaci isEditable = true => isSendable = true
     public boolean isSendable() {
         return (status.equals(Task.STATUS.OPEN.DB_VAL) || status.equals(Task.STATUS.RETURNED.DB_VAL));
+    }
+
+    public List<Long> getToUpdatePhotoRealIds() {
+        return new ArrayList<>(photoRealIdsCollector.toUpdatePhotoRealIds);
     }
 
     // region get, set
@@ -825,3 +1050,7 @@ public class Task {
 
     // endregion
 }
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

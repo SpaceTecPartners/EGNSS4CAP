@@ -25,7 +25,7 @@ class task_view{
     $twig->use_jquery();
     $twig->pushJavascript($this->getJS_PATH() . 'task.js');
     $twig->use_map_js();
-    $twig->pushCss($this->getCSS_PATH() . 'task.css');
+    $twig->pushCss('css/general.css');
     $this->getTwig()->setPage_id(self::TASK_DETAIL);
     return $twig->render($this->getTEMPLATES_PATH() . 'task_gallery.html.twig', $twig_array, true, $_SESSION['lang'], self::TASK_DETAIL);
   }
@@ -39,6 +39,17 @@ class task_view{
     $twig = $this->getTwig();
     $this->getTwig()->setPage_id(self::PHOTO_PDF_EXPORT);
     return $twig->render($this->getTEMPLATES_PATH() . 'photo_pdf_export.html.twig', $twig_array, true, $_SESSION['lang'], self::PHOTO_PDF_EXPORT);
+  }
+
+  public function load_prepare_pdf_photos_html(array $twig_array){
+    $twig = $this->getTwig();
+    $twig->use_jquery();
+    $twig->use_map_js();
+    $twig->pushJavascript('js/html2canvas.min.js');
+    $twig->pushJavascript('js/pdf_prepare.js');
+    $twig->pushCss('css/pdf/pdf.css');
+    $this->getTwig()->setPage_id(self::PHOTO_PDF_EXPORT);
+    return $twig->render($this->getTEMPLATES_PATH() . 'pdf_photo_prepare.html.twig', $twig_array, true, $_SESSION['lang'], self::PHOTO_PDF_EXPORT);
   }
 
   public function getTwig(): \twig_controler{
@@ -73,5 +84,5 @@ class task_view{
     $this->CSS_PATH = $CSS_PATH;
   }
 }
-
+//Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
 ?>

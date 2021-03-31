@@ -67,7 +67,6 @@ public class CHDrawer implements ServiceInit {
     private void drawMarker(CHService.Centroid centroid) {
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(new LatLng(centroid.latitude, centroid.longitude));
-        // TODO icon
         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_ch_location));
         if (markerCentroid != null) {
             markerCentroid.remove();
@@ -76,8 +75,8 @@ public class CHDrawer implements ServiceInit {
     }
 
     private void drawSampleCount(int count) {
-        TextView countTextView = chMapActivity.getSampleCount();
-        countTextView.setText(context.getString(R.string.map_sampleCount, String.valueOf(count), String.valueOf(PersistData.getSamplingNumber(context))));
+        TextView countTextView = chMapActivity.getSampleCountValue();
+        countTextView.setText(context.getString(R.string.map_sampleCountValue, String.valueOf(count), String.valueOf(PersistData.getSamplingNumber(context))));
     }
 
     public void onDestroy() {
@@ -87,3 +86,7 @@ public class CHDrawer implements ServiceInit {
         }
     }
 }
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

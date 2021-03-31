@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/menuItem_syncAll"
-        android:title="@string/menu_syncTasks" />
+        android:title="@string/menu_sync" />
     <item
         android:id="@+id/menuItem_home"
         android:title="@string/menu_home"
@@ -18,6 +19,9 @@
         android:id="@+id/menuItem_map"
         android:title="@string/menu_map" />
     <item
+        android:id="@+id/menuItem_pathTracking"
+        android:title="@string/menu_pathTracking" />
+    <item
         android:id="@+id/menuItem_settings"
         android:title="@string/menu_settings" />
     <item
@@ -30,3 +34,5 @@
         android:id="@+id/menuItem_logout"
         android:title="@string/menu_logout" />
 </menu>
+
+    <!-- Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu -->

@@ -8,8 +8,8 @@ android {
         applicationId "eu.foxcom.gtphotos"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 25
-        versionName "1.1.24"
+        versionCode 33
+        versionName "1.1.28"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -19,6 +19,8 @@ android {
             }
         }
 
+        multiDexEnabled true
+
     }
 
     buildTypes {
@@ -26,6 +28,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    lintOptions {
+        abortOnError false
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -37,6 +42,12 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(path: ':gnss_scan')
+    implementation(project(path: ':gnss_compare_core')) {
+        exclude(group: 'joda-time')
+    }
+    implementation (project(path: ':gnss_compare_core:GoGpsExtracts')){
+        exclude(group: 'joda-time')
+    }
     def room_version = "2.2.5"
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
@@ -48,6 +59,7 @@ dependencies {
     implementation 'net.danlew:android.joda:2.10.6'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation group: 'com.google.guava', name: 'guava', version: '27.1-android'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'

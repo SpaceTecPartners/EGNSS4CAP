@@ -61,7 +61,9 @@ class CameraViewController: UIViewController,AVCapturePhotoCaptureDelegate {
     private var infoMessages:[MsgInfo: String] = [:]
     private var warningMessages:[MsgWarning: String] = [:]
     
-    var persistPhotos = [PersistPhoto]()
+    var taskid:Int64 = -1
+    
+    //var persistPhotos = [PersistPhoto]()
     var manageObjectContext: NSManagedObjectContext!
 
     @IBOutlet weak var previewView: UIView!
@@ -69,23 +71,23 @@ class CameraViewController: UIViewController,AVCapturePhotoCaptureDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        snapshotButton.layer.cornerRadius = 10
+        /*snapshotButton.layer.cornerRadius = 10
         snapshotButton.layer.shadowColor = UIColor.black.cgColor
         snapshotButton.layer.shadowOffset = CGSize(width: 3, height: 3)
         snapshotButton.layer.shadowOpacity = 0.3
-        snapshotButton.layer.shadowRadius = 2.0
+        snapshotButton.layer.shadowRadius = 2.0*/
         
         infoView.layer.cornerRadius = 10
-        infoView.layer.shadowColor = UIColor.black.cgColor
+        /*infoView.layer.shadowColor = UIColor.black.cgColor
         infoView.layer.shadowOffset = CGSize(width: 3, height: 3)
         infoView.layer.shadowOpacity = 0.3
-        infoView.layer.shadowRadius = 2.0
+        infoView.layer.shadowRadius = 2.0*/
         
         centroidView.layer.cornerRadius = 10
-        centroidView.layer.shadowColor = UIColor.black.cgColor
+        /*centroidView.layer.shadowColor = UIColor.black.cgColor
         centroidView.layer.shadowOffset = CGSize(width: 3, height: 3)
         centroidView.layer.shadowOpacity = 0.3
-        centroidView.layer.shadowRadius = 2.0
+        centroidView.layer.shadowRadius = 2.0*/
         
         messageView.layer.cornerRadius = 5
         /*messageView.layer.shadowColor = UIColor.black.cgColor
@@ -260,7 +262,7 @@ class CameraViewController: UIViewController,AVCapturePhotoCaptureDelegate {
     @objc private func takingPhoto() {
         let remain = snapshotDate.timeIntervalSince(Date())
         if (remain > 0) {
-            addInfoMsg(type: .takePhotoWait, message: "Wait for automatic snapshot.\n\(String(format: "%.0f", remain)) s")
+            addInfoMsg(type: .takePhotoWait, message: "Waiting to take snapshot.\nCalculating position.\n\(String(format: "%.0f", remain)) s")
         } else {
             removeInfoMsg(type: .takePhotoWait)
             takingPhotoTimer.invalidate()
@@ -297,6 +299,8 @@ class CameraViewController: UIViewController,AVCapturePhotoCaptureDelegate {
         
         persistPhoto.userid = Int64(userID) ?? 0
         
+        persistPhoto.taskid = taskid
+        
         if let location = photoDataController.getLastLocation() {
             persistPhoto.lat = location.coordinate.latitude
             persistPhoto.lng = location.coordinate.longitude
@@ -330,14 +334,18 @@ class CameraViewController: UIViewController,AVCapturePhotoCaptureDelegate {
         let digest_string1 = "bfb576892e43b763731a1596c428987893b2e76ce1be10f733_" + photo_hash_string + "_" + stringDate + "_" + userID
         persistPhoto.digest = SHA256.hash(data: digest_string1.data(using: .utf8)!).hexStr.lowercased()
         
-        persistPhotos += [persistPhoto]
+        //persistPhotos += [persistPhoto]
                
         do{
             try self.manageObjectContext.save()
         }catch{
             print("Could not save data: \(error.localizedDescription)")
         }
-        performSegue(withIdentifier: "unwindToTableView", sender: self)
+        if taskid == -1 {
+            performSegue(withIdentifier: "unwindToTableView", sender: self)
+        } else {
+            performSegue(withIdentifier: "unwindToTaskView", sender: self)
+        }
     }
     
     private func setTakingPhotoState(start: Bool) {
@@ -438,3 +446,5 @@ class CameraViewController: UIViewController,AVCapturePhotoCaptureDelegate {
     */
 
 }
+
+// Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu

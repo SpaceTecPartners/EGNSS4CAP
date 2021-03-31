@@ -1,8 +1,6 @@
 package eu.foxcom.gnss_scan;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -21,14 +19,12 @@ import android.telephony.CellInfoWcdma;
 import android.telephony.TelephonyManager;
 
 import androidx.annotation.RequiresPermission;
-import androidx.core.app.ActivityCompat;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
 
 public class NetworkInfoScanner extends Scanner {
@@ -418,3 +414,7 @@ public class NetworkInfoScanner extends Scanner {
         }
     }
 }
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

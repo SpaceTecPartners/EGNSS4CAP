@@ -12,12 +12,13 @@ public class PermissionActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_permission);
+        setToolbar(R.id.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         setAutoCheckPermissions(false);
     }
 
     public void grandPermissions(View view) {
-        if(checkPermissions()) {
+        if(checkLocatiomPermissions()) {
             Intent intent = new Intent(this, StartActivity.class);
             startActivity(intent);
             finish();
@@ -35,3 +36,8 @@ public class PermissionActivity extends BaseActivity {
         }
     }
 }
+
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

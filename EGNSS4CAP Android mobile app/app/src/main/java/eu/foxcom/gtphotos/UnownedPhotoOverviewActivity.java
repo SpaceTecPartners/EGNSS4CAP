@@ -27,6 +27,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import eu.foxcom.gtphotos.model.AppDatabase;
 import eu.foxcom.gtphotos.model.LoggedUser;
+import eu.foxcom.gtphotos.model.MyAlertDialog;
 import eu.foxcom.gtphotos.model.Photo;
 import eu.foxcom.gtphotos.model.PhotoList;
 import eu.foxcom.gtphotos.model.Task;
@@ -34,6 +35,14 @@ import eu.foxcom.gtphotos.model.Util;
 import eu.foxcom.gtphotos.model.functionInterface.Consumer;
 
 public class UnownedPhotoOverviewActivity extends BaseActivity {
+
+    public enum BROADCAST_ACTION {
+        REFRESH_PHOTOS
+    }
+
+    public enum BROADCAST_REFRESH_PHOTOS {
+        SCROLL_TOP
+    }
 
     public static final String INTENT_ACTION_REFRESH_PHOTOS = "intentRefresh";
     public static final String INTENT_ACTION_REFRESH_PHOTOS_SCROLL_TOP = "scrollTop";
@@ -116,6 +125,7 @@ public class UnownedPhotoOverviewActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_unowned_photo_overview);
+        setToolbar(R.id.toolbar);
     }
 
     @Override
@@ -129,6 +139,13 @@ public class UnownedPhotoOverviewActivity extends BaseActivity {
     public void toCamera(View view) {
         Intent intent = new Intent(this, CameraActivity.class);
         intent.setAction(CameraActivity.INTENT_ACTION_START);
+        startActivity(intent);
+    }
+
+    public void showMap(View view) {
+        Intent intent = new Intent(this, MapActivity.class);
+        intent.setAction(MapActivity.INTENT_ACTION_START);
+        intent.putExtra(MapActivity.INTENT_ACTION_START_MODE, MapActivity.START_MODE.UNOWNED_PHOTOS.name());
         startActivity(intent);
     }
 
@@ -149,17 +166,18 @@ public class UnownedPhotoOverviewActivity extends BaseActivity {
                 return;
             }
             AtomicBoolean isUploadStarted = new AtomicBoolean(false);
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(R.string.un_uploadDialogTitle);
-            builder.setMessage(getString(R.string.un_uploadDialogText, String.valueOf(countToUpload)));
-            builder.setNegativeButton(R.string.dl_Cancel, (dialog, which) -> {
+            MyAlertDialog.Builder builder = new MyAlertDialog.Builder(this);
+            MyAlertDialog myAlertDialog = builder.build();
+            myAlertDialog.setTitle(getString(R.string.un_uploadDialogTitle));
+            myAlertDialog.setMessage(getString(R.string.un_uploadDialogText, String.valueOf(countToUpload)));
+            myAlertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.dl_Cancel), (dialog, which) -> {
                 isUploading.set(false);
             });
-            builder.setPositiveButton(R.string.dl_OK, (dialog, which) -> {
+            myAlertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.dl_OK), (dialog, which) -> {
                 isUploadStarted.set(true);
                 uploadAllPhotos();
             });
-            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            myAlertDialog.getAlertDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {
                     if (!isUploadStarted.get()) {
@@ -167,7 +185,7 @@ public class UnownedPhotoOverviewActivity extends BaseActivity {
                     }
                 }
             });
-            builder.create().show();
+            myAlertDialog.show();
         }
     }
 
@@ -217,7 +235,7 @@ public class UnownedPhotoOverviewActivity extends BaseActivity {
                             isUploading.set(false);
                         }
                     }
-                }, MS.getRequestor());
+                }, MS.getRequestor(), photoListNotSent);
             } catch (JSONException e) {
                 failedProcess.accept(e.getMessage());
                 isUploading.set(false);
@@ -226,7 +244,7 @@ public class UnownedPhotoOverviewActivity extends BaseActivity {
     }
 
     private void refreshPhotoList(boolean scrollToTop) {
-        photoList = PhotoList.createFromAppDatabase(MS.getAppDatabase(), null, getApplicationContext());
+        photoList = PhotoList.createFromAppDatabaseByTaskGroup(MS.getAppDatabase(), null, getApplicationContext());
         UnownedPhotoAdapter unownedPhotoAdapter = new UnownedPhotoAdapter(this, photoList);
         photosRecyclerView.setAdapter(unownedPhotoAdapter);
         if (scrollToTop) {
@@ -254,4 +272,17 @@ public class UnownedPhotoOverviewActivity extends BaseActivity {
         intent.putExtra(UnownedPhotoDetailActivity.INTENT_ACTION_START_PHOTO_ID, photo.getId());
         startActivity(intent);
     }
+
+    @Override
+    protected MainService.BROADCAST_MSG broadcastExplicitReceiver(Context context, Intent intent) {
+        if (BROADCAST_ACTION.REFRESH_PHOTOS.name().equals(intent.getStringExtra(MainService.BROADCAST_EXPLICIT_PARAMS.ACTION.ID))) {
+            refreshPhotoList(intent.getBooleanExtra(BROADCAST_REFRESH_PHOTOS.SCROLL_TOP.name(), false));
+        }
+        return null;
+    }
 }
+
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

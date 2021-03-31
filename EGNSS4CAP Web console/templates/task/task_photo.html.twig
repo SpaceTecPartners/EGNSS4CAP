@@ -2,10 +2,13 @@
   <div>{{ farmer_name }}</div>
   <div>{{ task_name }}</div>
   <div class=js_popup_border>
-    <div class="marker_image"><img style="transform: rotate({{ photos[0].rotation }}deg);" src="{{ photos[0].path }}{{ photos[0].file_name }}" ></div>
-    <img class="marker_border" src="img/icon_photo.png" >
+    {#<div class="marker_image"><img class="marker_image_img" style="transform: rotate({{ photos[0].rotation }}deg) translate(-50%, 0);" src="{{ photos[0].path }}{{ photos[0].file_name }}" ></div>#}
+    <div class="marker_image"><img class="marker_image_img" src="photo_detail.php?justimg=1&rotation={{ photos[0].rotation }}&img={{ photos[0].path }}{{ photos[0].file_name }}" ></div>
+    <img class="marker_border marker_border_web" src="img/icon_photo.png" >
+    <img class="marker_border marker_border_pdf" src="img/icon_photo_pdf.png" style="display: none;">
   <div>
 </div>
 <div class="js_azimuth" style=" transform: rotate({{ azimut[0].magnetic_azimuth }}deg)">
   <img class="azimuth" src="img/icon_azimuth.png">
 </div>
+<!--Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu-->

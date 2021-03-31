@@ -15,5 +15,5 @@ session_start();
 if(isset($GLOBALS['NO_LOGIN_CHECK']))/*do not check*/;
 else if(!login_model::is_user_logged()) header('Location: ' . SYSTEM_HOST . '/login.php');
 $_SESSION['lang'] = isset($_SESSION['lang']) ? $_SESSION['lang'] : 'en';
-
+//Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
 ?>

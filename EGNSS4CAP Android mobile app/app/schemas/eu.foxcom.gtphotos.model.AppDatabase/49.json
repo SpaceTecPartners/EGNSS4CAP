@@ -1,0 +1,755 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 49,
+    "identityHash": "185208fbbdd399d6bbb487dca62c942a",
+    "entities": [
+      {
+        "tableName": "LoggedUser",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `login` TEXT, `name` TEXT, `surname` TEXT, `idNumber` TEXT, `email` TEXT, `VAT` TEXT, `lastLogged` INTEGER, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "login",
+            "columnName": "login",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "surname",
+            "columnName": "surname",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "identificationNumber",
+            "columnName": "idNumber",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "email",
+            "columnName": "email",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "vat",
+            "columnName": "VAT",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lastLogged",
+            "columnName": "lastLogged",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Task",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `status` TEXT, `statusOrder` INTEGER, `name` TEXT, `text` TEXT, `textReturned` TEXT, `dateCreated` TEXT, `dateCreatedDateTime` INTEGER, `taskDueToDate` TEXT, `taskDueToDateDateTime` INTEGER, `flagValid` INTEGER, `flagInvalid` INTEGER, `note` TEXT, `userId` TEXT, `unownedPhotoId` INTEGER, `notSentPhotos` INTEGER NOT NULL, `onlySentPhotos` INTEGER NOT NULL, `isUploadStatus` INTEGER NOT NULL, `isPhotoSync` INTEGER NOT NULL, `isLastSendFailed` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "statusOrder",
+            "columnName": "statusOrder",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "text",
+            "columnName": "text",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "textReturned",
+            "columnName": "textReturned",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dateCreated",
+            "columnName": "dateCreated",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dateCreatedDateTime",
+            "columnName": "dateCreatedDateTime",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "taskDueToDate",
+            "columnName": "taskDueToDate",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "taskDueToDateDateTime",
+            "columnName": "taskDueToDateDateTime",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "flagValid",
+            "columnName": "flagValid",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "flagInvalid",
+            "columnName": "flagInvalid",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "userId",
+            "columnName": "userId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "unownedPhotoId",
+            "columnName": "unownedPhotoId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "notSentPhotos",
+            "columnName": "notSentPhotos",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "onlySentPhotos",
+            "columnName": "onlySentPhotos",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isUploadStatus",
+            "columnName": "isUploadStatus",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isPhotoSync",
+            "columnName": "isPhotoSync",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isLastSendFailed",
+            "columnName": "isLastSendFailed",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Photo",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `taskId` TEXT, `userId` TEXT, `isSent` INTEGER NOT NULL, `lat` REAL, `lng` REAL, `created` INTEGER, `indx` INTEGER NOT NULL, `photoPath` TEXT, `accuracy` REAL, `altitude` REAL, `bearing` REAL, `azimMagneticField` REAL, `photoHeading` REAL, `pitch` REAL, `roll` REAL, `tilt` REAL, `orientation` INTEGER, `horizontalViewAngle` REAL, `verticalViewAngle` REAL, `deviceManufacture` TEXT, `deviceModel` TEXT, `devicePlatform` TEXT, `deviceVersion` TEXT, `satsInfo` TEXT, `extraSatCount` INTEGER, `NMEAMessage` TEXT, `networkInfo` TEXT, `centroidLat` REAL, `centroidLng` REAL, `efkLatGpsL1` REAL, `efkLatGpsL5` REAL, `efkLatGpsIf` REAL, `efkLatGalE1` REAL, `efkLatGalE5` REAL, `efkLatGalIf` REAL, `efkLngGpsL1` REAL, `efkLngGpsL5` REAL, `efkLngGpsIf` REAL, `efkLngGalE1` REAL, `efkLngGalE5` REAL, `efkLngGalIf` REAL, `efkAltGpsL1` REAL, `efkAltGpsL5` REAL, `efkAltGpsIf` REAL, `efkAltGalE1` REAL, `efkAltGalE5` REAL, `efkAtlGalIf` REAL, `efkTimeGpsL1` INTEGER, `efkTimeGpsL5` INTEGER, `efkTimeGpsIf` INTEGER, `efkTimeGalE1` INTEGER, `efkTimeGalE5` INTEGER, `efkTimeGalIf` INTEGER, `photoBytes` BLOB, `digest` TEXT, `note` TEXT, `isLastSendFailed` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "taskId",
+            "columnName": "taskId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "userId",
+            "columnName": "userId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isSent",
+            "columnName": "isSent",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lat",
+            "columnName": "lat",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lng",
+            "columnName": "lng",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "created",
+            "columnName": "created",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "indx",
+            "columnName": "indx",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "photoPath",
+            "columnName": "photoPath",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "accuracy",
+            "columnName": "accuracy",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "altitude",
+            "columnName": "altitude",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "bearing",
+            "columnName": "bearing",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "azimMagneticField",
+            "columnName": "azimMagneticField",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "photoHeading",
+            "columnName": "photoHeading",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pitch",
+            "columnName": "pitch",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "roll",
+            "columnName": "roll",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "tilt",
+            "columnName": "tilt",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "orientation",
+            "columnName": "orientation",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "horizontalViewAngle",
+            "columnName": "horizontalViewAngle",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "verticalViewAngle",
+            "columnName": "verticalViewAngle",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "deviceManufacture",
+            "columnName": "deviceManufacture",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "deviceModel",
+            "columnName": "deviceModel",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "devicePlatform",
+            "columnName": "devicePlatform",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "deviceVersion",
+            "columnName": "deviceVersion",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "satsInfo",
+            "columnName": "satsInfo",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "extraSatCount",
+            "columnName": "extraSatCount",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "NMEAMessage",
+            "columnName": "NMEAMessage",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "networkInfo",
+            "columnName": "networkInfo",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "centroidLat",
+            "columnName": "centroidLat",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "centroidLng",
+            "columnName": "centroidLng",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkLatGpsL1",
+            "columnName": "efkLatGpsL1",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkLatGpsL5",
+            "columnName": "efkLatGpsL5",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkLatGpsIf",
+            "columnName": "efkLatGpsIf",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkLatGalE1",
+            "columnName": "efkLatGalE1",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkLatGalE5",
+            "columnName": "efkLatGalE5",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkLatGalIf",
+            "columnName": "efkLatGalIf",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkLngGpsL1",
+            "columnName": "efkLngGpsL1",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkLngGpsL5",
+            "columnName": "efkLngGpsL5",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkLngGpsIf",
+            "columnName": "efkLngGpsIf",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkLngGalE1",
+            "columnName": "efkLngGalE1",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkLngGalE5",
+            "columnName": "efkLngGalE5",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkLngGalIf",
+            "columnName": "efkLngGalIf",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkAltGpsL1",
+            "columnName": "efkAltGpsL1",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkAltGpsL5",
+            "columnName": "efkAltGpsL5",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkAltGpsIf",
+            "columnName": "efkAltGpsIf",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkAltGalE1",
+            "columnName": "efkAltGalE1",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkAltGalE5",
+            "columnName": "efkAltGalE5",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkAtlGalIf",
+            "columnName": "efkAtlGalIf",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkTimeGpsL1",
+            "columnName": "efkTimeGpsL1",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkTimeGpsL5",
+            "columnName": "efkTimeGpsL5",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkTimeGpsIf",
+            "columnName": "efkTimeGpsIf",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkTimeGalE1",
+            "columnName": "efkTimeGalE1",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkTimeGalE5",
+            "columnName": "efkTimeGalE5",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "efkTimeGalIf",
+            "columnName": "efkTimeGalIf",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "photoBytes",
+            "columnName": "photoBytes",
+            "affinity": "BLOB",
+            "notNull": false
+          },
+          {
+            "fieldPath": "digest",
+            "columnName": "digest",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isLastSendFailed",
+            "columnName": "isLastSendFailed",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "PTPath",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`autoId` INTEGER PRIMARY KEY AUTOINCREMENT, `realId` INTEGER, `isUploading` INTEGER NOT NULL, `userId` TEXT NOT NULL, `name` TEXT, `startT` INTEGER, `endT` INTEGER, `byCentroids` INTEGER NOT NULL, `area` REAL, `deviceManufacture` TEXT, `deviceModel` TEXT, `devicePlatform` TEXT, `deviceVersion` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "autoId",
+            "columnName": "autoId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "realId",
+            "columnName": "realId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "isUploading",
+            "columnName": "isUploading",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userId",
+            "columnName": "userId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "startT",
+            "columnName": "startT",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "endT",
+            "columnName": "endT",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "byCentroids",
+            "columnName": "byCentroids",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "area",
+            "columnName": "area",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "deviceManufacture",
+            "columnName": "deviceManufacture",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "deviceModel",
+            "columnName": "deviceModel",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "devicePlatform",
+            "columnName": "devicePlatform",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "deviceVersion",
+            "columnName": "deviceVersion",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "autoId"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_PTPath_realId",
+            "unique": true,
+            "columnNames": [
+              "realId"
+            ],
+            "createSql": "CREATE UNIQUE INDEX `index_PTPath_realId` ON `${TABLE_NAME}` (`realId`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "PTPoint",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`autoId` INTEGER PRIMARY KEY AUTOINCREMENT, `pathId` INTEGER NOT NULL, `index` INTEGER, `latitude` REAL, `longitude` REAL, `altitude` REAL, `accuracy` REAL, `created` INTEGER, FOREIGN KEY(`pathId`) REFERENCES `PTPath`(`autoId`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "autoId",
+            "columnName": "autoId",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pathId",
+            "columnName": "pathId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "index",
+            "columnName": "index",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "latitude",
+            "columnName": "latitude",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "longitude",
+            "columnName": "longitude",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "altitude",
+            "columnName": "altitude",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "accuracy",
+            "columnName": "accuracy",
+            "affinity": "REAL",
+            "notNull": false
+          },
+          {
+            "fieldPath": "created",
+            "columnName": "created",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "autoId"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_PTPoint_pathId",
+            "unique": false,
+            "columnNames": [
+              "pathId"
+            ],
+            "createSql": "CREATE  INDEX `index_PTPoint_pathId` ON `${TABLE_NAME}` (`pathId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "PTPath",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "pathId"
+            ],
+            "referencedColumns": [
+              "autoId"
+            ]
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"185208fbbdd399d6bbb487dca62c942a\")"
+    ]
+  }
+}

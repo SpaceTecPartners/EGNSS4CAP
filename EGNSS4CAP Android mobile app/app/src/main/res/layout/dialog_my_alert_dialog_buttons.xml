@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/myAlertDialog_linearLayout_buttons"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="end"
+    android:orientation="horizontal">
+
+    <Button
+        android:id="@+id/myAlertDialog_button_negative"
+        style="@style/buttonTextGray"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:visibility="gone"
+        tools:text="[NEGATIVE]"
+        tools:visibility="visible" />
+
+    <Button
+        android:id="@+id/myAlertDialog_button_positive"
+        style="@style/buttonTextGray"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:visibility="gone"
+        tools:text="[POSITIVE]"
+        tools:visibility="visible" />
+
+    <Button
+        android:id="@+id/myAlertDialog_button_neutral"
+        style="@style/buttonTextGray"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:visibility="gone"
+        tools:text="[NEUTRAL]"
+        tools:visibility="visible" />
+</LinearLayout>
+
+    <!-- Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu -->

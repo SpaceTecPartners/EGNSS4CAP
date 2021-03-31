@@ -1,4 +1,5 @@
 const FILTER_TYPE = 'user';
+const PDF_PREPARE = false;
 var map_property = {zoom: 4, popup_bool: false};
 $(document)
   .ready(function() {
@@ -13,7 +14,7 @@ $(document)
       load_table();
     }
   })
-  .on("click", "[class^='clicksort']", function(){
+  .on("click", "[class^='clicksort'], [class^='form-check-input clicksort'], .clicksort", function(){
     $field = $(this).data('field');
     post = $.post("index.php", {act: "list_sort", page: 'user_list', sort: $field});
     post.done(function(data){
@@ -52,3 +53,4 @@ function load_table(){
     }
   })
 }
+//Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu

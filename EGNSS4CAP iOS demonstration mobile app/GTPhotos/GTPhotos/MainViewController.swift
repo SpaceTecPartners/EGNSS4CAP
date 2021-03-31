@@ -11,15 +11,12 @@ import CoreLocation
 class MainViewController: UIViewController {
 
     @IBOutlet weak var userView: UIView!
-    @IBOutlet weak var userTitleView: UIView!
     @IBOutlet weak var basicInfoView: UIView!
-    @IBOutlet weak var basicInfoTitleView: UIView!
     @IBOutlet weak var loginLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var surnameLabel: UILabel!
     @IBOutlet weak var locationCheckImage: UIImageView!
     @IBOutlet weak var galileoCheckImage: UIImageView!
-    @IBOutlet weak var logoView: UIView!
     @IBOutlet weak var buttonView: UIView!
     @IBOutlet weak var serviceView: UIView!
     @IBOutlet weak var galileoView: UIView!
@@ -32,32 +29,26 @@ class MainViewController: UIViewController {
         // Do any additional setup after loading the view.
         
         userView.layer.cornerRadius = 10
-        userTitleView.layer.cornerRadius = 10
+        /*userTitleView.layer.cornerRadius = 10
         userTitleView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         userView.layer.shadowColor = UIColor.black.cgColor
         userView.layer.shadowOffset = CGSize(width: 3, height: 3)
         userView.layer.shadowOpacity = 0.3
-        userView.layer.shadowRadius = 2.0
+        userView.layer.shadowRadius = 2.0*/
         
         basicInfoView.layer.cornerRadius = 10
-        basicInfoTitleView.layer.cornerRadius = 10
+        /*basicInfoTitleView.layer.cornerRadius = 10
         basicInfoTitleView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         basicInfoView.layer.shadowColor = UIColor.black.cgColor
         basicInfoView.layer.shadowOffset = CGSize(width: 3, height: 3)
         basicInfoView.layer.shadowOpacity = 0.3
-        basicInfoView.layer.shadowRadius = 2.0
+        basicInfoView.layer.shadowRadius = 2.0*/
         
-        logoView.layer.cornerRadius = 10
-        logoView.layer.shadowColor = UIColor.black.cgColor
-        logoView.layer.shadowOffset = CGSize(width: 3, height: 3)
-        logoView.layer.shadowOpacity = 0.3
-        logoView.layer.shadowRadius = 2.0       
-        
-        buttonView.layer.cornerRadius = 10
+        /*buttonView.layer.cornerRadius = 10
         buttonView.layer.shadowColor = UIColor.black.cgColor
         buttonView.layer.shadowOffset = CGSize(width: 3, height: 3)
         buttonView.layer.shadowOpacity = 0.3
-        buttonView.layer.shadowRadius = 2.0
+        buttonView.layer.shadowRadius = 2.0*/
         
         locationManager.requestWhenInUseAuthorization()
         
@@ -85,6 +76,10 @@ class MainViewController: UIViewController {
 
     @IBAction func photosButton(_ sender: UIButton) {
         performSegue(withIdentifier: "ShowPhotos", sender: self)
+    }
+    
+    @IBAction func tasksButton(_ sender: UIButton) {
+        performSegue(withIdentifier: "ShowTasks", sender: self)
     }
     
     @IBAction func mapButton(_ sender: UIButton) {
@@ -153,3 +148,4 @@ class MainViewController: UIViewController {
     
 }
 
+// Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu

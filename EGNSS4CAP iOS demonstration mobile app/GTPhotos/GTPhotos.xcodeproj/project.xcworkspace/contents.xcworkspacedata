@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:/Users/foxcom/Desktop/EGNSS4CAP/EGNSS4CAP/GTPhotos.xcodeproj">
+      location = "group:/Users/foxcom/Documents/GitHub/EGNSS4CAP-project-2/ios/GTPhotos/GTPhotos/MainViewController.swift">
+   </FileRef>
+   <FileRef
+      location = "self:">
    </FileRef>
 </Workspace>

@@ -23,3 +23,7 @@ public class NMEAParserApp extends NMEAParser {
         setCentroidFinisher((ggaData, sampleProcessedNumber) -> sampleProcessedNumber >= PersistData.getSamplingNumber(context));
     }
 }
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

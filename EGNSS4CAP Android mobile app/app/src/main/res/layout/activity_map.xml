@@ -2,9 +2,14 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/button"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MapActivity">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
 
     <fragment
         android:id="@+id/map"
@@ -15,119 +20,302 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
         tools:context=".MapActivity" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
+        android:id="@+id/map_constraintLayout_pathTools"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible">
 
-        <LinearLayout
-            android:id="@+id/linearLayout9"
+        <Button
+            android:id="@+id/map_button_trackSend"
+            style="@style/buttonTextGreen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            android:layout_marginBottom="8dp"
+            android:onClick="uploadPathDialog"
+            android:text="@string/pt_sendButton"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/pt_frameLayout_currentTrack"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:visibility="visible" />
 
-            <ProgressBar
-                android:id="@+id/map_progressBar_trackLoad"
-                style="?android:attr/progressBarStyle"
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp" />
+                android:gravity="end"
+                android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/map_imageButton_rec"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/background_button"
-                android:onClick="recordTracking"
-                android:scaleType="centerInside"
-                android:visibility="gone"
-                app:srcCompat="@drawable/icon_record_act" />
+                <ProgressBar
+                    android:id="@+id/map_progressBar_trackLoad"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1" />
 
-            <ImageButton
-                android:id="@+id/map_imageButton_track"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/background_button"
-                android:onClick="gotToPathTrackingOverview"
-                android:scaleType="centerInside"
-                app:srcCompat="@drawable/icon_track" />
-        </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/map_linearLayout_trackLoadControls"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <Button
+                        android:id="@+id/map_button_pause"
+                        style="@style/buttonTextWhite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/background_button_white_border_r8"
+                        android:onClick="pauseTracking"
+                        android:text="@string/pt_pauseButton" />
+
+                    <Button
+                        android:id="@+id/map_button_rec"
+                        style="@style/buttonTextWhite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/background_button_white_border_r8"
+                        android:onClick="recordTracking"
+                        android:text="@string/pt_recButton" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/button6"
+                    style="@style/buttonTextWhiteGreen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="gotToPathTrackingOverview"
+                    android:text="@string/pt_pathsButton" />
+
+            </LinearLayout>
+        </HorizontalScrollView>
 
         <FrameLayout
             android:id="@+id/pt_frameLayout_currentTrack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout9"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView"
             app:layout_constraintEnd_toEndOf="parent"
             tools:visibility="visible">
 
         </FrameLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/map_constraintLayout_photosTools"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:orientation="vertical"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        tools:visibility="gone">
 
-        <TextView
-            android:id="@+id/textView84"
+        <ProgressBar
+            android:id="@+id/map_progressBar_photosLoad"
+            style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/map_blueMarker"
-            android:textColor="#0000FF" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-        <TextView
-            android:id="@+id/textView92"
+        <FrameLayout
+            android:id="@+id/map_frameLayout_currentPhotos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/map_redMarker"
-            android:textColor="#FF0000" />
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:visibility="visible">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tableLayout2">
+
+        <ToggleButton
+            android:id="@+id/map_toggleButton_mapType"
+            style="@style/buttonTextWhite"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/background_button_white_r22"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:textAllCaps="false"
+            android:textOff="@string/map_buttonToggleSatellite"
+            android:textOn="@string/map_buttonToggleMap"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout17"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tableLayout2">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TableLayout
+        android:id="@+id/tableLayout2"
+        style="@style/panelMin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="64dp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textView19"
+                style="@style/textBlue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/map_blueMarkerLabel"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textView69"
+                style="@style/textBlue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/map_blueMarkerValue"
+                android:textSize="14sp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textView120"
+                style="@style/textBlue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/map_accuracy"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/map_textView_accuracy"
+                style="@style/textBlue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/map_accuracyUnavailable"
+                android:textSize="14sp"
+                android:visibility="visible"
+                tools:visibility="visible" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/map_tableRow_centroidLabel"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:orientation="horizontal">
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/textView92"
+                style="@style/textRed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/map_redMarkerLabel"
+                android:textAlignment="center"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textView136"
+                style="@style/textRed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/map_redMarkerValue"
+                android:textSize="14sp" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/map_tableRow_samples"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/textView137"
+                style="@style/textRed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/map_sampleCountLabel"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/map_textView_sampleCount"
+                style="@style/textRed"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textColor="#FF0000" />
+                android:textColor="#FF0000"
+                android:textSize="14sp" />
+        </TableRow>
+    </TableLayout>
 
-        </LinearLayout>
-    </LinearLayout>
-
-    <ToggleButton
-        android:id="@+id/map_toggleButton_mapType"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="64dp"
-        android:background="@drawable/background_button"
-        android:text="ToggleButton"
-        android:textAllCaps="false"
-        android:textOff="Sat"
-        android:textOn="Map"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu -->

@@ -1,981 +1,657 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".GnssRawActivity">
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout4"
-            style="@style/panel"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:padding="@dimen/gn_screenMargin"
+            tools:context=".GnssRawActivity">
 
             <FrameLayout
                 android:id="@+id/gnss_frameLayout_basicInfo"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
             </FrameLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
-            android:id="@+id/linearLayout5"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:gravity="fill"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayout3"
+            <LinearLayout
+                android:id="@+id/linearLayout16"
                 style="@style/panel"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp">
+                android:layout_marginTop="16dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/gnss_frameLayout_basicInfo"
+                tools:visibility="gone">
 
-                <TextView
-                    android:id="@+id/gnss_textView_satInUseTitle"
-                    style="@style/panelTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/gnss_satInUse"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                <LinearLayout
+                    style="@style/panelHeader"
+                    android:orientation="horizontal">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    style="@style/panelContent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/gnss_textView_satInUseTitle">
+                    <ImageView
+                        android:id="@+id/imageView14"
+                        style="@style/panelIcon"
+                        app:srcCompat="@drawable/icon_sat_info" />
+
+                    <TextView
+                        android:id="@+id/textView142"
+                        style="@style/panelTitle"
+                        android:text="@string/gnss_satInfo" />
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/panelRow"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/gnss_textView_satInUseTitle"
+                        style="@style/panelValueStart"
+                        android:text="@string/gnss_satInUse" />
+
+                    <TextView style="@style/panelValueMiddle" />
 
                     <TextView
                         android:id="@+id/gnss_textView_satInUse"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/gnss_nd"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                        style="@style/panelValueEnd"
+                        android:text="@string/gnss_nd" />
+                </LinearLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                style="@style/panel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp">
+                <LinearLayout
+                    style="@style/panelRow"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/gnss_textView_satInViewTitle"
-                    style="@style/panelTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/gnss_satInView"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/gnss_textView_satInViewTitle"
+                        style="@style/panelValueStart"
+                        android:text="@string/gnss_satInView" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    style="@style/panelContent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/gnss_textView_satInViewTitle">
+                    <TextView style="@style/panelValueMiddle" />
 
                     <TextView
                         android:id="@+id/gnss_textView_satInView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/gnss_nd"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                        style="@style/panelValueEnd"
+                        android:text="@string/gnss_nd" />
+                </LinearLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                style="@style/panel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp">
+                <LinearLayout
+                    style="@style/panelRow"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/gnss_textView_egnosTitle"
-                    style="@style/panelTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/gnss_egnos"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/gnss_textView_egnosTitle"
+                        style="@style/panelValueStart"
+                        android:text="@string/gnss_egnos" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    style="@style/panelContent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/gnss_textView_egnosTitle">
+                    <TextView style="@style/panelValueMiddle" />
 
                     <TextView
                         android:id="@+id/gnss_textView_egnos"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/gnss_nd"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </LinearLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/gnss_constraintLayout_rmcInfoPanel"
-            style="@style/panel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout10">
-
-            <TextView
-                android:id="@+id/textView12"
-                style="@style/panelTitle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/gnss_rmcInfo"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                style="@style/panelContent"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView12">
-
-                <TableLayout
-                    android:id="@+id/tableLayout"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/textView21"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_magneticVariation" />
-
-                            <TextView
-                                android:id="@+id/gnss_textView_magneticVariation"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_nd"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/textView24"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_EW" />
-
-                            <TextView
-                                android:id="@+id/gnss_textView_EWRMC"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_nd"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/textView32"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_TrueNorthAngle" />
-
-                            <TextView
-                                android:id="@+id/gnss_textView_trueNorthAngle"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_nd"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-                    </TableRow>
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="8dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/gnss_textView_speedKnotsTitle"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_speedKnots" />
-
-                            <TextView
-                                android:id="@+id/gnss_textView_speedKnotsRMC"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_nd"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/gnss_textView_speedKmhTitle"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_speedKmh" />
-
-                            <TextView
-                                android:id="@+id/gnss_textView_speedKmhRMC"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_nd"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-                    </TableRow>
-
-                </TableLayout>
-
-                <LinearLayout
-                    android:id="@+id/linearLayout7"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tableLayout">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/constraintLayout8"
-                        style="@style/panel"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="2dp"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:id="@+id/textView13"
-                            style="@style/panelTitle"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:text="@string/gnss_galileoSats"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            style="@style/panelContent"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/textView13">
-
-                            <eu.foxcom.gtphotos.model.component.DynamicListView
-                                android:id="@+id/gnss_listView_galileo"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        style="@style/panel"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="2dp"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:id="@+id/textView15"
-                            style="@style/panelTitle"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:text="@string/gnss_gpsSats"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            style="@style/panelContent"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/textView15">
-
-                            <eu.foxcom.gtphotos.model.component.DynamicListView
-                                android:id="@+id/gnss_listView_gps"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                        style="@style/panelValueEnd"
+                        android:text="@string/gnss_nd" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLayout7">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        style="@style/panel"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="2dp"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:id="@+id/textView17"
-                            style="@style/panelTitle"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:text="@string/gnss_glonassSats"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            style="@style/panelContent"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/textView17">
-
-                            <eu.foxcom.gtphotos.model.component.DynamicListView
-                                android:id="@+id/gnss_listView_glonass"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        style="@style/panel"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="2dp"
-                        android:layout_weight="0.5">
-
-                        <TextView
-                            android:id="@+id/textView20"
-                            style="@style/panelTitle"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:text="@string/gnss_beidouSats"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            style="@style/panelContent"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/textView20">
-
-                            <eu.foxcom.gtphotos.model.component.DynamicListView
-                                android:id="@+id/gnss_listView_beidou"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </LinearLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/gnss_constraintLayout_geolocationInfo"
-            style="@style/panel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginRight="16dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/linearLayout5">
-
-            <TextView
-                android:id="@+id/textView22"
-                style="@style/panelTitle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/gnss_geolocationInfo"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                style="@style/panelContent"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView22">
-
-                <TableLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/textView26"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_latitude" />
-
-                            <TextView
-                                android:id="@+id/gnss_textView_latitude"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_nd"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/textView34"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_longitude" />
-
-                            <TextView
-                                android:id="@+id/gnss_textView_longitude"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_nd"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/textView36"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_altitude" />
-
-                            <TextView
-                                android:id="@+id/gnss_textView_altitude"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_nd"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-                    </TableRow>
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="8dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/textView40"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_NS" />
-
-                            <TextView
-                                android:id="@+id/gnss_textView_NS"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_nd"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/textView43"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_EW" />
-
-                            <TextView
-                                android:id="@+id/gnss_textView_EW_geoInfo"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_nd"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/textView45"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_fixQuality" />
-
-                            <TextView
-                                android:id="@+id/gnss_textView_fixQuality"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_nd"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-                    </TableRow>
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="8dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/textView48"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_hdop" />
-
-                            <TextView
-                                android:id="@+id/gnss_textView_HDOP"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_nd"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/textView50"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_pdop" />
-
-                            <TextView
-                                android:id="@+id/gnss_textView_PDOP"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_nd"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_vdop" />
-
-                            <TextView
-                                android:id="@+id/gnss_textView_VDOP"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_nd"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-                    </TableRow>
-
-                    <TableRow android:layout_marginTop="8dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_accurancy" />
-
-                            <TextView
-                                android:id="@+id/gnss_textView_accuracy"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_nd"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_precision" />
-
-                            <TextView
-                                android:id="@+id/gnss_textView_precision"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_nd"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"></LinearLayout>
-                    </TableRow>
-
-                </TableLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout10"
-            style="@style/panel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/gnss_constraintLayout_geolocationInfo">
-
-            <TextView
-                android:id="@+id/textView38"
-                style="@style/panelTitle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/gnss_vtgInfo"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                style="@style/panelContent"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView38">
-
-                <TableLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/textView39"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_trueDegrees" />
-
-                            <TextView
-                                android:id="@+id/gnss_textView_trueDegrees"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_nd"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/textView41"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_magneticDegrees" />
-
-                            <TextView
-                                android:id="@+id/gnss_textView_magneticDegrees"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_nd"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-                    </TableRow>
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="8dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/gnss_textView_speedKnotsVTGTitle"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_speedKnots" />
-
-                            <TextView
-                                android:id="@+id/gnss_textView_speedKnotsVTG"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_nd"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/gnss_textView_speedKmhVTGTitle"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_speedKmh" />
-
-                            <TextView
-                                android:id="@+id/gnss_textView_speedKmhVTG"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/gnss_nd"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-                    </TableRow>
-
-                </TableLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            style="@style/panel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/gnss_constraintLayout_rmcInfoPanel">
-
-            <TextView
-                android:id="@+id/textView47"
-                style="@style/panelTitle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/gnss_snr"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                style="@style/panelContent"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView47">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    style="@style/panelRow"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/textView52"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        style="@style/panelValueStart"
                         android:text="@string/gnss_meanSnr" />
+
+                    <TextView style="@style/panelValueMiddle" />
 
                     <TextView
                         android:id="@+id/gnss_textView_meanSnr"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/gnss_nd"
-                        android:textStyle="bold" />
+                        style="@style/panelValueEnd"
+                        android:text="@string/gnss_nd" />
                 </LinearLayout>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout17"
+                style="@style/panel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout16"
+                tools:visibility="gone">
+
+                <LinearLayout style="@style/panelHeader">
+
+                    <ImageView
+                        android:id="@+id/imageView15"
+                        style="@style/panelIcon"
+                        app:srcCompat="@drawable/icon_gnss_info" />
+
+                    <TextView
+                        android:id="@+id/textView22"
+                        style="@style/panelTitle"
+                        android:text="@string/gnss_geolocationInfo" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/panelRow">
+
+                    <TextView
+                        android:id="@+id/textView26"
+                        style="@style/panelValueStart"
+                        android:text="@string/gnss_latitude" />
+
+                    <TextView style="@style/panelValueMiddle" />
+
+                    <TextView
+                        android:id="@+id/gnss_textView_latitude"
+                        style="@style/panelValueEnd"
+                        android:text="@string/gnss_nd" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/panelRow">
+
+                    <TextView
+                        android:id="@+id/textView34"
+                        style="@style/panelValueStart"
+                        android:text="@string/gnss_longitude" />
+
+                    <TextView style="@style/panelValueMiddle" />
+
+                    <TextView
+                        android:id="@+id/gnss_textView_longitude"
+                        style="@style/panelValueEnd"
+                        android:text="@string/gnss_nd" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/panelRow">
+
+                    <TextView
+                        android:id="@+id/textView36"
+                        style="@style/panelValueStart"
+                        android:text="@string/gnss_altitude" />
+
+                    <TextView style="@style/panelValueMiddle" />
+
+                    <TextView
+                        android:id="@+id/gnss_textView_altitude"
+                        style="@style/panelValueEnd"
+                        android:text="@string/gnss_nd" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/panelRow">
+
+                    <TextView
+                        android:id="@+id/textView40"
+                        style="@style/panelValueStart"
+                        android:text="@string/gnss_NS" />
+
+                    <TextView style="@style/panelValueMiddle" />
+
+                    <TextView
+                        android:id="@+id/gnss_textView_NS"
+                        style="@style/panelValueEnd"
+                        android:text="@string/gnss_nd" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/panelRow">
+
+                    <TextView
+                        android:id="@+id/textView43"
+                        style="@style/panelValueStart"
+                        android:text="@string/gnss_EW" />
+
+                    <TextView style="@style/panelValueMiddle" />
+
+                    <TextView
+                        android:id="@+id/gnss_textView_EW_geoInfo"
+                        style="@style/panelValueEnd"
+                        android:text="@string/gnss_nd" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/panelRow">
+
+                    <TextView
+                        android:id="@+id/textView45"
+                        style="@style/panelValueStart"
+                        android:text="@string/gnss_fixQuality" />
+
+                    <TextView style="@style/panelValueMiddle" />
+
+                    <TextView
+                        android:id="@+id/gnss_textView_fixQuality"
+                        style="@style/panelValueEnd"
+                        android:text="@string/gnss_nd" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/panelRow">
+
+                    <TextView
+                        android:id="@+id/textView48"
+                        style="@style/panelValueStart"
+                        android:text="@string/gnss_hdop" />
+
+                    <TextView style="@style/panelValueMiddle" />
+
+                    <TextView
+                        android:id="@+id/gnss_textView_HDOP"
+                        style="@style/panelValueEnd"
+                        android:text="@string/gnss_nd" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/panelRow">
+
+                    <TextView
+                        android:id="@+id/textView50"
+                        style="@style/panelValueStart"
+                        android:text="@string/gnss_pdop" />
+
+                    <TextView style="@style/panelValueMiddle" />
+
+                    <TextView
+                        android:id="@+id/gnss_textView_PDOP"
+                        style="@style/panelValueEnd"
+                        android:text="@string/gnss_nd" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/panelRow">
+
+                    <TextView
+                        style="@style/panelValueStart"
+                        android:text="@string/gnss_vdop" />
+
+                    <TextView style="@style/panelValueMiddle" />
+
+                    <TextView
+                        android:id="@+id/gnss_textView_VDOP"
+                        style="@style/panelValueEnd"
+                        android:text="@string/gnss_nd" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/panelRow">
+
+                    <TextView
+                        style="@style/panelValueStart"
+                        android:text="@string/gnss_accurancy" />
+
+                    <TextView style="@style/panelValueMiddle" />
+
+                    <TextView
+                        android:id="@+id/gnss_textView_accuracy"
+                        style="@style/panelValueEnd"
+                        android:text="@string/gnss_nd" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/panelRow">
+
+                    <TextView
+                        style="@style/panelValueStart"
+                        android:text="@string/gnss_precision" />
+
+                    <TextView style="@style/panelValueMiddle" />
+
+                    <TextView
+                        android:id="@+id/gnss_textView_precision"
+                        style="@style/panelValueEnd"
+                        android:text="@string/gnss_nd" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout5"
+                style="@style/panel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout17"
+                tools:visibility="gone">
+
+                <LinearLayout style="@style/panelHeader">
+
+                    <ImageView
+                        android:id="@+id/imageView16"
+                        style="@style/panelIcon"
+                        app:srcCompat="@drawable/icon_gnss_info" />
+
+                    <TextView
+                        android:id="@+id/textView38"
+                        style="@style/panelTitle"
+                        android:text="@string/gnss_vtgInfo" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/panelRow">
+
+                    <TextView
+                        android:id="@+id/textView39"
+                        style="@style/panelValueStart"
+                        android:text="@string/gnss_trueDegrees" />
+
+                    <TextView style="@style/panelValueMiddle" />
+
+                    <TextView
+                        android:id="@+id/gnss_textView_trueDegrees"
+                        style="@style/panelValueEnd"
+                        android:text="@string/gnss_nd" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/panelRow">
+
+                    <TextView
+                        android:id="@+id/textView41"
+                        style="@style/panelValueStart"
+                        android:text="@string/gnss_magneticDegrees" />
+
+                    <TextView style="@style/panelValueMiddle" />
+
+                    <TextView
+                        android:id="@+id/gnss_textView_magneticDegrees"
+                        style="@style/panelValueEnd"
+                        android:text="@string/gnss_nd" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/panelRow">
+
+                    <TextView
+                        android:id="@+id/gnss_textView_speedKnotsVTGTitle"
+                        style="@style/panelValueStart"
+                        android:text="@string/gnss_speedKnots" />
+
+                    <TextView style="@style/panelValueMiddle" />
+
+                    <TextView
+                        android:id="@+id/gnss_textView_speedKnotsVTG"
+                        style="@style/panelValueEnd"
+                        android:text="@string/gnss_nd" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/panelRow">
+
+                    <TextView
+                        android:id="@+id/gnss_textView_speedKmhVTGTitle"
+                        style="@style/panelValueStart"
+                        android:text="@string/gnss_speedKmh" />
+
+                    <TextView style="@style/panelValueMiddle" />
+
+                    <TextView
+                        android:id="@+id/gnss_textView_speedKmhVTG"
+                        style="@style/panelValueEnd"
+                        android:text="@string/gnss_nd" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/linearLayout18"
+                style="@style/panel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout5"
+                tools:visibility="visible">
+
+                <LinearLayout style="@style/panelHeader">
+
+                    <ImageView
+                        android:id="@+id/imageView17"
+                        style="@style/panelIcon"
+                        app:srcCompat="@drawable/icon_gnss_info" />
+
+                    <TextView
+                        android:id="@+id/textView12"
+                        style="@style/panelTitle"
+                        android:text="@string/gnss_rmcInfo" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/panelRow">
+
+                    <TextView
+                        android:id="@+id/textView21"
+                        style="@style/panelValueStart"
+                        android:text="@string/gnss_magneticVariation" />
+
+                    <TextView style="@style/panelValueMiddle" />
+
+                    <TextView
+                        android:id="@+id/gnss_textView_magneticVariation"
+                        style="@style/panelValueEnd"
+                        android:text="@string/gnss_nd" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/panelRow">
+
+                    <TextView
+                        android:id="@+id/textView24"
+                        style="@style/panelValueStart"
+                        android:text="@string/gnss_EW" />
+
+                    <TextView style="@style/panelValueMiddle" />
+
+                    <TextView
+                        android:id="@+id/gnss_textView_EWRMC"
+                        style="@style/panelValueEnd"
+                        android:text="@string/gnss_nd" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/panelRow">
+
+                    <TextView
+                        android:id="@+id/textView32"
+                        style="@style/panelValueStart"
+                        android:text="@string/gnss_TrueNorthAngle" />
+
+                    <TextView style="@style/panelValueMiddle" />
+
+                    <TextView
+                        android:id="@+id/gnss_textView_trueNorthAngle"
+                        style="@style/panelValueEnd"
+                        android:text="@string/gnss_nd" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/panelRow">
+
+                    <TextView
+                        android:id="@+id/gnss_textView_speedKnotsTitle"
+                        style="@style/panelValueStart"
+                        android:text="@string/gnss_speedKnots" />
+
+                    <TextView style="@style/panelValueMiddle" />
+
+                    <TextView
+                        android:id="@+id/gnss_textView_speedKnotsRMC"
+                        style="@style/panelValueEnd"
+                        android:text="@string/gnss_nd" />
+                </LinearLayout>
+
+                <LinearLayout style="@style/panelRow">
+
+                    <TextView
+                        android:id="@+id/gnss_textView_speedKmhTitle"
+                        style="@style/panelValueStart"
+                        android:text="@string/gnss_speedKmh" />
+
+                    <TextView style="@style/panelValueMiddle" />
+
+                    <TextView
+                        android:id="@+id/gnss_textView_speedKmhRMC"
+                        style="@style/panelValueEnd"
+                        android:text="@string/gnss_nd" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/panel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:minHeight="400dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout18">
+
+                <LinearLayout style="@style/panelHeader">
+
+                    <ImageView
+                        style="@style/panelIcon"
+                        app:srcCompat="@drawable/icon_sat_info" />
+
+                    <TextView
+                        style="@style/panelTitle"
+                        android:text="@string/gnss_satellites" />
+
+                </LinearLayout>
+
+                <LinearLayout style="@style/panelRow">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <LinearLayout style="@style/gnss_satsPanel">
+
+                            <LinearLayout style="@style/panelRowMin">
+
+                                <TextView
+                                    style="@style/gnss_satsPanelTitle"
+                                    android:text="@string/gnss_galileoSats" />
+                            </LinearLayout>
+
+                            <LinearLayout style="@style/panelRowMin">
+
+                                <eu.foxcom.gtphotos.model.component.DynamicListView
+                                    android:id="@+id/gnss_listView_galileo"
+                                    style="@style/gnss_satsList" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <Space
+                            android:layout_width="match_parent"
+                            android:layout_height="8dp" />
+
+                        <LinearLayout style="@style/gnss_satsPanel">
+
+                            <LinearLayout style="@style/panelRowMin">
+
+                                <TextView
+                                    style="@style/gnss_satsPanelTitle"
+                                    android:text="@string/gnss_glonassSats" />
+                            </LinearLayout>
+
+                            <LinearLayout style="@style/panelRowMin">
+
+                                <eu.foxcom.gtphotos.model.component.DynamicListView
+                                    android:id="@+id/gnss_listView_glonass"
+                                    style="@style/gnss_satsList" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <Space
+                        android:layout_width="8dp"
+                        android:layout_height="match_parent" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <LinearLayout style="@style/gnss_satsPanel">
+
+                            <LinearLayout style="@style/panelRowMin">
+
+                                <TextView
+                                    style="@style/gnss_satsPanelTitle"
+                                    android:text="@string/gnss_gpsSats" />
+
+                            </LinearLayout>
+
+                            <LinearLayout style="@style/panelRowMin">
+
+                                <eu.foxcom.gtphotos.model.component.DynamicListView
+                                    android:id="@+id/gnss_listView_gps"
+                                    style="@style/gnss_satsList" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <Space
+                            android:layout_width="match_parent"
+                            android:layout_height="8dp" />
+
+                        <LinearLayout style="@style/gnss_satsPanel">
+
+                            <LinearLayout style="@style/panelRowMin">
+
+                                <TextView
+                                    style="@style/gnss_satsPanelTitle"
+                                    android:text="@string/gnss_beidouSats" />
+                            </LinearLayout>
+
+                            <LinearLayout style="@style/panelRowMin">
+
+                                <eu.foxcom.gtphotos.model.component.DynamicListView
+                                    android:id="@+id/gnss_listView_beidou"
+                                    style="@style/gnss_satsList" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
-</ScrollView>
+    <!-- Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu -->

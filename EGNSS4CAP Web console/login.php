@@ -23,4 +23,5 @@ if(isset($_SESSION['user_id'])) header('Location: ' . SYSTEM_HOST . '/index.php'
 $model = new login_model();
 $template = new login_view();
 echo $template->load_login_html_page(array());
+//Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
 ?>

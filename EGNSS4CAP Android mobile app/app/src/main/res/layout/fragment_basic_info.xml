@@ -6,213 +6,196 @@
     android:layout_height="match_parent"
     tools:context=".BasicInfoFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout4"
+    <LinearLayout
         style="@style/panel"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/linearLayout5"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="29dp">
+
+        <LinearLayout
+            style="@style/panelHeader"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView5"
+                style="@style/panelIcon"
+                android:src="@drawable/icon_basic_info" />
+
+            <TextView
+                android:id="@+id/textView65"
+                style="@style/panelTitle"
+                android:text="@string/bi_basicInfo" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/panelRow"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView83"
+                style="@style/panelValueStart"
+                android:text="@string/bi_deviceCondition" />
+
+            <TextView
+                android:id="@+id/textView127"
+                style="@style/panelValueMiddle" />
+
+            <ImageView
+                android:id="@+id/bi_imageView_deviceCondition"
+                style="@style/panelValueEnd"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/semaphor_red" />
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/textView5"
-            style="@style/panelTitle"
-            android:layout_width="0dp"
+            android:id="@+id/textView86"
+            style="@style/textNormal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/bi_basicInfo"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginTop="8dp"
+            android:background="@drawable/background_basic_info_note"
+            android:padding="10dp"
+            android:text="@string/bi_info"
+            android:textColor="@color/mainPrimary"
+            android:textSize="14sp" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            style="@style/panelContent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView5">
+        <LinearLayout
+            style="@style/panelRow"
+            android:orientation="horizontal">
 
-            <TableLayout
-                android:id="@+id/tableLayout6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+            <TextView
+                android:id="@+id/textView9"
+                style="@style/panelValueStart"
+                android:text="@string/bi_phoneManufacturer" />
 
-                <TableRow
-                    android:layout_marginBottom="5dp"
-                    android:gravity="center">
+            <TextView
+                android:id="@+id/textView128"
+                style="@style/panelValueMiddle" />
 
-                    <TextView
-                        android:id="@+id/textView83"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/bi_deviceCondition" />
+            <TextView
+                android:id="@+id/bi_textView_phoneManufacturer"
+                style="@style/panelValueEnd" />
+        </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/bi_imageView_deviceCondition"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:src="@drawable/point_red" />
-                </TableRow>
+        <LinearLayout
+            style="@style/panelRow"
+            android:orientation="horizontal">
 
-                <TableRow
-                    android:layout_width="263dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="5dp">
+            <TextView
+                android:id="@+id/textView23"
+                style="@style/panelValueStart"
+                android:text="@string/bi_phoneModel" />
 
-                    <TextView
-                        android:id="@+id/textView86"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:lines="2"
-                        android:text="@string/bi_info"
-                        android:textSize="12sp"
-                        android:textStyle="italic" />
-                </TableRow>
+            <TextView
+                android:id="@+id/textView129"
+                style="@style/panelValueMiddle" />
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="5dp">
+            <TextView
+                android:id="@+id/bi_textView_phoneModel"
+                style="@style/panelValueEnd" />
+        </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/textView9"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/bi_phoneManufacturer" />
+        <LinearLayout
+            style="@style/panelRow"
+            android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/bi_textView_phoneManufacturer"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAlignment="center" />
-                </TableRow>
+            <TextView
+                android:id="@+id/textView81"
+                style="@style/panelValueStart"
+                android:text="@string/bi_sensorCompassGyroscopeCheck" />
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="5dp">
+            <TextView
+                android:id="@+id/textView130"
+                style="@style/panelValueMiddle" />
 
-                    <TextView
-                        android:id="@+id/textView23"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/bi_phoneModel" />
+            <ImageView
+                android:id="@+id/bi_imageView_compassGyroscopeCheck"
+                style="@style/panelValueEnd"
+                android:src="@drawable/semaphor_yellow" />
+        </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/bi_textView_phoneModel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAlignment="center" />
-                </TableRow>
+        <LinearLayout
+            style="@style/panelRow"
+            android:orientation="horizontal">
 
-                <TableRow android:layout_marginBottom="5dp">
+            <TextView
+                android:id="@+id/textView25"
+                style="@style/panelValueStart"
+                android:text="@string/bi_galileoSignalCheck" />
 
-                    <TextView
-                        android:id="@+id/textView81"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/bi_sensorCompassGyroscopeCheck" />
+            <TextView
+                android:id="@+id/textView131"
+                style="@style/panelValueMiddle" />
 
-                    <ImageView
-                        android:id="@+id/bi_imageView_compassGyroscopeCheck"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/point_yellow" />
-                </TableRow>
+            <ImageView
+                android:id="@+id/bi_imageView_galileoSignalCheck"
+                style="@style/panelValueEnd"
+                app:srcCompat="@drawable/semaphor_yellow" />
+        </LinearLayout>
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="5dp">
+        <LinearLayout
+            style="@style/panelRow"
+            android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/textView25"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/bi_galileoSignalCheck" />
+            <TextView
+                android:id="@+id/textView27"
+                style="@style/panelValueStart"
+                android:text="@string/bi_dualFrequencySignalCheck" />
 
-                    <ImageView
-                        android:id="@+id/bi_imageView_galileoSignalCheck"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/point_yellow" />
-                </TableRow>
+            <TextView
+                android:id="@+id/textView132"
+                style="@style/panelValueMiddle" />
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="5dp">
+            <ImageView
+                android:id="@+id/bi_imageView_dualFrequencySignalCheck"
+                style="@style/panelValueEnd"
+                app:srcCompat="@drawable/semaphor_yellow" />
+        </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/textView27"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/bi_dualFrequencySignalCheck" />
+        <LinearLayout
+            style="@style/panelRow"
+            android:orientation="horizontal">
 
-                    <ImageView
-                        android:id="@+id/bi_imageView_dualFrequencySignalCheck"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/point_yellow" />
+            <TextView
+                android:id="@+id/textView29"
+                style="@style/panelValueStart"
+                android:text="@string/bi_EGNOSSignalCheck" />
 
-                </TableRow>
+            <TextView
+                android:id="@+id/textView133"
+                style="@style/panelValueMiddle" />
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="5dp">
+            <ImageView
+                android:id="@+id/bi_imageView_egnosSignalCheck"
+                style="@style/panelValueEnd"
+                app:srcCompat="@drawable/semaphor_yellow" />
+        </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/textView29"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/bi_EGNOSSignalCheck" />
+        <LinearLayout
+            style="@style/panelRow"
+            android:nestedScrollingEnabled="true"
+            android:orientation="horizontal">
 
-                    <ImageView
-                        android:id="@+id/bi_imageView_egnosSignalCheck"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/point_yellow" />
+            <TextView
+                android:id="@+id/textView31"
+                style="@style/panelValueStart"
+                android:text="@string/bi_galileoNavigationMessageSignalCheck" />
 
-                </TableRow>
+            <TextView
+                android:id="@+id/textView134"
+                style="@style/panelValueMiddle" />
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="5dp">
-
-                    <TextView
-                        android:id="@+id/textView31"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/bi_galileoNavigationMessageSignalCheck" />
-
-                    <ImageView
-                        android:id="@+id/bi_imageView_galileoNavigationMessageSignalCheck"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/point_yellow" />
-
-                </TableRow>
-            </TableLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageView
+                android:id="@+id/bi_imageView_galileoNavigationMessageSignalCheck"
+                style="@style/panelValueEnd"
+                app:srcCompat="@drawable/semaphor_yellow" />
+        </LinearLayout>
+    </LinearLayout>
 
 </FrameLayout>
+
+    <!-- Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu -->

@@ -57,11 +57,71 @@ public abstract class AppDatabase extends RoomDatabase {
         }
     };
 
-    public static final int VERSION = 47;
+    public static final Migration MIGRATION_47_48 = new Migration(47, 48) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("alter table Photo add `efkLatGpsL1` REAL default null");
+            database.execSQL("alter table Photo add `efkLatGpsL5` REAL default null");
+            database.execSQL("alter table Photo add `efkLatGpsIf` REAL default null");
+            database.execSQL("alter table Photo add `efkLatGalE1` REAL default null");
+            database.execSQL("alter table Photo add `efkLatGalE5` REAL default null");
+            database.execSQL("alter table Photo add `efkLatGalIf` REAL default null");
+            database.execSQL("alter table Photo add `efkLngGpsL1` REAL default null");
+            database.execSQL("alter table Photo add `efkLngGpsL5` REAL default null");
+            database.execSQL("alter table Photo add `efkLngGpsIf` REAL default null");
+            database.execSQL("alter table Photo add `efkLngGalE1` REAL default null");
+            database.execSQL("alter table Photo add `efkLngGalE5` REAL default null");
+            database.execSQL("alter table Photo add `efkLngGalIf` REAL default null");
+            database.execSQL("alter table Photo add `efkAltGpsL1` REAL default null");
+            database.execSQL("alter table Photo add `efkAltGpsL5` REAL default null");
+            database.execSQL("alter table Photo add `efkAltGpsIf` REAL default null");
+            database.execSQL("alter table Photo add `efkAltGalE1` REAL default null");
+            database.execSQL("alter table Photo add `efkAltGalE5` REAL default null");
+            database.execSQL("alter table Photo add `efkAtlGalIf` REAL default null");
+            database.execSQL("alter table Photo add `efkTimeGpsL1` INTEGER default null");
+            database.execSQL("alter table Photo add `efkTimeGpsL5` INTEGER default null");
+            database.execSQL("alter table Photo add `efkTimeGpsIf` INTEGER default null");
+            database.execSQL("alter table Photo add `efkTimeGalE1` INTEGER default null");
+            database.execSQL("alter table Photo add `efkTimeGalE5` INTEGER default null");
+            database.execSQL("alter table Photo add `efkTimeGalIf` INTEGER default null");
+
+        }
+    };
+
+    public static final Migration MIGRATION_48_49 = new Migration(48, 49) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("alter table PTPath add `deviceManufacture` TEXT default null");
+            database.execSQL("alter table PTPath add `deviceModel` TEXT default null");
+            database.execSQL("alter table PTPath add `devicePlatform` TEXT default null");
+            database.execSQL("alter table PTPath add `deviceVersion` TEXT default null");
+
+            database.execSQL("alter table PTPoint add `altitude` REAL default null");
+            database.execSQL("alter table PTPoint add `accuracy` REAL default null");
+        }
+    };
+
+    public static final Migration MIGRATION_49_50 = new Migration(49, 50) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("alter table PTPath add `isUploadingOpened` INTEGER NOT NULL default 0");
+            database.execSQL("alter table PTPath add `isLastSendFailed` INTEGER NOT NULL default 0");
+        }
+    };
+
+    public static final Migration MIGRATION_50_51 = new Migration(50, 51) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("alter table Photo add `realId` INTEGER default null");
+            database.execSQL("CREATE UNIQUE INDEX `index_Photo_realId` ON `Photo` (`realId`)");
+        }
+    };
+
+    public static final int VERSION = 51;
 
     public static AppDatabase build(Context applicationContext) {
         return Room.databaseBuilder(applicationContext, AppDatabase.class, "database-name").allowMainThreadQueries().
-                addMigrations(MIGRATION_42_43, MIGRATION_43_44, MIGRATION_44_45, MIGRATION_45_46, MIGRATION_46_47)
+                addMigrations(MIGRATION_42_43, MIGRATION_43_44, MIGRATION_44_45, MIGRATION_45_46, MIGRATION_46_47, MIGRATION_47_48, MIGRATION_48_49, MIGRATION_49_50, MIGRATION_50_51)
                 .build();
     }
 
@@ -73,3 +133,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract PTDao PTDao();
 }
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

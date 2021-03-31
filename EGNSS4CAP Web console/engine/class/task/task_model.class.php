@@ -60,14 +60,19 @@ class task_model{
     return $tasks_sql->fetchAll();
   }
 
-  public function load_task_photos($task_id){
-    $photos_sql = dibi::select('id, path, file_name, lat, lng, note, altitude, bearing, photo_heading as azimuth, photo_angle, roll, pitch, orientation, horizontal_view_angle as hvangle, vertical_view_angle as vvangle, accuracy, concat(device_manufacture, " - ", device_model, " - ", device_platform, " - ", device_version) as device, sats_info, nmea_msg, network_info, distance, date_format(timestamp, "%Y-%m-%d %H:%i:%s") as timestamp, date_format(created, "%Y-%m-%d %H:%i:%s") as created_date, rotation_correction as rotation, flg_checked_location, flg_original')
-    ->from('photo')->where('task_id = %i', $task_id)->where('flg_deleted = 0')->orderBy('timestamp');
+  public function load_task_photos($task_id, $photos = array()){
+    $photos_sql = dibi::select('id, path, file_name, lat, lng, note, altitude, bearing, photo_heading as azimuth, photo_angle, roll, pitch, orientation, horizontal_view_angle as hvangle, vertical_view_angle as vvangle, accuracy, concat(device_manufacture, " - ", device_model, " - ", device_platform, " - ", device_version) as device, sats_info, nmea_msg, network_info, distance, nmea_distance, date_format(timestamp, "%Y-%m-%d %H:%i:%s") as timestamp, date_format(created, "%Y-%m-%d %H:%i:%s") as created_date, rotation_correction as rotation, flg_checked_location, flg_original, efkLatGpsL1, efkLngGpsL1, efkAltGpsL1, date_format(efkTimeGpsL1, "%Y-%m-%d %H:%i:%s") as efkTimeGpsL1, efkLatGpsL5, efkLngGpsL5, efkAltGpsL5, date_format(efkTimeGpsL5, "%Y-%m-%d %H:%i:%s") as efkTimeGpsL5, efkLatGpsIf, efkLngGpsIf, efkAltGpsIf, date_format(efkTimeGpsIf, "%Y-%m-%d %H:%i:%s") as efkTimeGpsIf, efkLatGalE1, efkLngGalE1, efkAltGalE1, date_format(efkTimeGalE1, "%Y-%m-%d %H:%i:%s") as efkTimeGalE1, efkLatGalE5, efkLngGalE5, efkAltGalE5, date_format(efkTimeGalE5, "%Y-%m-%d %H:%i:%s") as efkTimeGalE5, efkLatGalIf, efkLngGalIf, efkAltGalIf, date_format(efkTimeGalIf, "%Y-%m-%d %H:%i:%s") as efkTimeGalIf')
+    ->from('photo')->where('task_id = %i', $task_id)
+    ->where('flg_deleted = 0');
+    if (!empty($photos)){
+      $photos_sql->where('id IN %in', $photos);
+    }
+    $photos_sql->orderBy('timestamp');
     return $photos_sql->fetchAll();
   }
 
   public function load_single_photo($photo_id){
-    $photos_sql = dibi::select('path, file_name, lat, lng, note, altitude, bearing, photo_heading as azimuth, photo_angle, roll, pitch, orientation, horizontal_view_angle as hvangle, vertical_view_angle as vvangle, accuracy, concat(device_manufacture, " - ", device_model, " - ", device_platform, " - ", device_version) as device, sats_info, nmea_msg, network_info, distance, date_format(timestamp, "%Y-%m-%d %H:%i:%s") as timestamp, date_format(created, "%Y-%m-%d %H:%i:%s") as created_date, rotation_correction as rotation, flg_checked_location, flg_original')
+    $photos_sql = dibi::select('path, file_name, lat, lng, note, altitude, bearing, photo_heading as azimuth, photo_angle, roll, pitch, orientation, horizontal_view_angle as hvangle, vertical_view_angle as vvangle, accuracy, concat(device_manufacture, " - ", device_model, " - ", device_platform, " - ", device_version) as device, sats_info, nmea_msg, network_info, distance, nmea_distance, date_format(timestamp, "%Y-%m-%d %H:%i:%s") as timestamp, date_format(created, "%Y-%m-%d %H:%i:%s") as created_date, rotation_correction as rotation, flg_checked_location, flg_original, efkLatGpsL1, efkLngGpsL1, efkAltGpsL1, date_format(efkTimeGpsL1, "%Y-%m-%d %H:%i:%s") as efkTimeGpsL1, efkLatGpsL5, efkLngGpsL5, efkAltGpsL5, date_format(efkTimeGpsL5, "%Y-%m-%d %H:%i:%s") as efkTimeGpsL5, efkLatGpsIf, efkLngGpsIf, efkAltGpsIf, date_format(efkTimeGpsIf, "%Y-%m-%d %H:%i:%s") as efkTimeGpsIf, efkLatGalE1, efkLngGalE1, efkAltGalE1, date_format(efkTimeGalE1, "%Y-%m-%d %H:%i:%s") as efkTimeGalE1, efkLatGalE5, efkLngGalE5, efkAltGalE5, date_format(efkTimeGalE5, "%Y-%m-%d %H:%i:%s") as efkTimeGalE5, efkLatGalIf, efkLngGalIf, efkAltGalIf, date_format(efkTimeGalIf, "%Y-%m-%d %H:%i:%s") as efkTimeGalIf')
     ->from('photo')->where('id = %i', $photo_id)->where('flg_deleted = 0');
     return $photos_sql->fetchAll();
   }
@@ -181,7 +186,7 @@ class task_model{
 
   public function get_tasks_gps($search, $filter_type, $spec_ids=''){
     if($filter_type == self::FILTER_TASKS_DETAIL){
-      return $this->get_all_task_gps($search);
+      return $this->get_all_task_gps($search, $spec_ids);
     } else if ($filter_type == self::FILTER_USERS_GALLERY){
       if (!empty($search)){
         return $this->get_all_users_unassigned_gps($search, $spec_ids);
@@ -224,8 +229,13 @@ class task_model{
     return $polygons;
   }
 
-  private function get_all_task_gps($task_id){
-    return dibi::select('p.lat, p.lng, p.task_id, p.id as photo_id, t.status, flg.flag_id')->from('photo p')->leftJoin('task_flag flg')->on('flg.task_id = p.task_id')->join('task t')->on('t.id = p.task_id')->where('p.task_id = %i', $task_id)->where('p.flg_deleted = 0')->fetchAll();
+  private function get_all_task_gps($task_id, $spec_ids=""){
+    if (!empty($spec_ids)){
+      return dibi::select('p.lat, p.lng, p.task_id, p.id as photo_id, t.status, flg.flag_id')
+      ->from('photo p')->leftJoin('task_flag flg')->on('flg.task_id = p.task_id')->join('task t')->on('t.id = p.task_id')->where('p.task_id = %i', $task_id)->where('p.id in (%sql)',$spec_ids)->where('p.flg_deleted = 0')->fetchAll();
+    } else {
+      return dibi::select('p.lat, p.lng, p.task_id, p.id as photo_id, t.status, flg.flag_id')->from('photo p')->leftJoin('task_flag flg')->on('flg.task_id = p.task_id')->join('task t')->on('t.id = p.task_id')->where('p.task_id = %i', $task_id)->where('p.flg_deleted = 0')->fetchAll();
+    }
   }
 
   private function get_all_users_unassigned_gps($user_id, $spec_ids=''){
@@ -335,5 +345,5 @@ class task_model{
     return $return;
   }
 }
-
+//Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
 ?>

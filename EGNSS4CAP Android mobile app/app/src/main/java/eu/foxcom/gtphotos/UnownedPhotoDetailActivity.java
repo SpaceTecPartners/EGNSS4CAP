@@ -3,13 +3,17 @@ package eu.foxcom.gtphotos;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -20,7 +24,9 @@ import java.text.DecimalFormat;
 
 import eu.foxcom.gtphotos.model.AppDatabase;
 import eu.foxcom.gtphotos.model.LoggedUser;
+import eu.foxcom.gtphotos.model.MyAlertDialog;
 import eu.foxcom.gtphotos.model.Photo;
+import eu.foxcom.gtphotos.model.PhotoList;
 import eu.foxcom.gtphotos.model.Task;
 import eu.foxcom.gtphotos.model.Util;
 import eu.foxcom.gtphotos.model.functionInterface.Consumer;
@@ -36,10 +42,21 @@ public class UnownedPhotoDetailActivity extends BaseActivity {
     private boolean isPhotoDataChanged = false;
     private boolean isNewPhoto = false;
 
+    private UnownedPhotoDetailViewModel unownedPhotoDetailViewModel;
+    private boolean isNoteDialogShown = false;
+    private TextInputEditText noteTextInputEditText = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_detail);
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            setToolbar(R.id.toolbar);
+        } else {
+            this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
+
+        unownedPhotoDetailViewModel = new ViewModelProvider(this).get(UnownedPhotoDetailViewModel.class);
     }
 
     @Override
@@ -48,7 +65,10 @@ public class UnownedPhotoDetailActivity extends BaseActivity {
 
         if (!intentActionStart()) {
             finish();
+            return;
         }
+
+        loadRuntimeDialogNote();
     }
 
     private boolean intentActionStart() {
@@ -64,11 +84,10 @@ public class UnownedPhotoDetailActivity extends BaseActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (isPhotoDataChanged || isNewPhoto) {
-            goToOverView();
-        }
+    protected void onStop() {
+        super.onStop();
+
+        saveRuntimeDialogNote();
     }
 
     private void loadPhoto(long id, boolean isNewPhoto) {
@@ -118,16 +137,17 @@ public class UnownedPhotoDetailActivity extends BaseActivity {
         if (!serviceController.isServiceInitialized()) {
             return;
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.pd_deleteDialogTitle);
-        builder.setMessage(R.string.pd_deleteDialogText);
-        builder.setNegativeButton(R.string.dl_Cancel, (dialog, which) -> {
+        MyAlertDialog.Builder builder = new MyAlertDialog.Builder(this);
+        MyAlertDialog myAlertDialog = builder.build();
+        myAlertDialog.setTitle(getString(R.string.pd_deleteDialogTitle));
+        myAlertDialog.setMessage(getString(R.string.pd_deleteDialogText));
+        myAlertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.dl_Cancel), (dialog, which) -> {
 
         });
-        builder.setPositiveButton(R.string.dl_OK, (dialog, which) -> {
+        myAlertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.dl_OK), (dialog, which) -> {
             deletePhotoDialog();
         });
-        builder.create().show();
+        myAlertDialog.show();
     }
 
     private void deletePhotoDialog() {
@@ -136,22 +156,24 @@ public class UnownedPhotoDetailActivity extends BaseActivity {
     }
 
     public void uploadPhotoDialog(View view) {
-        if (!serviceController.isServiceInitialized() ||!photo.isSendable()) {
+        if (!serviceController.isServiceInitialized() || !photo.isSendable()) {
             return;
         }
-        // zkratka pro uzamčenou fotografii
+        // shortcut for locked photo
         if (!photo.isEditable() && photo.isSendable()) {
             uploadPhoto();
             return;
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.pd_sendDialogTitle);
-        builder.setMessage(R.string.pd_sendDialogText);
-        builder.setNegativeButton(R.string.dl_Cancel, (dialog, which) -> {});
-        builder.setPositiveButton(R.string.dl_OK, (dialog, which) -> {
-           uploadPhoto();
+        MyAlertDialog.Builder builder = new MyAlertDialog.Builder(this);
+        MyAlertDialog myAlertDialog = builder.build();
+        myAlertDialog.setTitle(getString(R.string.pd_sendDialogTitle));
+        myAlertDialog.setMessage(getString(R.string.pd_sendDialogText));
+        myAlertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.dl_Cancel), (dialog, which) -> {
         });
-        builder.create().show();
+        myAlertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.dl_OK), (dialog, which) -> {
+            uploadPhoto();
+        });
+        myAlertDialog.show();
     }
 
     private void uploadPhoto() {
@@ -162,8 +184,8 @@ public class UnownedPhotoDetailActivity extends BaseActivity {
             photo.setLastSendFailed(true);
             photo.refreshToDB(MS.getAppDatabase());
             if (isCreated) {
-                AlertDialog failedDialog = alertBuild(getString(R.string.pd_errorUploadPhotoTitle), getString(R.string.pd_errorUploadPhotoText, errorString));
-                failedDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                MyAlertDialog failedDialog = alertBuild(getString(R.string.pd_errorUploadPhotoTitle), getString(R.string.pd_errorUploadPhotoText, errorString));
+                failedDialog.getAlertDialog().setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         restartActivity();
@@ -199,11 +221,22 @@ public class UnownedPhotoDetailActivity extends BaseActivity {
                 protected void finish(boolean success) {
 
                 }
-            }, MS.getRequestor());
+            }, MS.getRequestor(), PhotoList.createFromUnassignedPhoto(MS.getAppDatabase(), this, photo));
 
         } catch (JSONException e) {
             failedProcess.accept(e.getMessage());
         }
+    }
+
+    private void refreshUnownedPhotoOverview() {
+        if (!serviceController.isServiceInitialized()) {
+            return;
+        }
+        Intent intent = MS.createBroadcastExplicitIntent(UnownedPhotoOverviewActivity.class, UnownedPhotoOverviewActivity.BROADCAST_ACTION.REFRESH_PHOTOS.name());
+        if (isNewPhoto) {
+            intent.putExtra(UnownedPhotoOverviewActivity.BROADCAST_REFRESH_PHOTOS.SCROLL_TOP.name(), true);
+        }
+        MS.sendBroadcastMessage(intent);
     }
 
     private void goToOverView() {
@@ -217,21 +250,7 @@ public class UnownedPhotoDetailActivity extends BaseActivity {
     }
 
     public void noteDialog(View view) {
-        if (photo == null) {
-            return;
-        }
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = getLayoutInflater();
-        View noteView = inflater.inflate(R.layout.photo_note_dialog, null);
-        TextInputEditText noteEditText = noteView.findViewById(R.id.pd_textInputEditText_note);
-        noteEditText.setText(photo.getNote());
-        builder.setView(noteView);
-        builder.setNegativeButton(R.string.dl_Cancel, null);
-        builder.setPositiveButton(R.string.dl_OK, (dialog, which) -> {
-            AlertDialog alertDialog = (AlertDialog) dialog;
-            noteSave(noteEditText.getText().toString());
-        });
-        builder.create().show();
+        noteDialog((String) null);
     }
 
     private void noteSave(String note) {
@@ -240,12 +259,60 @@ public class UnownedPhotoDetailActivity extends BaseActivity {
         TextView noteTextView = findViewById(R.id.pd_textView_note);
         noteTextView.setText(note);
         isPhotoDataChanged = true;
+        refreshUnownedPhotoOverview();
+    }
+
+    private void noteDialog(String note) {
+        if (photo == null) {
+            return;
+        }
+        MyAlertDialog.Builder builder = new MyAlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View noteView = inflater.inflate(R.layout.photo_note_dialog, null);
+        TextInputEditText noteEditText = noteView.findViewById(R.id.pd_textInputEditText_note);
+        if (note == null) {
+            note = photo.getNote();
+        }
+        noteEditText.setText(note);
+        MyAlertDialog myAlertDialog = builder.build();
+        myAlertDialog.setCustomView(noteView);
+        myAlertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.dl_Cancel), null);
+        myAlertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.dl_OK), (dialog, which) -> {
+            noteSave(noteEditText.getText().toString());
+        });
+        myAlertDialog.getAlertDialog().setOnDismissListener(dialog -> {
+            noteTextInputEditText = null;
+            isNoteDialogShown = false;
+        });
+        myAlertDialog.show();
+        isNoteDialogShown = true;
+        noteTextInputEditText = noteEditText;
+    }
+
+    private void saveRuntimeDialogNote() {
+        if (isNoteDialogShown && noteTextInputEditText != null) {
+            unownedPhotoDetailViewModel.setLastNoteDialogShown(true);
+            unownedPhotoDetailViewModel.setDialogNote(noteTextInputEditText.getText().toString());
+        } else {
+            unownedPhotoDetailViewModel.setLastNoteDialogShown(false);
+        }
+    }
+
+    private void loadRuntimeDialogNote() {
+        if (unownedPhotoDetailViewModel.isLastNoteDialogShown() && isRunning) {
+            noteDialog(unownedPhotoDetailViewModel.getDialogNote());
+        }
     }
 
     private void initAlerts() {
-        // upozornění na mezistav uzamčení
+        // alert for lock status
         if (!photo.isEditable() && photo.isSendable()) {
             alert(getString(R.string.pd_lockedPhotoTitle), getString(R.string.pd_lockedPhotoText));
         }
     }
 }
+
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

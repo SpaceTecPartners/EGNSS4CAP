@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UnownedPhotoDetailActivity">
+
+
+    <ImageView
+        android:id="@+id/pd_imageView_photo"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.514"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <ImageButton
+        android:id="@+id/pd_imageButton_delete"
+        style="@style/buttonImage"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="@dimen/gn_screenMargin"
+        android:layout_marginBottom="@dimen/gn_screenMargin"
+        android:background="@drawable/background_button_white_r22"
+        android:onClick="deletePhotoDialog"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/icon_button_trash" />
+
+    <ImageButton
+        android:id="@+id/pd_imageButton_note"
+        style="@style/buttonImage"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="@dimen/gn_screenMargin"
+        android:layout_marginBottom="@dimen/gn_screenMargin"
+        android:background="@drawable/background_button_white_r22"
+        android:onClick="noteDialog"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/pd_imageButton_delete"
+        app:srcCompat="@drawable/icon_pencil" />
+
+    <Button
+        android:id="@+id/pd_imageButton_upload"
+        style="@style/buttonTextWhite"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginEnd="@dimen/gn_screenMargin"
+        android:layout_marginBottom="@dimen/gn_screenMargin"
+        android:background="@drawable/background_button_white_r22"
+        android:onClick="uploadPhotoDialog"
+        android:text="@string/pd_sendButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/pd_imageButton_note" />
+
+    <LinearLayout
+        style="@style/panelMin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="18dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout style="@style/panelRowMin">
+
+            <TextView
+                android:id="@+id/textView6"
+                style="@style/panelValueStartMin"
+                android:text="@string/pd_latitude" />
+
+            <TextView style="@style/panelValueMiddle" />
+
+            <TextView
+                android:id="@+id/pd_textView_latitude"
+                style="@style/panelValueEndMin" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/panelRowMin">
+
+            <TextView
+                android:id="@+id/textView57"
+                style="@style/panelValueStartMin"
+                android:text="@string/pd_longitude" />
+
+            <TextView style="@style/panelValueMiddle" />
+
+            <TextView
+                android:id="@+id/pd_textView_longitude"
+                style="@style/panelValueEndMin" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/panelRowMin">
+
+            <TextView
+                android:id="@+id/textView63"
+                style="@style/panelValueStartMin"
+                android:text="@string/pd_created" />
+
+            <TextView style="@style/panelValueMiddle" />
+
+            <TextView
+                android:id="@+id/pd_textView_created"
+                style="@style/panelValueEndMin" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/panelRowMin">
+
+            <TextView
+                android:id="@+id/textView64"
+                style="@style/panelValueStartMin"
+                android:text="@string/pd_sended" />
+
+            <TextView style="@style/panelValueMiddle" />
+
+            <TextView
+                android:id="@+id/pd_textView_sent"
+                style="@style/panelValueEndMin" />
+        </LinearLayout>
+
+        <LinearLayout style="@style/panelRowMin">
+
+            <TextView
+                android:id="@+id/textView76"
+                style="@style/panelValueStartMin"
+                android:text="@string/pd_note" />
+
+            <TextView style="@style/panelValueMiddle" />
+
+            <TextView
+                android:id="@+id/pd_textView_note"
+                style="@style/panelValueEndMin" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu -->

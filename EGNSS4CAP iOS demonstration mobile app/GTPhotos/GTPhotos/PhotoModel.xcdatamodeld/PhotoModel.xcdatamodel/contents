@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17709" systemVersion="20C69" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17709" systemVersion="20D91" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="PersistPhoto" representedClassName="PersistPhoto" syncable="YES" codeGenerationType="category">
         <attribute name="accuracy" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="altitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -18,7 +18,19 @@
         <attribute name="pitch" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="roll" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="sended" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="taskid" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="tilt" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="userid" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="PersistTask" representedClassName="PersistTask" syncable="YES" codeGenerationType="category">
+        <attribute name="date_created" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="note" optional="YES" attributeType="String"/>
+        <attribute name="status" optional="YES" attributeType="String"/>
+        <attribute name="task_due_date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="text" optional="YES" attributeType="String"/>
+        <attribute name="text_returned" optional="YES" attributeType="String"/>
         <attribute name="userid" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
     <entity name="PTPath" representedClassName="PTPath" syncable="YES" codeGenerationType="category">
@@ -37,7 +49,8 @@
         <relationship name="path" maxCount="1" deletionRule="Deny" destinationEntity="PTPath" inverseName="points" inverseEntity="PTPath"/>
     </entity>
     <elements>
-        <element name="PersistPhoto" positionX="-111.4296875" positionY="-165.80078125" width="128" height="328"/>
+        <element name="PersistPhoto" positionX="-111.4296875" positionY="-165.80078125" width="128" height="329"/>
+        <element name="PersistTask" positionX="90" positionY="-18" width="128" height="164"/>
         <element name="PTPath" positionX="329.01171875" positionY="-155.203125" width="128" height="134"/>
         <element name="PTPoint" positionX="114.34375" positionY="-150.58203125" width="113.328125" height="103"/>
     </elements>

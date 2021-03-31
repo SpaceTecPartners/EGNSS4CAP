@@ -86,7 +86,7 @@ class index_action_router extends \action_router{
           "photos"=>$gallery,
           "user_id"=>$params['id'],
           "ret_url" => "index.php?act=agency_user_tasks_list&id=".$params['id'],
-          "pdf_url" => "pdf_export.php?user_id=".$params['id']."&task_id=0"
+          "pdf_url" => "pdf_export.php?act=prepare&user_id=".$params['id']."&task_id=0"
         );
       }
       echo $template->load_index_gallery_unassigned_html_page($template_variables);
@@ -101,6 +101,7 @@ class index_action_router extends \action_router{
       $template_variables = array(
         "agency"=>user_model::is_agency(),
         "paths"=>$paths,
+        "show_visible_checkbox"=>(count($paths)>1?true:false),
         "user_id"=>$params['id'],
         "ret_url" => "index.php?act=agency_user_tasks_list&id=".$params['id']
       );
@@ -181,7 +182,7 @@ class index_action_router extends \action_router{
   }
 
   protected function load_task_table($params){
-    if(isset($params['id'])){ //pro oficera
+    if(isset($params['id'])){ //for oficera
       $model = new index_model(user_model::OFFICER_ROLE);
       $search = (isset($_SESSION['task_list_filter']['search'])?$_SESSION['task_list_filter']['search']:'');
       if (isset($params['search'])){
@@ -209,7 +210,7 @@ class index_action_router extends \action_router{
         $search = $params['search'];
         $_SESSION['task_list_filter']['search'] = $search;
       }
-      $farmers_tasks = $model->load_farmers_task_list(0, 0, $search); //nuly jsou default parametry
+      $farmers_tasks = $model->load_farmers_task_list(0, 0, $search); //0 is default
       $status_texts = task_model::get_statuses_texts();
       $template = new index_view();
       $template_variables = array(
@@ -273,7 +274,7 @@ class index_action_router extends \action_router{
       $sort = $_POST['sort'];
       if ($sort == 'reset'){
           unset($_SESSION[$params['page'].'_sort']);
-          index_model::setDefaultListFilter(false);//unset($_SESSION[$params['page'].'_filter']);
+          index_model::setDefaultListFilter(false, $params['page']);//unset($_SESSION[$params['page'].'_filter']);
           switch ($params['page']) {
             case 'task_list':
               $_SESSION[$params['page'].'_sort']['sort.sortorder']='ASC';
@@ -383,4 +384,5 @@ class index_action_router extends \action_router{
     exit;
   }
 }
+//Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
 ?>

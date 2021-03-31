@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -25,14 +27,18 @@ import com.google.maps.android.collections.PolylineManager;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.List;
+import java.util.Locale;
 
 import eu.foxcom.gtphotos.R;
+import eu.foxcom.gtphotos.model.AppDatabase;
 import eu.foxcom.gtphotos.model.Util;
 
 class PTDrawer {
 
     private static final int CAMERA_PADDING = 100;
+    private static final int CAMERA_MIN_ZOOM = 16;
 
     private PTManager ptManager;
 
@@ -46,6 +52,7 @@ class PTDrawer {
 
     private DecimalFormat coordinateFormat;
     private DateTimeFormatter dateTimeFormatter;
+    private DecimalFormat decimalFormat0;
 
     public PTDrawer(PTManager ptManager){
         this.ptManager = ptManager;
@@ -55,6 +62,8 @@ class PTDrawer {
 
         coordinateFormat = Util.createPrettyCoordinateFormat();
         dateTimeFormatter = Util.createPrettyDateTimeFormat();
+        decimalFormat0 = new DecimalFormat("#");
+        decimalFormat0.setDecimalFormatSymbols(new DecimalFormatSymbols(Locale.ENGLISH));
 
         markerCollection.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
             @Override
@@ -65,12 +74,17 @@ class PTDrawer {
             @Override
             public View getInfoContents(Marker marker) {
                 PTPoint ptPoint = (PTPoint) marker.getTag();
-                LayoutInflater inflater = ptManager.ptMapActivity.getAppCompatActivity().getLayoutInflater();
+                AppCompatActivity appCompatActivity = ptManager.ptMapActivity.getAppCompatActivity();
+                LayoutInflater inflater = appCompatActivity.getLayoutInflater();
                 View view = inflater.inflate(R.layout.info_map_pt_point, null, false);
                 TextView latitudeTextView = view.findViewById(R.id.pt_textView_infoPointLat);
                 latitudeTextView.setText(coordinateFormat.format(ptPoint.getLatitude()));
                 TextView longitudeTextView = view.findViewById(R.id.pt_textView_infoPointLng);
                 longitudeTextView.setText(coordinateFormat.format(ptPoint.getLongitude()));
+                TextView altitudeTextView = view.findViewById(R.id.pt_textView_infoPointAltitude);
+                altitudeTextView.setText(ptPoint.getAltitude() == null ? appCompatActivity.getString(R.string.gn_unavailable) : decimalFormat0.format(ptPoint.getAltitude()));
+                TextView accuracyTextView = view.findViewById(R.id.pt_textView_infoPointAccuracy);
+                accuracyTextView.setText(ptPoint.getAccuracy() == null ? appCompatActivity.getString(R.string.gn_unavailable)  : decimalFormat0.format(ptPoint.getAccuracy()));
                 TextView orderTextView = view.findViewById(R.id.pt_textView_infoPointOrder);
                 orderTextView.setText(String.valueOf(ptPoint.getIndex() + 1));
                 TextView createdTextView = view.findViewById(R.id.pt_textView_infoPointCreated);
@@ -99,6 +113,20 @@ class PTDrawer {
             addMarker(ptPoint);
         }
         lastPoint = ptPath.getPoints().get(n - 1);
+        return true;
+    }
+
+    // reload bez vykreslení
+    boolean reloadCurrentPathData(AppDatabase appDatabase) {
+        if (currentPtPath == null) {
+            return false;
+        }
+        PTPath ptPath = PTPath.createFromAppDatabase(appDatabase, currentPtPath.getAutoId());
+        if (ptPath == null) {
+            currentPtPath = null;
+            return false;
+        }
+        currentPtPath = ptPath;
         return true;
     }
 
@@ -143,30 +171,41 @@ class PTDrawer {
         });
     }
 
-    private void drawCurrentPathInfo() {
+    void drawCurrentPathInfo() {
         lazyLoadCurrentPathInfoLayout();
         currentPathInfoView.setVisibility(View.VISIBLE);
-        TextView idTextView = currentPathInfoView.findViewById(R.id.pt_textView_infoCurPathId);
-        TextView infoTitle = currentPathInfoView.findViewById(R.id.pt_textView_infoCurTitle);
+        TextView idTextView = currentPathInfoView.findViewById(R.id.pt_textView_PTinfoCurPathId);
+        TextView infoTitle = currentPathInfoView.findViewById(R.id.pt_textView_PTinfoCurTitle);
         ptManager.isTrackingDisposable(isTracking -> infoTitle.setText(isTracking ? R.string.pt_infoCurPathTitleRecording : R.string.pt_infoCurPathTitleShown));
-        TextView centroidsNoteTextView = currentPathInfoView.findViewById(R.id.pt_textView_infoCurPathCentroidsNote);
+        TextView centroidsNoteTextView = currentPathInfoView.findViewById(R.id.pt_textView_PTinfoCurPathCentroidsNote);
         if (currentPtPath.isByCentroids()) {
             centroidsNoteTextView.setVisibility(View.VISIBLE);
         } else {
             centroidsNoteTextView.setVisibility(View.GONE);
         }
+        drawPathInfoPauseState(ptManager.isPause() == null ? false : ptManager.isPause());
         if (currentPtPath.isSent()) {
             idTextView.setText(String.valueOf(currentPtPath.getRealId()));
-            idTextView.setTypeface(idTextView.getTypeface(), Typeface.NORMAL);
+            idTextView.setTypeface(null, Typeface.NORMAL);
         } else {
             idTextView.setText(ptManager.ptMapActivity.getAppCompatActivity().getString(R.string.pt_notSent));
-            idTextView.setTypeface(idTextView.getTypeface(), Typeface.ITALIC);
+            idTextView.setTypeface(null, Typeface.ITALIC);
         }
         String name = currentPtPath.getName();
         if (name != null) {
-            TextView nameTextView = currentPathInfoView.findViewById(R.id.pt_textView_infoCurPathName);
+            TextView nameTextView = currentPathInfoView.findViewById(R.id.pt_textView_PTinfoCurPathName);
             nameTextView.setText(name);
         }
+    }
+
+    void drawPathInfoPauseState(boolean isPause) {
+        ptManager.isTrackingDisposable(isTracking -> {
+            if (currentPathInfoView == null) {
+                return;
+            }
+            TextView pauseTextView = currentPathInfoView.findViewById(R.id.pt_textView_PTinfoCurPathPause);
+            pauseTextView.setVisibility(isPause && isTracking ? View.VISIBLE : View.GONE);
+        });
     }
 
     private void hideCurrentPathInfo() {
@@ -180,9 +219,9 @@ class PTDrawer {
         }
         GoogleMap map = ptManager.ptMapActivity.getGoogleMap();
         float zoom = map.getCameraPosition().zoom;
-        zoom = zoom < 16 ? 16 : zoom;
+        zoom = zoom < CAMERA_MIN_ZOOM ? CAMERA_MIN_ZOOM : zoom;
         CameraPosition  cameraPosition = new CameraPosition.Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(zoom).build();
-        map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        ptManager.ptMapActivity.requestAnimatePTOnPoint(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
     void centralizeToPath(PTPath ptPath) {
@@ -194,7 +233,7 @@ class PTDrawer {
             builder.include(new LatLng(ptPoint.getLatitude(), ptPoint.getLongitude()));
         }
         LatLngBounds latLngBounds = builder.build();
-        ptManager.ptMapActivity.getGoogleMap().animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, CAMERA_PADDING));
+        ptManager.ptMapActivity.requestAnimatePTOnPath(CameraUpdateFactory.newLatLngBounds(latLngBounds, CAMERA_PADDING));
     }
 
     void addPointToPath(PTPoint ptPoint) {
@@ -212,6 +251,7 @@ class PTDrawer {
         markerCollection.clear();
         polylineCollection.clear();
         polygonCollection.clear();
+        currentPtPath = null;
         lastPoint = null;
         hideCurrentPathInfo();
     }

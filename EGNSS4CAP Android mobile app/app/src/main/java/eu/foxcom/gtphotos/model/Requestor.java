@@ -71,7 +71,7 @@ public class Requestor {
             public java.util.Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("Content-Type", "application/x-www-form-urlencoded");
-                String creds = String.format("%s:%s", "username", "password");
+                String creds = String.format("%s:%s", "login", "pswd");
                 String auth = "Basic " + Base64.encodeToString(creds.getBytes(), Base64.DEFAULT);
                 params.put("Authorization", auth);
                 return params;
@@ -86,3 +86,7 @@ public class Requestor {
 
     // endregion
 }
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

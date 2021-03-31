@@ -2,7 +2,7 @@
 
 function db_connect() {
 	$spoj = ($GLOBALS["mysqli_spoj"] = mysqli_connect("localhost",  "login",  "pswd"));
-	mysqli_select_db($GLOBALS["mysqli_spoj"], "schema");
+	mysqli_select_db($GLOBALS["mysqli_spoj"], "egnss4cap");
 	mysqli_query($GLOBALS["mysqli_spoj"], "set character set UTF8"); 
   mysqli_query($GLOBALS["mysqli_spoj"], "set names UTF8"); 
   mysqli_query($GLOBALS["mysqli_spoj"], "charset UTF8"); 
@@ -14,4 +14,5 @@ function db_close() {
 	mysqli_close($GLOBALS["mysqli_spoj"]);
 }
 
+//Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
 ?>

@@ -76,6 +76,7 @@ public class GnssRawActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gnss_raw);
+        setToolbar(R.id.toolbar);
 
         decimalFormat = new DecimalFormat("#.##");
         decimalFormat.setDecimalFormatSymbols(new DecimalFormatSymbols(Locale.ENGLISH));
@@ -382,3 +383,7 @@ public class GnssRawActivity extends BaseActivity {
         MS.stopLocationMonitoring(null, null, null);
     }
 }
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

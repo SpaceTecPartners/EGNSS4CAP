@@ -18,7 +18,15 @@ $user_id = trim($user_id);
 
 if (isset($_POST['photo'])) $photo_json = $_POST['photo'];
 else $photo_json = $_GET['photo'];
-$photo_json = trim($photo_json);   
+$photo_json = trim($photo_json);  
+
+$status_ok = true;
+if ($task_id) {
+  $task_status = get_task_status($task_id);
+  if (($task_status != 'new' && $task_status != 'open' && $task_status != 'returned')) {
+    $status_ok = false;
+  }
+}  
 
 $output = array(); 
 $output['status'] = 'ok';
@@ -26,13 +34,18 @@ $output['error_msg'] = NULL;
 
 if ($photo_json) {
   if ($user_id) {  
-    $photo = json_decode($photo_json,true);
-    if (json_last_error() === JSON_ERROR_NONE) {   
-        $output = set_photo ($photo,$user_id,$task_id);    
+    if ($status_ok) {      
+      $photo = json_decode($photo_json,true);
+      if (json_last_error() === JSON_ERROR_NONE) {   
+          $output = set_photo ($photo,$user_id,$task_id);    
+      } else {
+        $output['status'] = 'error';
+        $output['error_msg'] = 'photo json decode error';
+      } 
     } else {
       $output['status'] = 'error';
-      $output['error_msg'] = 'photo json decode error';
-    } 
+      $output['error_msg'] = 'task is not in editable status';
+    }
   } else {
     $output['status'] = 'error';
     $output['error_msg'] = 'missing user ID';
@@ -45,4 +58,5 @@ echo json_encode($output);
 
 db_close();
 
+//Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
 ?>

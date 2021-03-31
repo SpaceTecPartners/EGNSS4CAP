@@ -251,3 +251,5 @@ class PTManager: NSObject, CLLocationManagerDelegate {
         return max(area, -area) // In order not to worry about is polygon clockwise or counterclockwise defined.
     }
 }
+
+// Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu

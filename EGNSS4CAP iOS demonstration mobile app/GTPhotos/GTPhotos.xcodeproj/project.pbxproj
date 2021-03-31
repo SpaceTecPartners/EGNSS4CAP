@@ -37,13 +37,18 @@
 		49CA64D52561A33B00817406 /* PersistPhoto+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CA64D32561A33B00817406 /* PersistPhoto+CoreDataClass.swift */; };
 		49CA64DA2561A3B100817406 /* DB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49CA64D92561A3B100817406 /* DB.swift */; };
 		49F003A12565865400795C7C /* Weak.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49F003A02565865400795C7C /* Weak.swift */; };
+		611181B4260DC106006DC555 /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611181B3260DC106006DC555 /* GalleryViewController.swift */; };
+		6117A00C260CAF9F007B0593 /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6117A00B260CAF9F007B0593 /* TaskViewController.swift */; };
 		611FE5812553FC0700063891 /* PhotoDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611FE5802553FC0700063891 /* PhotoDetailViewController.swift */; };
 		613A5E58255537DE007D82E5 /* PhotoModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 613A5E56255537DE007D82E5 /* PhotoModel.xcdatamodeld */; };
+		6189FA17260B52790026F43F /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6189FA16260B52790026F43F /* MainViewController.swift */; };
+		6189FA1F260B595E0026F43F /* TasksTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6189FA19260B57610026F43F /* TasksTableViewController.swift */; };
+		6189FA41260B88E90026F43F /* PersistTask+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6189FA40260B88E90026F43F /* PersistTask+CoreDataClass.swift */; };
+		6189FA49260B996D0026F43F /* TasksTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6189FA48260B996D0026F43F /* TasksTableViewCell.swift */; };
 		61B3EC622552DF7500AB8AA6 /* PhotosTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B3EC612552DF7500AB8AA6 /* PhotosTableViewController.swift */; };
 		61B3EC672552E66000AB8AA6 /* PhotoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B3EC662552E66000AB8AA6 /* PhotoTableViewCell.swift */; };
 		61C3AC9E2551461F000CED80 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C3AC9D2551461F000CED80 /* AppDelegate.swift */; };
 		61C3ACA02551461F000CED80 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C3AC9F2551461F000CED80 /* SceneDelegate.swift */; };
-		61C3ACA22551461F000CED80 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61C3ACA12551461F000CED80 /* MainViewController.swift */; };
 		61C3ACA52551461F000CED80 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 61C3ACA32551461F000CED80 /* Main.storyboard */; };
 		61C3ACA72551461F000CED80 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 61C3ACA62551461F000CED80 /* Assets.xcassets */; };
 		61C3ACAA2551461F000CED80 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 61C3ACA82551461F000CED80 /* LaunchScreen.storyboard */; };
@@ -88,14 +93,19 @@
 		49CA64D32561A33B00817406 /* PersistPhoto+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PersistPhoto+CoreDataClass.swift"; sourceTree = "<group>"; };
 		49CA64D92561A3B100817406 /* DB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DB.swift; sourceTree = "<group>"; };
 		49F003A02565865400795C7C /* Weak.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weak.swift; sourceTree = "<group>"; };
+		611181B3260DC106006DC555 /* GalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
+		6117A00B260CAF9F007B0593 /* TaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
 		611FE5802553FC0700063891 /* PhotoDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoDetailViewController.swift; sourceTree = "<group>"; };
 		613A5E57255537DE007D82E5 /* PhotoModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PhotoModel.xcdatamodel; sourceTree = "<group>"; };
+		6189FA16260B52790026F43F /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MainViewController.swift; path = "/Users/foxcom/Documents/GitHub/EGNSS4CAP-project-2/ios/GTPhotos/GTPhotos/MainViewController.swift"; sourceTree = "<absolute>"; };
+		6189FA19260B57610026F43F /* TasksTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksTableViewController.swift; sourceTree = "<group>"; };
+		6189FA40260B88E90026F43F /* PersistTask+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PersistTask+CoreDataClass.swift"; sourceTree = "<group>"; };
+		6189FA48260B996D0026F43F /* TasksTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksTableViewCell.swift; sourceTree = "<group>"; };
 		61B3EC612552DF7500AB8AA6 /* PhotosTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosTableViewController.swift; sourceTree = "<group>"; };
 		61B3EC662552E66000AB8AA6 /* PhotoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTableViewCell.swift; sourceTree = "<group>"; };
 		61C3AC9A2551461F000CED80 /* GTPhotos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GTPhotos.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		61C3AC9D2551461F000CED80 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		61C3AC9F2551461F000CED80 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		61C3ACA12551461F000CED80 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		61C3ACA42551461F000CED80 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		61C3ACA62551461F000CED80 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		61C3ACA92551461F000CED80 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -192,6 +202,7 @@
 			children = (
 				49CA64D92561A3B100817406 /* DB.swift */,
 				49CA64D32561A33B00817406 /* PersistPhoto+CoreDataClass.swift */,
+				6189FA40260B88E90026F43F /* PersistTask+CoreDataClass.swift */,
 			);
 			path = DB;
 			sourceTree = "<group>";
@@ -218,11 +229,15 @@
 				61CFFC1A255EE0890009554D /* Model */,
 				61C3AC9D2551461F000CED80 /* AppDelegate.swift */,
 				61C3AC9F2551461F000CED80 /* SceneDelegate.swift */,
-				61C3ACA12551461F000CED80 /* MainViewController.swift */,
 				61C3ACB225514F31000CED80 /* LoginViewController.swift */,
+				6189FA16260B52790026F43F /* MainViewController.swift */,
 				61B3EC612552DF7500AB8AA6 /* PhotosTableViewController.swift */,
 				61B3EC662552E66000AB8AA6 /* PhotoTableViewCell.swift */,
 				611FE5802553FC0700063891 /* PhotoDetailViewController.swift */,
+				6189FA19260B57610026F43F /* TasksTableViewController.swift */,
+				6189FA48260B996D0026F43F /* TasksTableViewCell.swift */,
+				6117A00B260CAF9F007B0593 /* TaskViewController.swift */,
+				611181B3260DC106006DC555 /* GalleryViewController.swift */,
 				61CB59C525595CDD00AB9B97 /* CameraViewController.swift */,
 				61C4DA9B2552D784003540DE /* MapViewController.swift */,
 				49B9EEA82567DBA600D21C82 /* SettingViewController.swift */,
@@ -344,13 +359,15 @@
 				49AAE59E257567FB00A37C1B /* PTPointInfoView.swift in Sources */,
 				49051E4E2567EBFA00FEB06D /* SEActiveCell.swift in Sources */,
 				61B3EC672552E66000AB8AA6 /* PhotoTableViewCell.swift in Sources */,
+				6189FA1F260B595E0026F43F /* TasksTableViewController.swift in Sources */,
 				61CB59C625595CDD00AB9B97 /* CameraViewController.swift in Sources */,
 				61C3ACB325514F31000CED80 /* LoginViewController.swift in Sources */,
 				49B32BB52569ADE9009240EE /* PersistStorage.swift in Sources */,
 				49AAE58825717C0500A37C1B /* PTPoint+CoreDataClass.swift in Sources */,
+				6117A00C260CAF9F007B0593 /* TaskViewController.swift in Sources */,
 				499B6BB8256B129B0078AEE6 /* CHPoint.swift in Sources */,
+				611181B4260DC106006DC555 /* GalleryViewController.swift in Sources */,
 				49AAE59B257566D200A37C1B /* PTMKAnnotation.swift in Sources */,
-				61C3ACA22551461F000CED80 /* MainViewController.swift in Sources */,
 				61C3AC9E2551461F000CED80 /* AppDelegate.swift in Sources */,
 				61C4DA9C2552D784003540DE /* MapViewController.swift in Sources */,
 				49AAE59525755F8F00A37C1B /* PTManager.swift in Sources */,
@@ -360,13 +377,16 @@
 				49B32BB22569AC6F009240EE /* SEStorage.swift in Sources */,
 				611FE5812553FC0700063891 /* PhotoDetailViewController.swift in Sources */,
 				495415312563340C0072510A /* PhotoMapInfoView.swift in Sources */,
+				6189FA41260B88E90026F43F /* PersistTask+CoreDataClass.swift in Sources */,
 				61C3ACA02551461F000CED80 /* SceneDelegate.swift in Sources */,
 				496B73A12564C6F5009723BE /* AzimuthMKAnnotation.swift in Sources */,
 				61B3EC622552DF7500AB8AA6 /* PhotosTableViewController.swift in Sources */,
+				6189FA49260B996D0026F43F /* TasksTableViewCell.swift in Sources */,
 				49F003A12565865400795C7C /* Weak.swift in Sources */,
 				49AAE57B257045CF00A37C1B /* PathTrackTableViewController.swift in Sources */,
 				496B73A42564C7D5009723BE /* AzimuthMKAnnotationView.swift in Sources */,
 				61DDD8992591EA470080019F /* AboutViewController.swift in Sources */,
+				6189FA17260B52790026F43F /* MainViewController.swift in Sources */,
 				49051E5A2567EF5300FEB06D /* SESetting.swift in Sources */,
 				49051E542567EDB000FEB06D /* SECentroidSampleCell.swift in Sources */,
 				49AAE5B12578B1F600A37C1B /* PathTrackTableViewCell.swift in Sources */,
@@ -449,7 +469,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -504,7 +524,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -521,15 +541,15 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = C6RB9762M5;
 				INFOPLIST_FILE = "$(SRCROOT)/GTPhotos/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = eu.foxcom.gtphotos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = Teplice_distribution_gtphotos;
@@ -545,15 +565,15 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = C6RB9762M5;
 				INFOPLIST_FILE = "$(SRCROOT)/GTPhotos/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = eu.foxcom.gtphotos;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = Teplice_distribution_gtphotos;

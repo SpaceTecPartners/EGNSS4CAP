@@ -1,77 +1,66 @@
+{% set page_name = 'index' %}
 {% extends "base.html.twig" %}
 {% block title %}{{ title }}{% endblock %}
 {% block body %}
 <h2>{{ heading }}</h2>
 
-<div class="w-100 pl-2">
+<div class="w-100">
   <div id="map"></div>
 </div>
 
 <div class="w-100">
-  <nav class="navbar navbar-light pl-md-0">
-    <form class="form-inline">
-      <input class="form-control mr-sm-2 js_search_input" type="search" value="{{ filter }}" placeholder="{{ search }}" aria-label="Search">
-      <button type="button" class="btn js_search"> <i class="fas fa-search"></i></button>
-    </form>
-    <button class="js_new_farmer_show mt-2 float-right mb-2 btn btn-primary" data-userid="0" data-formheader="{{ new_farmer_header }}">{{ new_farmer }}</button>
-  </nav>
-  <div class="js_new_farmer_inputs">
+  <div class="row navbar_color control_bar p-2">
+    <div class="col">
+      <div class="cmb_inlineb">
+        <form class="form-inline">
+          <input class="form-control mr-sm-2 js_search_input" type="search" value="{{ filter }}" placeholder="{{ search }}" aria-label="Search">
+          <button type="button" class="btn js_search"> <i class="fas fa-search" style="color: white;"></i></button>
+        </form>
+        {% if (sort is not empty or filter is not empty) %}
+          <button type="button" class="clickResetSort btn btn-outline-secondary ml-5">{{ reset_sort|upper }}</button>
+        {% endif %}
+      </div>
+      <button class="js_new_farmer_show float-right btn btn-primary" data-userid="0" data-formheader="{{ new_farmer_header }}">{{ new_farmer|upper }}</button>
+    </div>
+  </div>
+  <div class="js_new_farmer_inputs box_dropdown">
     <h2 id="js_fi_header">{{ new_farmer_header }}</h2>
     <form id="new_farmer_form" method="POST" action="index.php">
     <input type="hidden" name="act" id="js_fi_act" value="new_farmer">
     <input type="hidden" name="user_id" id="js_fi_uid" value="0">
-      <table>
-        <thead>
-          <tr>
-            <th>{{ login }}</th>
-            <th>{{ password }}</th>
-          </tr>
-          <tr>
-            <td><input id="js_fi_login" type="text" name="login" required></td>
-            <td><input id="js_fi_pass" type="password" name="password" required></td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th class="not_required">{{ name }}</th>
-            <th class="not_required">{{ surname }}</th>
-          </tr>
-          <tr>
-            <td><input id="js_fi_name" type="text" name="name"></td>
-            <td><input id="js_fi_surname" type="text" name="surname"></td>
-          </tr>
-          <tr>
-            <th class="not_required">{{ email }}</th>
-            <th></th>
-          </tr>
-          <tr>
-            <td><input id="js_fi_email" type="email" name="email"></td>
-            <td></td>
-          </tr>
-          <tr>
-            <th class="not_required">{{ ji }}</th>
-            <th class="not_required">{{ vat }}</th>
-          </tr>
-          <tr>
-            <td><input id="js_fi_in" type="number" name="identification_number"></td>
-            <td><input id="js_fi_vat" type="text" name="vat"></td>
-          </tr>
-          <tr>
-            <td>
-              <button class="js_new_farmer btn btn-primary" type="submit">{{ save }}</button>
-              <button class="js_button_close_farmer_edit btn btn-secondary" type="button">{{ close }}</button>
-            </td>
-            <td></td>
-          </tr>
-        </tbody>
-      </table>
+    <table class="form_table">
+      <thead>
+        <tr>
+          <td><label>{{login}}</label><input id="js_fi_login" type="text" name="login" required></td>
+          <td class="pass_input"><label>{{password}}</label><input id="js_fi_pass" type="password" name="password" required><span class="show_password"><i class="fas fa-eye"></i></span></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><label class="not_required">{{name}}</label><input id="js_fi_name" type="text" name="name"></td>
+          <td><label class="not_required">{{surname}}</label><input id="js_fi_surname" type="text" name="surname"></td>
+        </tr>
+        <tr>
+          <td><label class="not_required">{{email}}</label><input id="js_fi_email" type="email" name="email"></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><label class="not_required">{{ji}}</label><input id="js_fi_in" type="number" name="identification_number"></td>
+          <td><label class="not_required">{{vat}}</label><input id="js_fi_vat" type="text" name="vat"></td>
+        </tr>
+        <tr>
+          <td>
+            <button class="js_new_farmer btn btn-primary" type="submit">{{ save|upper }}</button>
+            <button class="js_button_close_farmer_edit btn btn-outline-secondary" type="button">{{ close|upper }}</button>
+          </td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
     </form>
   </div>
-  <div class="w-100 float-md-left">
-    {% if (sort is not empty or filter is not empty) %}
-      <button type="button" class="clickResetSort btn btn-secondary mb-2">{{ reset_sort }}</button>
-    {% endif %}
-    <table class="w-100 table float-md-left js_table">
+  <div class="table_cont">
+    <table class="w-100 table float-md-left js_table table_responsive">
       <thead>
         <tr>
           <th class="clicksort {{ attribute(sort, 'u.id') }}" data-field="u.id"><span class="sortflag"><i class="fas fa-arrow-circle-down"></i></span>{{ id }}</th>
@@ -95,4 +84,5 @@
 <script src="https://unpkg.com/@google/markerclustererplus@5.1.0/dist/markerclustererplus.min.js"></script>
 
 <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ map_api_key }}&libraries=geometry"></script>
+<!--Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu-->
 {% endblock %}

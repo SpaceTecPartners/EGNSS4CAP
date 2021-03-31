@@ -14,9 +14,9 @@ class autoloader
   {
     $class_namespaces = explode(DIRECTORY_SEPARATOR, $class);
     if (in_array($class_namespaces[count($class_namespaces) - 1], self::not_load)) return true;
-    $class = str_replace('\\', '/', $class);  //hrube reseni, bude to chtit osetrit
-    $required_file = INCLUDE_PATH . 'engine/class/' . $class . '.class.php'; //klasika chceme class
-    if (!file_exists($required_file)) // možná jsme chtěli interface
+    $class = str_replace('\\', '/', $class);
+    $required_file = INCLUDE_PATH . 'engine/class/' . $class . '.class.php';
+    if (!file_exists($required_file))
     {
       $interface = INCLUDE_PATH . 'engine/class/' . $class . '.interface.php';
       if (file_exists($interface))
@@ -37,4 +37,5 @@ class autoloader
   }
 
 }
+//Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
 ?>

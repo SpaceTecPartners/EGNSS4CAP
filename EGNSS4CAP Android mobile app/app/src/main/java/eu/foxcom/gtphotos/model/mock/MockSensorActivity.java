@@ -15,6 +15,7 @@ import eu.foxcom.gtphotos.MainService;
 import eu.foxcom.gtphotos.R;
 import eu.foxcom.gtphotos.model.ExifUtil;
 import eu.foxcom.gtphotos.model.PhotoDataController;
+import eu.foxcom.gtphotos.model.ekf.EkfCreateException;
 
 public class MockSensorActivity extends BaseActivity {
 
@@ -37,7 +38,10 @@ public class MockSensorActivity extends BaseActivity {
     }
 
     private void startSensor() {
-        photoDataController = new PhotoDataController(this);
+        try {
+            photoDataController = new PhotoDataController(this);
+        } catch (EkfCreateException e) {
+        }
         MS.startLocationMonitoring(new MainService.LocationReceiver() {
             @Override
             public void receive(Location location) {

@@ -62,7 +62,7 @@ class twig_controler{
   }
 
   public function use_bootstrap_css(){
-    $this->pushCss('css' . DIRECTORY_SEPARATOR . 'bootstrap' . DIRECTORY_SEPARATOR . 'bootstrap.css');
+    $this->pushCss('css' . DIRECTORY_SEPARATOR . 'bootstrap' . DIRECTORY_SEPARATOR . 'bootstrap.min.css');
   }
 
   public function use_bootstrap_js(){
@@ -105,5 +105,5 @@ class twig_controler{
     return $this;
   }
 }
-
+//Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
 ?>

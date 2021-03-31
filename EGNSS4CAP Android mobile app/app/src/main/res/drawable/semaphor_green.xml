@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rotate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fromDegrees="-60"
+    android:toDegrees="-60">
+    <shape android:shape="rectangle">
+        <gradient
+            android:angle="0"
+            android:startColor="#52B741"
+            android:endColor="#C0EB5A"
+            android:type="linear" />
+        <corners android:radius="50dp"/>
+        <size
+            android:width="20dp"
+            android:height="20dp"/>
+    </shape>
+</rotate>
+
+    <!-- Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu -->

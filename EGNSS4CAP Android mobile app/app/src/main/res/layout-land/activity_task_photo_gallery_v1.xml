@@ -8,169 +8,172 @@
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/tpg_viewPager2_photoPager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tpg_textView_photoCounter"
+    <LinearLayout
+        style="@style/panelMin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@color/transparentBackground"
-        android:padding="5dp"
-        android:text="0/0"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="18dp"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            style="@style/panelRowFirstMin"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView85"
+                style="@style/panelValueStartMin"
+                android:text="@string/tpg_taskId" />
+
+            <TextView style="@style/panelValueMiddle" />
+
+            <TextView
+                android:id="@+id/tpg_textView_taskId"
+                style="@style/panelValueEndMin" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/panelRowMin"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView87"
+                style="@style/panelValueStartMin"
+                android:text="@string/tpg_order" />
+
+            <TextView style="@style/panelValueMiddle" />
+
+            <TextView
+                android:id="@+id/tpg_textView_order"
+                style="@style/panelValueEndMin" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/panelRowMin"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView89"
+                style="@style/panelValueStartMin"
+                android:text="@string/tpg_latitude" />
+
+            <TextView style="@style/panelValueMiddle" />
+
+            <TextView
+                android:id="@+id/tpg_textView_latitude"
+                style="@style/panelValueEndMin" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/panelRowMin"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView90"
+                style="@style/panelValueStartMin"
+                android:text="@string/tpg_longitude" />
+
+            <TextView style="@style/panelValueMiddle" />
+
+            <TextView
+                android:id="@+id/tpg_textView_longitude"
+                style="@style/panelValueEndMin" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/panelRowMin"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView93"
+                style="@style/panelValueStartMin"
+                android:text="@string/tpg_created" />
+
+            <TextView style="@style/panelValueMiddle" />
+
+            <TextView
+                android:id="@+id/tpg_textView_created"
+                style="@style/panelValueEndMin" />
+        </LinearLayout>
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
-            android:id="@+id/imageButton"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/background_button_transparent"
-            android:onClick="nextPhoto"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/icon_arrow_right" />
-
-        <ImageButton
-            android:id="@+id/imageButton3"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/background_button_transparent"
-            android:onClick="previousPhoto"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageButton"
-            app:srcCompat="@drawable/icon_arrow_left" />
-
-        <ImageButton
             android:id="@+id/tpg_imageButton_delete"
+            style="@style/buttonImage"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:background="@drawable/background_button_transparent"
+            android:background="@drawable/background_button_white_r22"
             android:onClick="deletePhotoDialog"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/icon_trash" />
+            app:srcCompat="@drawable/icon_button_trash" />
+
+        <ImageButton
+            android:id="@+id/imageButton4"
+            style="@style/buttonImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/background_button_white_r22"
+            android:onClick="previousPhoto"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageButton5"
+            app:srcCompat="@drawable/icon_button_previous" />
+
+        <ImageButton
+            android:id="@+id/imageButton5"
+            style="@style/buttonImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/background_button_white_r22"
+            android:onClick="nextPhoto"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/icon_button_next" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TableLayout
+    <TextView
+        android:id="@+id/tpg_textView_photoCounter"
+        style="@style/buttonTextWhite"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@color/transparentBackground"
-        android:padding="5dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/textView85"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:text="@string/tpg_taskId" />
-
-            <TextView
-                android:id="@+id/tpg_textView_taskId"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/textView87"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:text="@string/tpg_order" />
-
-            <TextView
-                android:id="@+id/tpg_textView_order"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/textView89"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:text="@string/tpg_latitude" />
-
-            <TextView
-                android:id="@+id/tpg_textView_latitude"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/textView90"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:text="@string/tpg_longitude" />
-
-            <TextView
-                android:id="@+id/tpg_textView_longitude"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/textView93"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:text="@string/tpg_created" />
-
-            <TextView
-                android:id="@+id/tpg_textView_created"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </TableRow>
-    </TableLayout>
+        android:layout_height="40dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="35dp"
+        android:gravity="center"
+        android:text="0/0"
+        android:textFontWeight="700"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu -->

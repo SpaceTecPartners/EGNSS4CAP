@@ -19,20 +19,41 @@ class LoginViewController: UIViewController,UITextFieldDelegate {
         // Do any additional setup after loading the view.
         self.isModalInPresentation = true
         
-        backView.layer.cornerRadius = 10
+        /*backView.layer.cornerRadius = 10
         backView.layer.shadowColor = UIColor.black.cgColor
         backView.layer.shadowOffset = CGSize(width: 3, height: 3)
         backView.layer.shadowOpacity = 0.3
-        backView.layer.shadowRadius = 2.0
-        
+        backView.layer.shadowRadius = 2.0*/
+    }    
+   
+    @objc func keyboardWillShow(notification: NSNotification) {
+        guard let userInfo = notification.userInfo else {return}
+        guard let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else {return}
+        let keyboardFrame = keyboardSize.cgRectValue
+
+        if self.view.bounds.origin.y == 0{
+            self.view.bounds.origin.y += keyboardFrame.height
+        }
+    }
+
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if self.view.bounds.origin.y != 0 {
+            self.view.bounds.origin.y = 0
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.portrait, andRotateTo: UIInterfaceOrientation.portrait)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         AppDelegate.AppUtility.lockOrientation(UIInterfaceOrientationMask.all)
+        
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -102,7 +123,7 @@ class LoginViewController: UIViewController,UITextFieldDelegate {
         let pswdText = pswdTextField.text ?? ""
         
         // Prepare URL
-        let url = URL(string: "https://username:password@server/ws/comm_login.php")
+        let url = URL(string: "https://login:pswd@egnss4cap-uat.foxcom.eu/ws/comm_login.php")
         guard let requestUrl = url else { fatalError() }
         // Prepare URL Request Object
         var request = URLRequest(url: requestUrl)
@@ -143,3 +164,5 @@ class LoginViewController: UIViewController,UITextFieldDelegate {
     */
 
 }
+
+// Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu

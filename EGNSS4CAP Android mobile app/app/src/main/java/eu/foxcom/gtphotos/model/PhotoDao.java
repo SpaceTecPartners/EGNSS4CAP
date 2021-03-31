@@ -5,6 +5,8 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -52,9 +54,32 @@ public abstract class PhotoDao {
     @Query("select max(p.indx) as maxIndx from Photo p where p.taskId is null")
     public abstract Integer selectUnownedMaxIndx();
 
+    @Query("select p.realId from Photo p where p.taskId = :taskId")
+    public abstract List<Long> selectRealIdsByTaskId(String taskId);
+
+    @Query("select p.realId from Photo p where p.taskId is null and p.userId = :userId")
+    public abstract List<Long> selectUnassignedIds(String userId);
+
+    @Query("delete from Photo where realId = :realId")
+    public abstract void deleteByRealId(Long realId);
+
+    @Update
+    public abstract void update(List<Photo> photos);
+
+    @Transaction
+    public void deleteByRealIds(List<Long> realIds) {
+        for (Long realId : realIds) {
+            deleteByRealId(realId);
+        }
+    }
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public abstract long insertPhoto(Photo photo);
 
     @Delete
     public abstract void deletePhoto(Photo photo);
 }
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

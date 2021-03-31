@@ -20,12 +20,14 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/pt_textInputEditText_name"
+            style="@style/textBold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/pt_textView_centroidsNote"
+        style="@style/textNormal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -33,6 +35,7 @@
         android:layout_marginEnd="16dp"
         android:text="@string/pt_centroidsNote"
         android:textAlignment="center"
+        android:textSize="14sp"
         android:textStyle="italic"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,3 +43,5 @@
         app:layout_constraintTop_toBottomOf="@+id/pt_textInputLayout_name"
         tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu -->

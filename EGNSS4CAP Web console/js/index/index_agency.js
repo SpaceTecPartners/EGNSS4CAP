@@ -46,3 +46,4 @@ function hide_new_agency_inputs (){
   $('.js_new_agency_inputs').hide();
   $('.js_new_agency_show').show();
 }
+//Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu

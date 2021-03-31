@@ -1,4 +1,5 @@
 const FILTER_TYPE = 'task';
+const PDF_PREPARE = false;
 var map_property = {zoom:4, popup_bool: true};
 $(document)
   .ready(function() {
@@ -13,7 +14,7 @@ $(document)
       load_table();
     }
   })
-  .on("click", "[class^='clicksort']", function(){
+  .on("click", "[class^='clicksort'], [class^='form-check-input clicksort'], .clicksort", function(){
     $field = $(this).data('field');
     post = $.post("index.php", {act: "list_sort", page: 'task_list', sort: $field});
     post.done(function(data){
@@ -30,7 +31,7 @@ $(document)
         }
     });
   })
-  .on("click", "[class^='changeFilter']", function(){
+  .on("click", "[class^='changeFilter'], [class^='form-check-input changeFilter'], .changeFilter", function(){
     $field = $(this).data('field');
     $fieldType = $(this).data('fieldtype');
     $value = 0;
@@ -78,3 +79,4 @@ function load_table(){
     }
   })
 }
+//Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu

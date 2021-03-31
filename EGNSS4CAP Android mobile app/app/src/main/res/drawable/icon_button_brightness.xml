@@ -1,0 +1,11 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+  <path
+      android:pathData="M19.9999,15.31L23.3099,12L19.9999,8.69V4H15.3099L11.9999,0.69L8.6899,4H3.9999V8.69L0.6899,12L3.9999,15.31V20H8.6899L11.9999,23.31L15.3099,20H19.9999V15.31ZM11.9999,18V6C15.3099,6 17.9999,8.69 17.9999,12C17.9999,15.31 15.3099,18 11.9999,18Z"
+      android:fillColor="#2D3142"/>
+</vector>
+
+    <!-- Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu -->

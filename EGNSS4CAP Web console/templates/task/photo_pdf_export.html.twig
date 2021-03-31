@@ -52,6 +52,9 @@
 </div>
 {% endif %}
 {% for image in images %}
+{% if image.id != images[0].id %}
+<pagebreak>
+{% endif %}
 <div class="pdf_image_row">
   <table class="pdf_image_row_table">
     <tr>
@@ -59,47 +62,56 @@
         <img src="photo_detail.php?justimg=1&rotation={{ image.rotation }}&img={{ image.path }}{{ image.file_name }}">
       </td>
       <td class="pdf_image_row_table_td2">
-        <table>
-          <tr>
-            <td class="metadata">
-              <label>{{ pht_lat }}: {{ image.lat }}</label><br/>
-              <label>{{ pht_lng }}: {{ image.lng }}</label><br/>
-              <label>{{ pht_altitude }}: {{ image.altitude }}</label><br/>
-              <label>{{ pht_azimuth }}: {{ image.azimuth }}</label><br/>
-              <label>{{ pht_angle }}: {{ image.photo_angle }}</label><br/>
-              <label>{{ pht_note }}: {{ image.note }}</label><br/>
-              <label></label><br/>
-              <label>{{ pht_device }}: {{ image.device }}</label><br/>
-              <label>{{ pht_accuracy }}: {{ image.accuracy }}</label><br/>
-              <label>{{ pht_distance }}: {{ image.distance }}</label><br/>
-            </td>
-            <td class="metadata">
-              <label>{{ pht_timestamp }}: {{ image.timestamp }}</label><br/>
-              <label>{{ pht_created_date }}: {{ image.created_date }}</label><br/>
-              <label></label><br/>
-              <label class="text_color_{{ image.flg_checked_location }}">
-                {% if image.flg_checked_location is same as(1) %}
-                  {{ pht_checked_location_ok }}
-                {% elseif  image.flg_checked_location is same as(0) %}
-                  {{ pht_checked_location_fail }}
-                {% else %}
-                  {{ pht_checked_location_notvf }}
-                {% endif %}
-              </label><br/>
-              <label class="text_color_{{ image.flg_original }}">
-                {% if image.flg_original is same as(1) %}
-                  {{ pht_original_ok }}
-                {% elseif  image.flg_original is same as(0) %}
-                  {{ pht_original_fail }}
-                {% else %}
-                  {{ pht_original_notvf }}
-                {% endif %}
-              </label>
-            </td>
-          </tr>
+        <table class="table">
+          <tbody>
+            <tr><td class="td td_01"><label title="{{ pht_lat_title }}">{{ pht_lat }}</label></td><td class="td"><label title="{{ pht_lat }}">{{ image.lat }}</label></td></tr>
+            <tr><td class="td td_01"><label title="{{ pht_lng_title }}">{{ pht_lng }}</label></td><td class="td"><label title="{{ pht_lng }}">{{ image.lng }}</label></td></tr>
+            <tr><td class="td td_01"><label title="{{ pht_alt_title }}">{{ pht_altitude }}</label></td><td class="td"><label title="{{ pht_alt }}">{{ image.altitude }} m</label></td></tr>
+            <tr><td class="td td_01"><label title="{{ pht_azimuth_title }}">{{ pht_azimuth }}</label></td><td class="td"><label title="{{ pht_azimuth }}">{{ image.azimuth }}</label></td></tr>
+            <tr><td class="td td_01"><label title="{{ pht_angle_title }}">{{ pht_angle }}</label></td><td class="td"><label title="{{ pht_angle }}">{{ image.photo_angle }}</label></td></tr>
+            <tr><td class="td td_01"><label title="{{ pht_note_title }}">{{ pht_note }}</label></td><td class="td"><label title="{{ pht_note }}">{{ image.note }}</label></td></tr>
+            <tr><td class="td td_01"><label title="{{ pht_device_title }}">{{ pht_device }}</label></td><td class="td"><label title="{{ pht_device }}">{{ image.device }}</label></td></tr>
+            <tr><td class="td td_01"><label title="{{ pht_accuracy_title }}">{{ pht_accuracy }}</label></td><td class="td"><label title="{{ pht_accuracy }}">{% if image.accuracy is not empty %} {{ image.accuracy }} m{% endif %}</label></td></tr>
+            <tr><td class="td td_01"><label title="{{ pht_distance_title }}">{{ pht_distance }}</label></td><td class="td"><label title="{{ pht_distance }}">{% if image.distance is not empty %} {{ image.distance }} m{% endif %}</label></td></tr>
+            <tr><td class="td td_01"><label title="{{ pht_distance_nmea_title }}">{{ pht_distance_nmea }}</label></td><td class="td"><label title="{{ pht_distance_nmea }}">{% if image.nmea_distance is not empty %} {{ image.nmea_distance }} m{% endif %}</label></td></tr>
+            <tr><td class="td td_01"><label title="{{ pht_timestamp_title }}">{{ pht_timestamp }}</label></td><td class="td"><label title="{{ pht_timestamp }}">{{ image.timestamp }}</label></td></tr>
+            <tr><td class="td td_01"><label title="{{ pht_created_date_title }}">{{ pht_created_date }}</label></td><td class="td"><label title="{{ pht_created_date }}">{{ image.created_date }}</label></td></tr>
+            <tr>
+              <td class="td td_01"></td>
+              <td class="td">
+                <label class="text_color_{{ image.flg_checked_location }}">
+                  {% if image.flg_checked_location is same as(1) %}
+                    {{ pht_checked_location_ok }}
+                  {% elseif  image.flg_checked_location is same as(0) %}
+                    {{ pht_checked_location_fail }}
+                  {% else %}
+                    {{ pht_checked_location_notvf }}
+                  {% endif %}
+                </label>
+              </td>
+            </tr>
+            <tr>
+              <td class="td td_01"></td>
+              <td class="td">
+                <label class="text_color_{{ image.flg_original }}">
+                  {% if image.flg_original is same as(1) %}
+                    {{ pht_original_ok }}
+                  {% elseif  image.flg_original is same as(0) %}
+                    {{ pht_original_fail }}
+                  {% else %}
+                    {{ pht_original_notvf }}
+                  {% endif %}
+                </label>
+              </td>
+            </tr>
+          </tbody>
         </table>
       </td>
     </tr>
   </table>
+  <div class="photo_map photo_map_pdf_export" style="text-align:center;">
+    <img style="width:600px;" src="img/map_tmp/{{ map_prefix }}-{{ image.id }}.png">
+  </div>
 </div>
 {% endfor %}
+<!--Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu-->

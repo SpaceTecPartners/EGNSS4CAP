@@ -7,10 +7,15 @@ table { border-collapse: collapse; }
 .pdf_top_header_table_td3 { width: 60%; text-align: right; padding: 5px; }
 .pdf_top_header_logo_img { height: 50px; }
 
+.pdf_second_header { text-align: right; font-size: 10; }
+
 .pdf_header { width: 100%; margin-bottom: 20px; }
 .pdf_header_table { width: 100%; font-size: 14; }
 .pdf_header th { text-align: left; border-top: 1px solid; border-bottom: 1px solid; padding: 5px; }
-.pdf_header td { text-align: left; padding: 5px; }
+.pdf_header td {
+  text-align: left;
+  padding: 5px;
+}
 
 .pdf_footer { width: 100%; }
 .pdf_footer_table { width: 100%; }
@@ -18,9 +23,133 @@ table { border-collapse: collapse; }
 
 .pdf_image_row { width: 100%; border-bottom: 1px solid; padding-top: 10px; padding-bottom: 10px; }
 .pdf_image_row_table { width: 100%; }
-.pdf_image_row_table_td1 { width: 50%; text-align: center; }
-.pdf_image_row_table_td2 { width: 50%; text-align: center; }
+.pdf_image_row_table_td1 { width: 50%; text-align: center; height: 350px; }
+.pdf_image_row_table_td2 { width: 50%; }
+.pdf_image_row_table_td2 table {max-width: 550px;}
+.pdf_image_row_table_td2 tr td {border-bottom: 1px dotted rgb(126, 126, 126); background: none;}
+.pdf_image_row_table_td2 table td:nth-child(2) {text-align: right;}
+.td_01 {color: rgb(139, 139, 139);}
+#pdf_photo_prepare .pdf_image_row_table_td2 table td:nth-child(2) {text-align: right;}
 .pdf_image_row_img { width: 100%; }
 .metadata { width: 50%; text-align: left; font-size: 12; padding: 10px;}
 .text_color_1 { color: #1fad4e; }
 .text_color_0 { color: #df2020; }
+
+.photo_map img { width: 600px; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+#js_map_popup{
+  display: none;
+}
+.popup-bubble {
+  /* Position the bubble centred-above its parent. */
+  position: absolute;
+  top: -40px;
+  left: 0;
+  -webkit-transform: translate(-50%, -100%);
+      -ms-transform: translate(-50%, -100%);
+          transform: translate(-50%, -100%);
+  /* Style the bubble. */
+  background-color: white;
+  padding: 5px;
+  border-radius: 5px;
+  font-family: sans-serif;
+  overflow-y: auto;
+  /* max-height: 110px; */
+  -webkit-box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.5);
+          box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.5);
+  cursor: pointer;
+  z-index: 2;
+}
+/* The parent of the bubble. A zero-height div at the top of the tip. */
+.popup-bubble-anchor {
+  /* Position the div a fixed distance above the tip. */
+  position: absolute;
+  width: 100%;
+  bottom: /* TIP_HEIGHT= */ 8px;
+  left: 0;
+}
+/* This element draws the tip. */
+.popup-bubble-anchor::after {
+  content: "";
+  position: absolute;
+  top: -40px;
+  left: 0;
+  /* Center the tip horizontally. */
+  -webkit-transform: translate(-50%, 0);
+      -ms-transform: translate(-50%, 0);
+          transform: translate(-50%, 0);
+  /* The tip is a https://css-tricks.com/snippets/css/css-triangle/ */
+  height: 50px;
+  /* The tip is 8px high, and 12px wide. */
+ /* border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 8px solid white;*/
+  background-color:white;
+  width:3px;
+}
+/* JavaScript will position this div at the bottom of the popup tip. */
+.popup-container {
+  cursor: auto;
+  height: 0;
+  position: absolute;
+  /* The max width of the info window. */
+  width: 100px;
+}
+.js_detail{width: 100%; margin-bottom: 2px;}
+.popup-bubble-anchor-hide{display: none;}
+.popup-bubble-anchor::after{display: none;}
+.js_popup{background: transparent; -webkit-box-shadow: none; box-shadow: none; overflow: visible; top: 20px;}
+.js_popup_border{position: relative;}
+.marker_image{
+  position: absolute;
+  width: 82px;
+  height: 82px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  top: -141px;
+  left: 0;
+  overflow: hidden;
+  border-radius: 50%;
+  background-color: rgb(45 50 66);
+}
+.marker_image_img{
+  width: auto;
+  height: auto;
+  max-width: 100% !important;
+  max-height: 100%;
+  position: absolute;
+  -o-object-fit: scale-down;
+  object-fit: scale-down;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, 0);
+  -ms-transform: translate(-50%, 0);
+  transform: translate(-50%, -50%);
+  mask-image: unset;
+  mask-position: unset;
+  mask-repeat: unset;
+  mask-size: unset;
+  -webkit-mask-image: unset;
+  -webkit-mask-position: unset;
+  -webkit-mask-size: unset;
+  -webkit-mask-repeat: unset;
+  border-radius: unset;
+}
+.marker_border_web{display: none !important;}
+.marker_border_pdf{display: block !important; width: 84px; position: absolute; top: -141px;}
+.js_azimuth{max-width: 100px; height: 100px; top: -40px; left: -50px; position:absolute; z-index: 1;}
+.azimuth{width: 100px;}
+/*Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu*/

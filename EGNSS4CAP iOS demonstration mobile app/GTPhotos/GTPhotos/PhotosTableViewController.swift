@@ -205,7 +205,7 @@ class PhotosTableViewController: UITableViewController {
                 fatalError("Unexpected destination: \(segue.destination)")
             }
             
-            cameraViewController.persistPhotos = persistPhotos
+            //cameraViewController.persistPhotos = persistPhotos
             cameraViewController.manageObjectContext = manageObjectContext
             
         case "ShowPhotoDetail":
@@ -241,7 +241,7 @@ class PhotosTableViewController: UITableViewController {
     
     private func loadPersistPhotos() {
         let persistPhotoRequest: NSFetchRequest<PersistPhoto> = PersistPhoto.fetchRequest()
-        persistPhotoRequest.predicate = NSPredicate(format: "userid == %@", String(UserStorage.userID))
+        persistPhotoRequest.predicate = NSPredicate(format: "userid == %@ AND taskid = -1", String(UserStorage.userID))
         do {
             persistPhotos = try manageObjectContext.fetch(persistPhotoRequest)
         }
@@ -305,3 +305,5 @@ class PhotosTableViewController: UITableViewController {
         
     
 }
+
+// Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu

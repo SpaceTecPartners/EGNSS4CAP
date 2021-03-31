@@ -22,7 +22,7 @@ import eu.foxcom.gtphotos.model.Util;
 
 public class BasicInfoFragment extends BaseFragment {
 
-    public static final String TAG = BasicInfoFragment.class.getSimpleName();
+    public static final String TAG = BasicInfoFragment.class.getName();
 
     public static final int DEVICE_CONDITION_INERVAL_MILS = 2000;
 
@@ -95,7 +95,7 @@ public class BasicInfoFragment extends BaseFragment {
         PackageManager packageManager = getActivity().getPackageManager();
         if (packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_COMPASS) && packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_GYROSCOPE)) {
             ImageView compassGyroscopeImageView = getView().findViewById(R.id.bi_imageView_compassGyroscopeCheck);
-            compassGyroscopeImageView.setImageResource(R.drawable.point_green);
+            compassGyroscopeImageView.setImageResource(R.drawable.semaphor_green);
         }
     }
 
@@ -110,7 +110,7 @@ public class BasicInfoFragment extends BaseFragment {
                 public void run() {
                     boolean enabled = Util.isLocationServiceEnabled(getContext());
                     ImageView deviceConditionImageView = getView().findViewById(R.id.bi_imageView_deviceCondition);
-                    deviceConditionImageView.setImageResource(enabled ? R.drawable.point_green : R.drawable.point_red);
+                    deviceConditionImageView.setImageResource(enabled ? R.drawable.semaphor_green : R.drawable.semaphor_red);
 
                     deviceConditionHandler.postDelayed(this, DEVICE_CONDITION_INERVAL_MILS);
                 }
@@ -168,7 +168,7 @@ public class BasicInfoFragment extends BaseFragment {
     private void setGalileoSignalCheck(boolean checked) {
         if (checked) {
             ImageView imageView = getView().findViewById(R.id.bi_imageView_galileoSignalCheck);
-            imageView.setImageResource(R.drawable.point_green);
+            imageView.setImageResource(R.drawable.semaphor_green);
             PersistData.saveGalileoSignalCheck(baseActivity, checked);
         }
     }
@@ -176,7 +176,7 @@ public class BasicInfoFragment extends BaseFragment {
     private void setDualFrequencySignalCheck(boolean checked) {
         if (checked) {
             ImageView imageView = getView().findViewById(R.id.bi_imageView_dualFrequencySignalCheck);
-            imageView.setImageResource(R.drawable.point_green);
+            imageView.setImageResource(R.drawable.semaphor_green);
             PersistData.saveDualFrequencySignalCheck(baseActivity, checked);
         }
 
@@ -185,7 +185,7 @@ public class BasicInfoFragment extends BaseFragment {
     private void setEgnosSignalCheck(boolean checked) {
         if (checked) {
             ImageView imageView = getView().findViewById(R.id.bi_imageView_egnosSignalCheck);
-            imageView.setImageResource(R.drawable.point_green);
+            imageView.setImageResource(R.drawable.semaphor_green);
             PersistData.saveEgnosSignalCheck(baseActivity, checked);
         }
     }
@@ -193,7 +193,7 @@ public class BasicInfoFragment extends BaseFragment {
     private void setGalileoNavigationMessageSignalCheck(boolean checked) {
         if (checked) {
             ImageView imageView = getView().findViewById(R.id.bi_imageView_galileoNavigationMessageSignalCheck);
-            imageView.setImageResource(R.drawable.point_green);
+            imageView.setImageResource(R.drawable.semaphor_green);
             PersistData.saveGalileoNavigationMessageSignalCheck(baseActivity, checked);
         }
     }
@@ -207,3 +207,7 @@ public class BasicInfoFragment extends BaseFragment {
         return Util.getPhoneModel();
     }
 }
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

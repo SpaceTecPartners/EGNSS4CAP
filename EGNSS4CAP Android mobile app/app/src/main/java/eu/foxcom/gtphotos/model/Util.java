@@ -1,10 +1,18 @@
 package eu.foxcom.gtphotos.model;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.StrictMode;
 import android.view.KeyEvent;
+
+import androidx.constraintlayout.widget.ConstraintSet;
 
 import com.android.volley.VolleyError;
 
@@ -142,4 +150,33 @@ public class Util {
         err += error.getMessage();
         return err;
     }
+
+    public static void clearAllAnchor(ConstraintSet constraintSet, int viewId) {
+        constraintSet.clear(viewId, ConstraintSet.START);
+        constraintSet.clear(viewId, ConstraintSet.END);
+        constraintSet.clear(viewId, ConstraintSet.TOP);
+        constraintSet.clear(viewId, ConstraintSet.BOTTOM);
+    }
+
+    public static Bitmap getCroppedBitmap(Bitmap src, Path path) {
+        Bitmap output = Bitmap.createBitmap(src.getWidth(),
+                src.getHeight(), Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(output);
+
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setColor(0XFF000000);
+
+        canvas.drawPath(path, paint);
+
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+
+        canvas.drawBitmap(src, 0, 0, paint);
+
+        return output;
+    }
 }
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

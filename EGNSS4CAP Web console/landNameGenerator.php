@@ -1,5 +1,6 @@
 <?php
-if (isset($_GET['land'])){
+session_start();
+if (isset($_GET['land']) && isset($_SESSION['user_id'])){
   $text = $_GET['land'];
   $textLength = strlen($text);
   if (isset($_GET['zoom']) ){
@@ -25,10 +26,8 @@ if (isset($_GET['land'])){
   isset($_GET['color'])?$fontColors=explode("|", $_GET['color']):$fontColors=array(120,120,120);
   $textColour = ImageColorAllocate($image,$fontColors[0],$fontColors[1],$fontColors[2]);
 
-  //isset($_GET['font'])?$font = dirname(__FILE__) ."/fonts/".$_GET['font']:$font = dirname(__FILE__) ."/fonts/CooperHewitt-Medium.otf";
-  $font = dirname(__FILE__)."/fonts/ArialCE.ttf";
+  $font = dirname(__FILE__)."/fonts/arial.ttf";
   // set text
-  //ImageString($image,$textHeight,0,0,$text,$textColour);
   imagettftext($image, $fontSize, 0, 0, $textHeight, $textColour, $font, $text);
   // set correct header
   header('Content-type: image/png');
@@ -36,3 +35,4 @@ if (isset($_GET['land'])){
   // create image
   echo ImagePNG($image);
 }
+//Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu

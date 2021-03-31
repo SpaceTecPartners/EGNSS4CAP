@@ -3,7 +3,6 @@ package eu.foxcom.gnss_scan;
 import android.content.Context;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 abstract class Scanner {
@@ -50,3 +49,7 @@ abstract class Scanner {
         updateReceivers(holder, null);
     }
 }
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

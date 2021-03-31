@@ -17,6 +17,12 @@ public abstract class PTDao {
     @Query("select * from PTPath where userId = :userId and realId is null")
     public abstract List<PTPath> selectPTPathsUnsent(String userId);
 
+    @Query("select count(*) from PTPath where userId = :userId and realId is null")
+    public abstract int selectPTPathsUnsentCount(String userId);
+
+    @Query("select count(*) from PTPath where userId = :userId and realId is null and isUploadingOpened = 1")
+    public abstract int selectPTPathsUploadingOpenedCount(String userId);
+
     @Query("select * from PTPath where autoId = :autoId")
     public abstract PTPath selectPTPathByAutoId(Long autoId);
 

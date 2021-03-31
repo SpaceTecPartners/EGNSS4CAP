@@ -1,9 +1,9 @@
 {% for task in tasks %}
 <tr class="clickable" id="{{task.id}}">
-  <td class="js_task_detail" data-href="{{task.id}}"><span class="task_status{% if task.status == 'data checked' %} datachecked_{{ task.flag_id }}{% elseif task.status == 'data provided'%} dataprovided{% else %} {{ task.status }}{% endif %}">{{ task.status }}</span></td>
-  <td class="js_task_detail" data-href="{{task.id}}">{{ task.photos_taken }}</td>
+  <td class="js_task_detail" data-label="{{status}}" data-href="{{task.id}}"><span class="task_status{% if task.status == 'data checked' %} datachecked_{{ task.flag_id }}{% elseif task.status == 'data provided'%} dataprovided{% else %} {{ task.status }}{% endif %}">{{ task.status }}</span></td>
+  <td class="js_task_detail" data-label="{{photos}}" data-href="{{task.id}}">{{ task.photos_taken }}</td>
   {% if agency %}
-    <td class="js_task_detail" data-href="{{task.id}}">
+    <td class="js_task_detail" data-label="{{photos_verified}}" data-href="{{task.id}}">
     {% if attribute(tasks_verified, task.id) == 'verified' %}
       <i class="fas fa-check text_color_1"></i>
     {% elseif  attribute(tasks_verified, task.id) == 'not_verified' %}
@@ -11,25 +11,26 @@
     {% endif %}
     </td>
   {% endif %}
-  <td class="js_task_detail" data-href="{{task.id}}">{{ task.name }}</td>
-  <td class="js_task_detail" data-href="{{task.id}}">{{ task.text }}</td>
-  <td class="js_task_detail" data-href="{{task.id}}">{{ task.date_created }}</td>
-  <td class="js_task_detail" data-href="{{task.id}}">{{ task.task_due_date }}</td>
-  <td class="js_task_detail" data-href="{{task.id}}">
+  <td class="js_task_detail td_name" data-label="{{name}}" data-href="{{task.id}}">{{ task.name }}</td>
+  <td class="js_task_detail" data-label="{{description}}" data-href="{{task.id}}">{{ task.text }}</td>
+  <td class="js_task_detail" data-label="{{date_created}}" data-href="{{task.id}}">{{ task.date_created }}</td>
+  <td class="js_task_detail" data-label="{{due_date}}" data-href="{{task.id}}">{{ task.task_due_date }}</td>
+  <td class="js_task_detail" data-label="{{accept}}" data-href="{{task.id}}">
     {% if task.flag_id == 1 %}
-      <div class="btn btn-success w-100p">{{ ack }}</div>
+      <div class="btn btn-success btn_status w-100p">{{ ack }}</div>
     {% elseif  task.flag_id == 2 %}
-      <div class="btn btn-danger w-100p">{{ decline }}</div>
+      <div class="btn btn-danger btn_status w-100p">{{ decline }}</div>
     {% elseif task.status == 'data provided' %}
-      <div class="btn btn-light w-100p">{{ wait }}</div>
+      <div class="btn btn-light btn_status w-100p">{{ wait }}</div>
     {% endif %}
   </td>
   {% if agency %}
-    <td>
+    <td data-label="{{group_task_accept}}" style="vertical-align: middle;">
       {% if task.status == 'data provided' and task.flag_id is null %}
-        <input type="checkbox" class="js_group_task_accept_chck" data-task_id="{{ task.id }}">
+        <input style="margin: 2px 0 0 0;" type="checkbox" class="form-check-input js_group_task_accept_chck" data-task_id="{{ task.id }}">
       {% endif %}
     </td>
   {% endif %}
 </tr>
 {% endfor %}
+<!--Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu-->

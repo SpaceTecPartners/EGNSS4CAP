@@ -26,7 +26,15 @@ $note = trim($note);
 
 if (isset($_POST['photos'])) $photos_json = $_POST['photos'];
 else $photos_json = $_GET['photos'];
-$photos_json = trim($photos_json);   
+$photos_json = trim($photos_json);  
+
+$status_ok = true;
+if ($task_id) {
+  $task_status = get_task_status($task_id);
+  if (($task_status != 'new' && $task_status != 'open' && $task_status != 'returned')) {
+    $status_ok = false;
+  }
+} 
 
 $output = array(); 
 $output['status'] = 'ok';
@@ -34,13 +42,18 @@ $output['error_msg'] = NULL;
 
 if ($photos_json) {
   if ($user_id) {  
-    $photos = json_decode($photos_json,true);
-    if (json_last_error() === JSON_ERROR_NONE) {   
-        $output = set_photos ($photos,$user_id,$task_id);    
+    if ($status_ok) { 
+      $photos = json_decode($photos_json,true);
+      if (json_last_error() === JSON_ERROR_NONE) {   
+          $output = set_photos ($photos,$user_id,$task_id);    
+      } else {
+        $output['status'] = 'error';
+        $output['error_msg'] = 'photos json decode error';
+      } 
     } else {
       $output['status'] = 'error';
-      $output['error_msg'] = 'photos json decode error';
-    } 
+      $output['error_msg'] = 'task is not in editable status';
+    }
   } else {
     $output['status'] = 'error';
     $output['error_msg'] = 'missing user ID';
@@ -52,7 +65,7 @@ if ($output['status'] == 'ok') {
   $task_status = get_task_status($task_id);
     if ($task_status == 'new' && $status == 'open') {
       $output = set_task_status($task_id, $status, $note);
-    } elseif (($task_status == 'new' || $task_status == 'open') && $status == 'data provided') {
+    } elseif (($task_status == 'new' || $task_status == 'open' || $task_status == 'returned') && $status == 'data provided') {
       if (check_task_photos($task_id)) {
         $output = set_task_status($task_id, $status, $note);
       } else {
@@ -69,4 +82,5 @@ echo json_encode($output);
 
 db_close();
 
+//Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
 ?>

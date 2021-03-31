@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -16,20 +15,23 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormatter;
+
+import eu.foxcom.gtphotos.model.FilterTaskDialogFragment;
 import eu.foxcom.gtphotos.model.LoggedUser;
 import eu.foxcom.gtphotos.model.Task;
 import eu.foxcom.gtphotos.model.TaskList;
+import eu.foxcom.gtphotos.model.Util;
+import eu.foxcom.gtphotos.model.functionInterface.Function;
 
 public class TaskOverviewActivity extends BaseActivity {
 
@@ -70,11 +72,26 @@ public class TaskOverviewActivity extends BaseActivity {
                 statusImageView.setImageResource(status.POINT_ID);
             }
             TextView photoCountTextView = convertView.findViewById(R.id.tl_textView_photoCount);
-            photoCountTextView.setText(getString(R.string.to_photoCount, task.getPhotoCount(MS.getAppDatabase())));
+            int count = task.getPhotoCount(MS.getAppDatabase());
+            if (count == 1) {
+                photoCountTextView.setText(getString(R.string.to_photoCount_1, count));
+            } else if (count >= 2 && count <= 4) {
+                photoCountTextView.setText(getString(R.string.to_photoCount_2, count));
+            } else {
+                photoCountTextView.setText(getString(R.string.to_photoCount_3, count));
+            }
             TextView createdTextView = convertView.findViewById(R.id.tl_textView_createdValue);
-            createdTextView.setText(task.getDateCreated() == null ? "" : task.getDateCreated());
+            DateTimeFormatter dateFormatter = Util.createPrettyDateFormat();
+            DateTimeFormatter timeFormatter = Util.createPrettyTimeFormat();
+            Function<DateTime, String> prettyDateTime = dateTime -> {
+                if (dateTime == null) {
+                    return "";
+                }
+                return dateTime.toString(dateFormatter) + " " + dateTime.toString(timeFormatter);
+            };
+            createdTextView.setText(prettyDateTime.apply(task.getDateCreatedDateTime()));
             TextView dueDateTextView = convertView.findViewById(R.id.tl_textView_dueDateValue);
-            dueDateTextView.setText(task.getTaskDueToDate() == null ? "" : task.getTaskDueToDate());
+            dueDateTextView.setText(prettyDateTime.apply(task.getTaskDueToDateDateTime()));
             if (task.getTaskDueToDateDatetime() != null && task.getTaskDueToDateDatetime().isBeforeNow()) {
                 dueDateTextView.setTextColor(Color.RED);
             } else {
@@ -92,19 +109,28 @@ public class TaskOverviewActivity extends BaseActivity {
     boolean isFilterSettingRun = false;
     private Integer firstVisibleItem;
 
+    private FilterTaskDialogFragment filterDialog;
+    private View filterView;
+    private boolean isFilterViewInit = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_overview);
-        initFilter();
+        setToolbar(R.id.toolbar);
+
+        filterDialog = new FilterTaskDialogFragment(this);
+        filterView = LayoutInflater.from(this).inflate(R.layout.dialog_filter_task_overview, null, false);
+        filterDialog.show(getSupportFragmentManager(), FilterTaskDialogFragment.TAG);
+        filterDialog.dismiss();
+        EditText filterEditText = findViewById(R.id.to_editText_filter);
+        filterEditText.setOnClickListener(v -> filterDialog.show(getSupportFragmentManager(), FilterTaskDialogFragment.TAG));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (serviceController.isServiceInitialized()) {
-            refreshList(false);
-        }
+        refreshList(false);
     }
 
     @Override
@@ -114,10 +140,10 @@ public class TaskOverviewActivity extends BaseActivity {
     }
 
     @Override
-    protected MainService.BROADCAST_MSG broadcastReceiver(Context context, Intent intent) {
-        MainService.BROADCAST_MSG broadcastMsg = super.broadcastReceiver(context, intent);
+    protected MainService.BROADCAST_MSG broadcastImplicitReceiver(Context context, Intent intent) {
+        MainService.BROADCAST_MSG broadcastMsg = super.broadcastImplicitReceiver(context, intent);
         switch (broadcastMsg) {
-            case REFRESH_TASKS:
+            case REFRESH_TASKS_FINISHED:
                 boolean success = intent.getBooleanExtra(MainService.BROADCAST_REFRESH_TASKS_PARAMS.SUCCESS.ID, false);
                 if (success) {
                     restartActivity();
@@ -129,6 +155,10 @@ public class TaskOverviewActivity extends BaseActivity {
     }
 
     public void refreshList(boolean filterChanged) {
+        if (!serviceController.isServiceBound() || !isFilterViewInit) {
+            return;
+        }
+
         ListView listView = findViewById(R.id.to_listView);
         if (taskListFilter == null) {
             loadTaskFilterPerzToUI();
@@ -149,37 +179,6 @@ public class TaskOverviewActivity extends BaseActivity {
                     task.saveToDB(MS.getAppDatabase());
                 }
                 goToDetail(task);
-                // způsobovalo neznámou chybu na nějakých zažízeních neznámou chybu na nějakých zařízení
-                /*
-                if (task.getStatus().equals(Task.STATUS.NEW.DB_VAL)) {
-                    task.setStatus(Task.STATUS.OPEN.DB_VAL);
-                    task.updateStatus(MS.getAppDatabase(), TaskOverviewActivity.this, new Task.UpdateTaskReceiver() {
-
-                        @Override
-                        protected void success(AppDatabase appDatabase, Task task) {
-                        }
-
-                        @Override
-                        protected void success(AppDatabase appDatabase) {
-                            // not used
-                        }
-
-                        @Override
-                        public void failed(String error) {
-                            Toast.makeText(TaskOverviewActivity.this, getString(R.string.to_failedToOpenStatus, error), Toast.LENGTH_LONG).show();
-                            task.setUploadStatus(true);
-                        }
-
-                        @Override
-                        public void finish(boolean success) {
-                            task.saveToDB(MS.getAppDatabase());
-                            goToDetail(task);
-                        }
-                    }, MS.getRequestor());
-                } else {
-                    goToDetail(task);
-                }
-                /**/
             }
         });
         if (filterChanged) {
@@ -200,8 +199,12 @@ public class TaskOverviewActivity extends BaseActivity {
                 TaskOverviewActivity.this.firstVisibleItem = firstVisibleItem;
             }
         });
-        TextView filterCountTextView = findViewById(R.id.to_textView_filterCount);
-        filterCountTextView.setText(getString(R.string.to_showCount, taskListFiltered.getTasks().size(), TaskList.countOfAllTask(MS.getAppDatabase())));
+        int shownCount = taskListFiltered.getTasks().size();
+        int totalCount = TaskList.countOfAllTask(MS.getAppDatabase());
+        TextView filterCountTextView = filterView.findViewById(R.id.to_textView_filterCount);
+        filterCountTextView.setText(getString(R.string.to_showCount, shownCount, totalCount));
+        EditText editTextFilter = findViewById(R.id.to_editText_filter);
+        editTextFilter.setHint(getString(R.string.to_filter) + " (" + getString(R.string.to_showCount, shownCount, totalCount) + ")");
     }
 
     private void saveTaskFilterPerzFromUI() {
@@ -211,39 +214,39 @@ public class TaskOverviewActivity extends BaseActivity {
         taskListFilter.setUserId(LoggedUser.createFromAppDatabase(MS.getAppDatabase()).getId());
 
         // name
-        EditText nameEditText = findViewById(R.id.to_editText_name);
+        EditText nameEditText = filterView.findViewById(R.id.to_editText_name);
         taskListFilter.setName(nameEditText.getText().toString());
 
         // status
-        CheckBox newCheckBox = findViewById(R.id.to_checkBox_new);
+        CheckBox newCheckBox = filterView.findViewById(R.id.to_checkBox_new);
         if (newCheckBox.isChecked()) {
             taskListFilter.getFilterStatuses().add(TaskList.TaskListFilter.STATUS.NEW);
         }
-        CheckBox openCheckBox = findViewById(R.id.to_checkBox_open);
+        CheckBox openCheckBox = filterView.findViewById(R.id.to_checkBox_open);
         if (openCheckBox.isChecked()) {
             taskListFilter.getFilterStatuses().add(TaskList.TaskListFilter.STATUS.OPEN);
         }
-        CheckBox providedCheckBox = findViewById(R.id.to_checkBox_provided);
+        CheckBox providedCheckBox = filterView.findViewById(R.id.to_checkBox_provided);
         if (providedCheckBox.isChecked()) {
             taskListFilter.getFilterStatuses().add(TaskList.TaskListFilter.STATUS.PROVIDED);
         }
-        CheckBox returnedCheckBox = findViewById(R.id.to_checkBox_returned);
+        CheckBox returnedCheckBox = filterView.findViewById(R.id.to_checkBox_returned);
         if (returnedCheckBox.isChecked()) {
             taskListFilter.getFilterStatuses().add(TaskList.TaskListFilter.STATUS.RETURNED);
         }
-        CheckBox acceptedCheckBox = findViewById(R.id.to_checkBox_accepted);
+        CheckBox acceptedCheckBox = filterView.findViewById(R.id.to_checkBox_accepted);
         if (acceptedCheckBox.isChecked()) {
             taskListFilter.getFilterStatuses().add(TaskList.TaskListFilter.STATUS.ACCEPTED);
         }
-        CheckBox declinedCheckBox = findViewById(R.id.to_checkBox_declined);
+        CheckBox declinedCheckBox = filterView.findViewById(R.id.to_checkBox_declined);
         if (declinedCheckBox.isChecked()) {
             taskListFilter.getFilterStatuses().add(TaskList.TaskListFilter.STATUS.DECLINED);
         }
 
         // sort
-        CheckBox passedAtEndCheckBox = findViewById(R.id.to_checkBox_passedAtEnd);
+        CheckBox passedAtEndCheckBox = filterView.findViewById(R.id.to_checkBox_passedAtEnd);
         taskListFilter.setSortPassedAtEnd(passedAtEndCheckBox.isChecked());
-        RadioGroup sortOrderRadioGroup = findViewById(R.id.to_radioGroup_sortOrder);
+        RadioGroup sortOrderRadioGroup = filterView.findViewById(R.id.to_radioGroup_sortOrder);
         int sortOrderRadioId = sortOrderRadioGroup.getCheckedRadioButtonId();
         switch (sortOrderRadioId) {
             case R.id.to_radioButton_sortDesc:
@@ -253,7 +256,7 @@ public class TaskOverviewActivity extends BaseActivity {
                 taskListFilter.setSortDesc(false);
                 break;
         }
-        RadioGroup sortTypeRadioGroup = findViewById(R.id.to_radioGroup_sortType);
+        RadioGroup sortTypeRadioGroup = filterView.findViewById(R.id.to_radioGroup_sortType);
         int sortTypeId = sortTypeRadioGroup.getCheckedRadioButtonId();
         switch (sortTypeId) {
             case R.id.to_radioButton_sortByStatus:
@@ -281,30 +284,30 @@ public class TaskOverviewActivity extends BaseActivity {
         isFilterSettingRun = true;
 
         // name
-        EditText nameEditText = findViewById(R.id.to_editText_name);
+        EditText nameEditText = filterView.findViewById(R.id.to_editText_name);
         nameEditText.setText(taskListFilter.getName());
 
         // status
-        CheckBox newCheckBox = findViewById(R.id.to_checkBox_new);
+        CheckBox newCheckBox = filterView.findViewById(R.id.to_checkBox_new);
         newCheckBox.setChecked(taskListFilter.getFilterStatuses().contains(TaskList.TaskListFilter.STATUS.NEW));
-        CheckBox openCheckBox = findViewById(R.id.to_checkBox_open);
+        CheckBox openCheckBox = filterView.findViewById(R.id.to_checkBox_open);
         openCheckBox.setChecked(taskListFilter.getFilterStatuses().contains(TaskList.TaskListFilter.STATUS.OPEN));
-        CheckBox providedCheckBox = findViewById(R.id.to_checkBox_provided);
+        CheckBox providedCheckBox = filterView.findViewById(R.id.to_checkBox_provided);
         providedCheckBox.setChecked(taskListFilter.getFilterStatuses().contains(TaskList.TaskListFilter.STATUS.PROVIDED));
-        CheckBox returnedCheckBox = findViewById(R.id.to_checkBox_returned);
+        CheckBox returnedCheckBox = filterView.findViewById(R.id.to_checkBox_returned);
         returnedCheckBox.setChecked(taskListFilter.getFilterStatuses().contains(TaskList.TaskListFilter.STATUS.RETURNED));
-        CheckBox acceptedCheckBox = findViewById(R.id.to_checkBox_accepted);
+        CheckBox acceptedCheckBox = filterView.findViewById(R.id.to_checkBox_accepted);
         acceptedCheckBox.setChecked(taskListFilter.getFilterStatuses().contains(TaskList.TaskListFilter.STATUS.ACCEPTED));
-        CheckBox declinedCheckBox = findViewById(R.id.to_checkBox_declined);
+        CheckBox declinedCheckBox = filterView.findViewById(R.id.to_checkBox_declined);
         declinedCheckBox.setChecked(taskListFilter.getFilterStatuses().contains(TaskList.TaskListFilter.STATUS.DECLINED));
 
         // sort
-        CheckBox passedAtEndCheckBox = findViewById(R.id.to_checkBox_passedAtEnd);
+        CheckBox passedAtEndCheckBox = filterView.findViewById(R.id.to_checkBox_passedAtEnd);
         passedAtEndCheckBox.setChecked(taskListFilter.isSortPassedAtEnd());
-        RadioGroup sortOrderRadioGroup = findViewById(R.id.to_radioGroup_sortOrder);
+        RadioGroup sortOrderRadioGroup = filterView.findViewById(R.id.to_radioGroup_sortOrder);
         int sortOrderRadioId = taskListFilter.isSortDesc() ? R.id.to_radioButton_sortDesc : R.id.to_radioButton_sortAsc;
         sortOrderRadioGroup.check(sortOrderRadioId);
-        RadioGroup sortTypeRadioGroup = findViewById(R.id.to_radioGroup_sortType);
+        RadioGroup sortTypeRadioGroup = filterView.findViewById(R.id.to_radioGroup_sortType);
         TaskList.TaskListFilter.SORT sort = taskListFilter.getSort();
         switch (sort) {
             case STATUS:
@@ -331,41 +334,15 @@ public class TaskOverviewActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    public void toggleFilterShow(View view) {
-        filterShown = !filterShown;
-        filterShow();
-    }
-
-    private void filterShow() {
-        ImageButton imageButton = findViewById(R.id.to_imageButton_showFilter);
-        ConstraintLayout constraintLayout = findViewById(R.id.to_constraintLayout_filter);
-        TextView filterCountTextView = findViewById(R.id.to_textView_filterCount);
-        ((ViewGroup) filterCountTextView.getParent()).removeView(filterCountTextView);
-        if (filterShown) {
-            imageButton.setImageResource(R.drawable.icon_arrow_up);
-            constraintLayout.setVisibility(View.VISIBLE);
-            LinearLayout linearLayout = findViewById(R.id.to_linearLayout_innerFilterCount);
-            linearLayout.addView(filterCountTextView);
-        } else {
-            imageButton.setImageResource(R.drawable.icon_arrow_down);
-            constraintLayout.setVisibility(View.GONE);
-            LinearLayout linearLayout = findViewById(R.id.to_linearLayout_headerFilterCount);
-            linearLayout.addView(filterCountTextView);
-        }
-    }
-
     public void filterChanged(View view) {
         saveTaskFilterPerzFromUI();
-        if (serviceController.isServiceInitialized()) {
-            refreshList(true);
-        }
+        refreshList(true);
     }
-
 
 
     @SuppressLint("ClickableViewAccessibility")
-    private void initFilter() {
-        EditText nameEditText = findViewById(R.id.to_editText_name);
+    public void initFilter() {
+        EditText nameEditText = filterView.findViewById(R.id.to_editText_name);
         nameEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -386,30 +363,22 @@ public class TaskOverviewActivity extends BaseActivity {
             }
         });
 
-        ConstraintLayout constraintLayout = findViewById(R.id.to_constraintLayout_filter);
-        ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) constraintLayout.getLayoutParams();
-        origHeight = layoutParams.height;
-        constraintLayout.setOnTouchListener((v, event) -> {
-            ConstraintLayout.LayoutParams lp = (ConstraintLayout.LayoutParams) constraintLayout.getLayoutParams();
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                previousHeight = constraintLayout.getHeight();
-                diffHeight = previousHeight - (int) event.getY();
-            }
-            int newHeight = (int) event.getY() + diffHeight;
-            if (newHeight < previousHeight && newHeight > 0) {
-                lp.height = newHeight;
-            }
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                if (constraintLayout.getHeight() <= previousHeight / 2) {
-                    toggleFilterShow(v);
-                }
-                lp.height = origHeight;
-            }
-            constraintLayout.setLayoutParams(lp);
-            return true;
-        });
-        filterShow();
+        isFilterViewInit = true;
+        refreshList(false);
     }
+
+    // region get, set
+
+    public View getFilterView() {
+        return filterView;
+    }
+
+    // endregion
 
 
 }
+
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

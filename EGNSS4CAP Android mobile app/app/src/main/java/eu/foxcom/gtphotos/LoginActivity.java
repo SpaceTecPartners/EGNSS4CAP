@@ -2,6 +2,7 @@ package eu.foxcom.gtphotos;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -22,11 +23,18 @@ import eu.foxcom.gtphotos.model.mock.UserMock;
 
 public class LoginActivity extends BaseActivity {
 
+    public final String TAG = LoginActivity.class.getName();
+
+    private boolean isServerLastConnected = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
         setContentView(R.layout.activity_login);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
     }
 
     @Override
@@ -36,29 +44,23 @@ public class LoginActivity extends BaseActivity {
 
     private void showMessage(String message) {
         TextView messageTextView = findViewById(R.id.lg_textView_msg);
-        messageTextView.setText(message);
-    }
-
-    @Override
-    protected void refreshTasks(Intent intent) {
-        if (true) {
-            super.refreshTasks(intent);
-            return;
-        }
-        if(intent.getBooleanExtra(MainService.BROADCAST_REFRESH_TASKS_PARAMS.SUCCESS.ID, false)) {
-            goToMainActivity();
+        if (message != null && !message.isEmpty()) {
+            messageTextView.setVisibility(View.VISIBLE);
         } else {
-            endLogin(getString(R.string.lg_loginFailed, intent.getStringExtra(MainService.BROADCAST_REFRESH_TASKS_PARAMS.ERROR_MSG.ID)));
+            messageTextView.setVisibility(View.GONE);
         }
+        messageTextView.setText(message);
     }
 
     public void tryLogin(View view) {
         beginLogin();
+        isServerLastConnected = false;
         final TextView loginTextView = findViewById(R.id.lg_textInputEditText_login);
         final TextView passwordTextView = findViewById(R.id.lg_textInputEditText_password);
-        MS.getRequestor().requestAuth("https://server/ws/comm_login.php", new Response.Listener<String>() {
+        MS.getRequestor().requestAuth("https://egnss4cap-uat.foxcom.eu/ws/comm_login.php", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                isServerLastConnected = true;
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     String status = jsonObject.getString("status").trim();
@@ -69,7 +71,7 @@ public class LoginActivity extends BaseActivity {
                         loggedUser = UserMock.createUserMock();
                     } else if (!status.equals("ok")) {
                         String errorMsg = jsonObject.getString("error_msg");
-                        endLogin(getString(R.string.lg_loginFailed, errorMsg));
+                        endLogin();
                         return;
                     } else {
                         loggedUser = LoggedUser.createFromResponse(jsonObject.getJSONObject("user"), loginTextView.getText().toString(), new DateTime());
@@ -78,13 +80,14 @@ public class LoginActivity extends BaseActivity {
                     MS.syncAll();
                     goToMainActivity();
                 } catch (JSONException e) {
-                    endLogin(getString(R.string.lg_loginFailed, e.getMessage()));
+                    Log.e(TAG, e.getMessage());
+                    endLogin();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                endLogin(getString(R.string.lg_loginFailed, error.getMessage()));
+                endLogin();
             }
         }, new Requestor.Req() {
             @Override
@@ -109,9 +112,22 @@ public class LoginActivity extends BaseActivity {
         progressBar.setVisibility(View.VISIBLE);
     }
 
-    private void endLogin(String msg) {
-        showMessage(msg);
+    private String createErrMsg() {
+        String errMsg;
+        if (isServerLastConnected) {
+           errMsg = getString(R.string.lg_loginFailed, getString(R.string.lg_loginFailedWrongData));
+        } else {
+            errMsg = getString(R.string.lg_loginFailed, getString(R.string.lg_loginFailedNoServer));
+        }
+        return errMsg;
+    }
+
+    private void endLogin() {
+        showMessage(createErrMsg());
         final ProgressBar progressBar = findViewById(R.id.lg_progressBar);
         progressBar.setVisibility(View.GONE);
     }
 }
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

@@ -1,0 +1,132 @@
+{% set page_name = 'pdf_photo_prepare' %}
+{% extends "base.html.twig" %}
+{% block title %}{{ title }}{% endblock %}
+{% block body %}
+<script>
+const FILTER_TYPE = "{{ mapjs_filter_type }}";
+</script>
+<h2>{{ prep_heading }}</h2>
+<div class="pdf_loader" style="display: none;">
+  <div class="inner_cont">
+    <p><span id="process_counter_cur"></span>&nbsp;{{ counter_out_of }}&nbsp;<span id="process_counter_max"></span></p>
+    <img src="img/spinner.gif" alt="spinner_loader">
+    <p>{{wait}}</p>
+  </div>
+</div>
+
+<input type="hidden" value="" class="js_photo_ids">
+<input type="hidden" value="{{ search_string }}" class="js_search_input">
+<input type="hidden" value="{{ photos_string }}" class="js_photos_input">
+<input type="hidden" value="{{ pdf_url }}" id="js_pdf_create_url">
+<div class="float-left w-100 p-2 m-2">
+
+  <button id="js_confirm_pdf_generate" type="button" class="btn btn-primary text-capitalize">{{ prep_confirm }}</button>
+</div>
+{% for image in images %}
+<div class="pdf_image_row" data-image_id="{{ image.id }}">
+  <table class="pdf_image_row_table">
+    <tr>
+      <td class="pdf_image_row_table_td1">
+        <img src="photo_detail.php?justimg=1&rotation={{ image.rotation }}&img={{ image.path }}{{ image.file_name }}">
+      </td>
+      <td class="pdf_image_row_table_td2">
+        {#ORIGINAL:
+        <table>
+          <tr>
+            <td class="metadata">
+              <label>{{ pht_lat }}: {{ image.lat }}</label><br/>
+              <label>{{ pht_lng }}: {{ image.lng }}</label><br/>
+              <label>{{ pht_altitude }}: {{ image.altitude }} m</label><br/>
+              <label>{{ pht_azimuth }}: {{ image.azimuth }}</label><br/>
+              <label>{{ pht_angle }}: {{ image.photo_angle }}</label><br/>
+              <label>{{ pht_note }}: {{ image.note }}</label><br/>
+              <label></label><br/>
+              <label>{{ pht_device }}: {{ image.device }}</label><br/>
+              <label>{{ pht_accuracy }}:{% if image.accuracy is not empty %} {{ image.accuracy }} m{% endif %}</label><br/>
+              <label>{{ pht_distance }}:{% if image.distance is not empty %} {{ image.distance }} m{% endif %}</label><br/>
+              <label>{{ pht_distance_nmea }}:{% if image.nmea_distance is not empty %} {{ image.nmea_distance }} m{% endif %}</label><br/>
+            </td>
+            <td class="metadata">
+              <label>{{ pht_timestamp }}: {{ image.timestamp }}</label><br/>
+              <label>{{ pht_created_date }}: {{ image.created_date }}</label><br/>
+              <label></label><br/>
+              <label class="text_color_{{ image.flg_checked_location }}">
+                {% if image.flg_checked_location is same as(1) %}
+                  {{ pht_checked_location_ok }}
+                {% elseif  image.flg_checked_location is same as(0) %}
+                  {{ pht_checked_location_fail }}
+                {% else %}
+                  {{ pht_checked_location_notvf }}
+                {% endif %}
+              </label><br/>
+              <label class="text_color_{{ image.flg_original }}">
+                {% if image.flg_original is same as(1) %}
+                  {{ pht_original_ok }}
+                {% elseif  image.flg_original is same as(0) %}
+                  {{ pht_original_fail }}
+                {% else %}
+                  {{ pht_original_notvf }}
+                {% endif %}
+              </label>
+            </td>
+          </tr>
+        </table> #}
+        <table class="table">
+          <tbody>
+            <tr><td><label title="{{ pht_lat_title }}">{{ pht_lat }}</label></td><td><label title="{{ pht_lat }}">{{ image.lat }}</label></td></tr>
+            <tr><td><label title="{{ pht_lng_title }}">{{ pht_lng }}</label></td><td><label title="{{ pht_lng }}">{{ image.lng }}</label></td></tr>
+            <tr><td><label title="{{ pht_alt_title }}">{{ pht_altitude }}</label></td><td><label title="{{ pht_alt }}">{{ image.altitude }} m</label></td></tr>
+            <tr><td><label title="{{ pht_azimuth_title }}">{{ pht_azimuth }}</label></td><td><label title="{{ pht_azimuth }}">{{ image.azimuth }}</label></td></tr>
+            <tr><td><label title="{{ pht_angle_title }}">{{ pht_angle }}</label></td><td><label title="{{ pht_angle }}">{{ image.photo_angle }}</label></td></tr>
+            <tr><td><label title="{{ pht_note_title }}">{{ pht_note }}</label></td><td><label title="{{ pht_note }}">{{ image.note }}</label></td></tr>
+            <tr><td><label title="{{ pht_device_title }}">{{ pht_device }}</label></td><td><label title="{{ pht_device }}">{{ image.device }}</label></td></tr>
+            <tr><td><label title="{{ pht_accuracy_title }}">{{ pht_accuracy }}</label></td><td><label title="{{ pht_accuracy }}">{% if image.accuracy is not empty %} {{ image.accuracy }} m{% endif %}</label></td></tr>
+            <tr><td><label title="{{ pht_distance_title }}">{{ pht_distance }}</label></td><td><label title="{{ pht_distance }}">{% if image.distance is not empty %} {{ image.distance }} m{% endif %}</label></td></tr>
+            <tr><td><label title="{{ pht_distance_nmea_title }}">{{ pht_distance_nmea }}</label></td><td><label title="{{ pht_distance_nmea }}">{% if image.nmea_distance is not empty %} {{ image.nmea_distance }} m{% endif %}</label></td></tr>
+            <tr><td><label title="{{ pht_timestamp_title }}">{{ pht_timestamp }}</label></td><td><label title="{{ pht_timestamp }}">{{ image.timestamp }}</label></td></tr>
+            <tr><td><label title="{{ pht_created_date_title }}">{{ pht_created_date }}</label></td><td><label title="{{ pht_created_date }}">{{ image.created_date }}</label></td></tr>
+            <tr><td></td><td><label class="js_open_ekf">{{ show_ekf_metadata }}</label></td></tr>
+            <tr>
+              <td></td>
+              <td>
+                <label class="text_color_{{ image.flg_checked_location }}">
+                  {% if image.flg_checked_location is same as(1) %}
+                    {{ pht_checked_location_ok }}
+                  {% elseif  image.flg_checked_location is same as(0) %}
+                    {{ pht_checked_location_fail }}
+                  {% else %}
+                    {{ pht_checked_location_notvf }}
+                  {% endif %}
+                </label>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>
+                <label class="text_color_{{ image.flg_original }}">
+                  {% if image.flg_original is same as(1) %}
+                    {{ pht_original_ok }}
+                  {% elseif  image.flg_original is same as(0) %}
+                    {{ pht_original_fail }}
+                  {% else %}
+                    {{ pht_original_notvf }}
+                  {% endif %}
+                </label>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </table>
+  <div class="w-100 mt-5" style="display:flex; justify-content:center;">
+    <div id="map_for-{{ image.id }}" class="map" style="width:900px; height:500px;"></div>
+  </div>
+</div>
+{% endfor %}
+
+<script src="https://unpkg.com/@google/markerclustererplus@5.1.0/dist/markerclustererplus.min.js"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key={{ map_api_key }}&callback=initMap&libraries=geometry"></script>
+
+<!--Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu-->
+{% endblock %}

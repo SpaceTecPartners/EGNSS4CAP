@@ -38,6 +38,7 @@ if($model->getUser_role() == user_model::OFFICER_ROLE){
     $_SESSION['user_list_sort']['u.id'] = 'ASC';
   }
   $template_variables = array(
+    "test" => 'test',
     "agency" => true,
     "sort" => (isset($_SESSION['user_list_sort'])?$_SESSION['user_list_sort']:array()),
     "filter" => (isset($_SESSION['user_list_filter'])?$_SESSION['user_list_filter']:"")
@@ -51,5 +52,5 @@ if($model->getUser_role() == user_model::SUPERADMIN_ROLE){
   );
   echo $template->load_index_agency_html_page($template_variables);
 }
-
+//Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
 ?>

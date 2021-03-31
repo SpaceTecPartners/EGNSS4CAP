@@ -4,18 +4,19 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentTransaction;
 
-import eu.foxcom.gtphotos.model.LoggedUser;
 import eu.foxcom.gnss_scan.GnssStatusScanner;
+import eu.foxcom.gtphotos.model.LoggedUser;
 import eu.foxcom.gtphotos.model.Util;
 
 public class MainActivity extends BaseActivity {
@@ -28,8 +29,14 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setToolbar(R.id.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        toolbar.setLogo(R.drawable.title_logo);
         setShowMenu(true);
+        resolveShowingLoggedUser();
+
+
         checkLocationService();
     }
 
@@ -104,7 +111,7 @@ public class MainActivity extends BaseActivity {
         if (!enabled) alert(getString(R.string.ms_deviceConditionTitle),getString(R.string.ms_deviceConditionDetail));
     }
 
-    protected AlertDialog alertBuild(String title, String text) {
+    protected AlertDialog alertBuild_old(String title, String text) {
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(title);
         alertDialog.setMessage(text);
@@ -116,4 +123,23 @@ public class MainActivity extends BaseActivity {
                 });
         return alertDialog;
     }
+
+    private void resolveShowingLoggedUser() {
+        try {
+            ApplicationInfo applicationInfo = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
+            String mode = applicationInfo.metaData.getString(getString(R.string.meta_appMode_name));
+            if (!getString(R.string.meta_appMode_gsa).equals(mode)) {
+                View loggedUserView = findViewById(R.id.hs_linearLayout_loggedUser);
+                loggedUserView.setVisibility(View.VISIBLE);
+                View spaceView = findViewById(R.id.hs_space_loggedUserBottom);
+                spaceView.setVisibility(View.VISIBLE);
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            // nothing
+        }
+    }
 }
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

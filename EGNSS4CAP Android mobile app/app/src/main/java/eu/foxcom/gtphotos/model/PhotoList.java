@@ -19,6 +19,7 @@ public class PhotoList {
     private List<Photo> photos = new ArrayList<>();
     private String taskId;
 
+    @Deprecated
     public static PhotoList createFromJSONArray(AppDatabase appDatabase, JSONArray jsonArray, String taskId, Context context) throws JSONException, IOException {
         List<Photo> photos = new ArrayList<>();
         Integer indx = 0;
@@ -32,13 +33,13 @@ public class PhotoList {
         }
         for (int i = 0; i < jsonArray.length(); ++i) {
             JSONObject jsonObject = jsonArray.getJSONObject(i);
-            photos.add(Photo.createFromResponse(jsonObject, taskId, indx, context, appDatabase));
+            photos.add(Photo.createFromResponse(jsonObject, null, taskId, indx, context, appDatabase));
             ++indx;
         }
         return new PhotoList(appDatabase, photos, taskId, context);
     }
 
-    public static PhotoList createFromAppDatabase(AppDatabase appDatabase, String taskId, Context context) {
+    public static PhotoList createFromAppDatabaseByTaskGroup(AppDatabase appDatabase, String taskId, Context context) {
         List<Photo> photos = new ArrayList<>();
         if (taskId != null) {
             photos = appDatabase.photoDao().selectTaskPhotos(taskId);
@@ -63,7 +64,7 @@ public class PhotoList {
             List<Photo> photos = appDatabase.photoDao().selectUnownedPhotosNotSent(LoggedUser.createFromAppDatabase(appDatabase).getId());
             return new PhotoList(appDatabase, photos, null, context);
         } else {
-            return createFromAppDatabase(appDatabase, null, context);
+            return createFromAppDatabaseByTaskGroup(appDatabase, null, context);
         }
     }
 
@@ -82,9 +83,20 @@ public class PhotoList {
         return new PhotoList(appDatabase, photos, null, context);
     }
 
-    public static Map<Long, Photo> createFromAppDatabaseByUser(AppDatabase appDatabase) {
+    public static PhotoList createFromUnassignedPhoto(AppDatabase appDatabase, Context context, Photo photo) {
+        List<Photo> photos = new ArrayList<>();
+        photos.add(photo);
+        return new PhotoList(appDatabase, photos, null, context);
+    }
+
+    public static PhotoList createFromAppDatabaseUserPhoto(AppDatabase appDatabase, Context context) {
         LoggedUser loggedUser = LoggedUser.createFromAppDatabase(appDatabase);
         List<Photo> photos = appDatabase.photoDao().selectUserPhotos(loggedUser.getId());
+        return new PhotoList(appDatabase, photos, null, context);
+    }
+
+    public static Map<Long, Photo> getMapWithIds(PhotoList photoList) {
+        List<Photo> photos = photoList.photos;
         Map<Long, Photo> photoMap = new HashMap<>();
         for (Photo photo : photos) {
             photoMap.put(photo.getId(), photo);
@@ -128,7 +140,7 @@ public class PhotoList {
     }
 
     public void setLastSendFailed(boolean failed) {
-        for (Photo photo :photos) {
+        for (Photo photo : photos) {
             photo.setLastSendFailed(failed);
         }
     }
@@ -138,9 +150,17 @@ public class PhotoList {
         photos.remove(indx);
     }
 
+    public void unlockAllImmediately() {
+        for (Photo photo : photos) {
+            photo.setLastSendFailed(false);
+        }
+        appDatabase.photoDao().update(photos);
+    }
+
     /*
-     * odstraní z databáze všechny fotografie, který mají shodné digesty fotografií v tomto seznamu
+     * removes from the database all photos that have identical photo digests in this list
      * */
+    @Deprecated
     public void deleteSameDigestPhotos() {
         for (Photo photo : photos) {
             String digest = photo.getDigest();
@@ -152,6 +172,21 @@ public class PhotoList {
                 continue;
             }
             duplicatePhoto.delete(appDatabase);
+        }
+    }
+
+    public void deleteDuplicatePhotosInDatabaseByDigest() {
+        for (Photo refPhoto : photos) {
+            if (refPhoto.getDigest() == null) {
+                continue;
+            }
+            Photo duplicatePhoto = appDatabase.photoDao().selectPhotoByDigest(refPhoto.getDigest());
+            if (duplicatePhoto == null) {
+                continue;
+            }
+            if (!duplicatePhoto.getId().equals(refPhoto.getId())) {
+                appDatabase.photoDao().deletePhoto(duplicatePhoto);
+            }
         }
     }
 
@@ -175,3 +210,7 @@ public class PhotoList {
 
     // endregion
 }
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

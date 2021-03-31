@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/roboto" />
+    <font
+        android:fontStyle="italic"
+        android:fontWeight="400"
+        android:font="@font/roboto_italic" />
+
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="700"
+        android:font="@font/roboto_bold" />
+
+    <font
+        android:fontStyle="italic"
+        android:fontWeight="700"
+        android:font="@font/roboto_bold_italic" />
+
+</font-family>
+
+    <!-- Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu -->

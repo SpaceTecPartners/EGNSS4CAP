@@ -38,7 +38,49 @@ $(document)
     e.preventDefault();
     save_new_task();
   })
-
+  .on('click', '#unassigned_pdf_export', async function(e){
+    e.preventDefault();
+    var url = $(this).attr('href');
+    await get_translate('assign_photos_select_error');
+    if ($('#assign_photos_form').find('.assign_photo_input').length > 0){
+      $photos = $('#assign_photos_form').find('.assign_photo_input');
+      var specified_photos = '&specified_photos=';
+      var first = true;
+      $.each($photos, function () {
+        if (first){
+          specified_photos += $(this).val();
+          first = false;
+        } else {
+          specified_photos += ','+$(this).val();
+        }
+      });
+      window.open(url + specified_photos, '_blank');
+    } else {
+      alert(alert_text);
+    }
+    //window.open(url, '_blank');
+  })
+  .on('click', '#unassigned_pdf_export_selected', async function(e){
+    e.preventDefault();
+    var url = $(this).attr('href');
+    await get_translate('assign_photos_select_error');
+    if ($('#assign_photos_form').find('.assign_photo_input:checked').length > 0){
+      $photos = $('#assign_photos_form').find('.assign_photo_input:checked');
+      var specified_photos = '&specified_photos=';
+      var first = true;
+      $.each($photos, function () {
+        if (first){
+          specified_photos += $(this).val();
+          first = false;
+        } else {
+          specified_photos += ','+$(this).val();
+        }
+      });
+      window.open(url + specified_photos, '_blank');
+    } else {
+      alert(alert_text);
+    }
+  })
 
 
   function save_new_task(){
@@ -97,7 +139,7 @@ $(document)
 
   function show_hide_new_farmers_inputs ($button){
     $form = $('.js_new_farmer_inputs');
-    scrollToTop();
+    scrollToHeading('#js_fi_header');
     if($form.is(":hidden")){
       clear_form($form);
       $form.show();
@@ -234,3 +276,12 @@ $(document)
     var body = $("html, body, main");
     body.stop().animate({scrollTop:$offset}, 500, 'swing', function() {});
   }
+
+  function scrollToHeading(target) {
+    setTimeout(
+      function() {
+        $('html, body, main').animate({scrollTop: 0},0);//otherwise the target position is wrong, due to the fact we're not scrolling body, but main
+        $('html, body, main').animate({scrollTop: (($(target).position().top)-70)},500);
+      }, 10);
+  }
+//Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu

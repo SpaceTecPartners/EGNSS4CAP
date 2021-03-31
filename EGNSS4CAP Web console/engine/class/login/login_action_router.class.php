@@ -39,5 +39,5 @@ class login_action_router extends \action_router{
   protected function lang_cz($params){$_SESSION['lang'] = 'cz';}
 
 }
-
+//Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
 ?>

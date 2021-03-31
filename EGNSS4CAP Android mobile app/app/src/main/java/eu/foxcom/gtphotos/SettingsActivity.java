@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import eu.foxcom.gtphotos.model.MyAlertDialog;
 import eu.foxcom.gtphotos.model.PersistData;
 import eu.foxcom.gtphotos.model.Util;
 import eu.foxcom.gtphotos.model.component.SeekBarAPI26;
@@ -26,7 +27,7 @@ public class SettingsActivity extends BaseActivity {
         PersistData.MANUAL_BRIGHTNESS_ACTIVE brightnessActive = PersistData.getManualBrightnessCorrectionActive(context);
         boolean brightnessActiveBoolean;
         if (brightnessActive.equals(PersistData.MANUAL_BRIGHTNESS_ACTIVE.DEFAULT)) {
-            // defaultní vypnutí korekce jasu u nepodporovaných telefonů
+            // default turn off brightness correction for unsupported phones
             if (Util.getPhoneModel().toLowerCase().trim().equals("Mi note 10 Pro".toLowerCase().trim())) {
                 brightnessActiveBoolean = false;
             } else {
@@ -42,6 +43,7 @@ public class SettingsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        setToolbar(R.id.toolbar);
     }
 
     @Override
@@ -97,6 +99,8 @@ public class SettingsActivity extends BaseActivity {
         buttonSnapshotSwitch.setChecked(PersistData.getButtonSnapshotActive(this));
         showButtonSnapshotKeyCode(PersistData.getButtonSnapshotKeyCode(this));
         initBrightnessButton();
+        initAutoPanButton();
+        initBeepButton();
     }
 
     private void initBrightnessButton() {
@@ -104,6 +108,22 @@ public class SettingsActivity extends BaseActivity {
         buttonManualBrightness.setChecked(isManualBrightnessActive(this));
         buttonManualBrightness.setOnCheckedChangeListener((buttonView, isChecked) -> {
             PersistData.saveManualBrightnessCorrectionActive(this, isChecked ? PersistData.MANUAL_BRIGHTNESS_ACTIVE.TRUE : PersistData.MANUAL_BRIGHTNESS_ACTIVE.FALSE);
+        });
+    }
+
+    private void initAutoPanButton() {
+        Switch autoPanSwitch = findViewById(R.id.se_switch_autoPan);
+        autoPanSwitch.setChecked(PersistData.getAutoPan(this));
+        autoPanSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            PersistData.saveAutoPan(this, isChecked);
+        });
+    }
+
+    private void initBeepButton() {
+        Switch beepSwitch = findViewById(R.id.se_switch_beep);
+        beepSwitch.setChecked(PersistData.getBeepPathPoint(this));
+        beepSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            PersistData.saveBeepPathPoint(this, isChecked);
         });
     }
 
@@ -116,11 +136,12 @@ public class SettingsActivity extends BaseActivity {
         if (active) {
             saveButtonSnapshotActive(false);
         } else {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(R.string.se_buttonToSnapTitle);
-            builder.setMessage(R.string.se_buttonToSnapDesc);
-            builder.setNeutralButton(R.string.dl_Cancel, null);
-            builder.setOnKeyListener((dialog, keyCode, event) -> {
+            MyAlertDialog.Builder builder = new MyAlertDialog.Builder(this);
+            MyAlertDialog myAlertDialog = builder.build();
+            myAlertDialog.setTitle(getString(R.string.se_buttonToSnapTitle));
+            myAlertDialog.setMessage(getString(R.string.se_buttonToSnapDesc));
+            myAlertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.dl_Cancel), null);
+            myAlertDialog.getAlertDialog().setOnKeyListener((dialog, keyCode, event) -> {
                 if (keyCode == KeyEvent.ACTION_DOWN
                         || keyCode == KeyEvent.ACTION_UP
                         || keyCode == KeyEvent.ACTION_MULTIPLE
@@ -133,7 +154,7 @@ public class SettingsActivity extends BaseActivity {
                 dialog.dismiss();
                 return true;
             });
-            builder.create().show();
+            myAlertDialog.show();
         }
     }
 
@@ -149,6 +170,35 @@ public class SettingsActivity extends BaseActivity {
         if (name.equals("UNRECOGNIZE")) {
             name = getString(R.string.se_buttonToSnapUnassigned);
         }
-        keyCodeTextView.setText(Util.getButtonName(keyCode));
+        keyCodeTextView.setText(name);
     }
+
+
+    // region UI bridges to switches
+    public void photoWithCentroidToggle(View view) {
+        Switch aSwitch = findViewById(R.id.se_switch_photoWithCentroid);
+        aSwitch.performClick();
+    }
+
+    public void manualBrightnessToggle(View view) {
+        Switch aSwitch = findViewById(R.id.se_switch_manualBrightness);
+        aSwitch.performClick();
+    }
+
+    public void autoPanToggle(View view) {
+        Switch aSwitch = findViewById(R.id.se_switch_autoPan);
+        aSwitch.performClick();
+    }
+
+    public void beepToggle(View view) {
+        Switch aSwitch = findViewById(R.id.se_switch_beep);
+        aSwitch.performClick();
+    }
+
+    // endregion
 }
+
+
+/**
+ * Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
+ */

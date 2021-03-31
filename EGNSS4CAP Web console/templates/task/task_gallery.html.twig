@@ -1,90 +1,171 @@
 {% extends "task/task.html.twig" %}
 {% block galery %}
 <!-- Page Content -->
-<div class="container">
-  <div class="row">
-    <div class="row w-100">
-      {% for image in images %}
-      <div class="col-lg-6 col-md-5 col-xs-6 thumb">
-        <a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title=""
-          data-image="{{ image.path }}{{ image.file_name }}" data-target="#image-gallery">
-          <img id="photo_{{ image.id }}" data-photo_db_id="{{ image.id }}" data-rotation="{{ image.rotation }}" style="transform: rotate({{ image.rotation }}deg);" class="img-thumbnail" src="{{ image.path }}{{ image.file_name }}">
-        </a>
-        <div class="js_photo_metadata_popup">
-          <!--<label><b>{{ photo_meta_head }}</b></label>-->
-          <label title="{{ pht_lat_title }}">{{ pht_lat }}: {{ image.lat }}</label>
-            <label title="{{ pht_lng_title }}">{{ pht_lng }}: {{ image.lng }}</label>
-            <label title="{{ pht_alt_title }}">{{ pht_altitude }}: {{ image.altitude }}</label>
-            <label title="{{ pht_azimuth_title }}">{{ pht_azimuth }}: {{ image.azimuth }}</label>
-            <label title="{{ pht_angle_title }}">{{ pht_angle }}: {{ image.photo_angle }}</label>
-            <label title="{{ pht_note_title }}">{{ pht_note }}: {{ image.note }}</label> 
-            <label></label>                         
-            <label title="{{ pht_device_title }}">{{ pht_device }}: {{ image.device }}</label>
-            <label title="{{ pht_accuracy_title }}">{{ pht_accuracy }}: {{ image.accuracy }}</label>            
-            <label title="{{ pht_distance_title }}">{{ pht_distance }}: {{ image.distance }}</label>  
-            <label></label>             
-            <label title="{{ pht_timestamp_title }}">{{ pht_timestamp }}: {{ image.timestamp }}</label>
-            <label title="{{ pht_created_date_title }}">{{ pht_created_date }}: {{ image.created_date }}</label>
-            <label></label>
-          {% if agency %}
-            <label title="{{ flg_checked_location_title }}" class="text_color_{{ image.flg_checked_location }}">
-              {% if image.flg_checked_location is same as(1) %}
-                {{ pht_checked_location_ok }}
-              {% elseif  image.flg_checked_location is same as(0) %}
-                {{ pht_checked_location_fail }}
-              {% else %}
-                {{ pht_checked_location_notvf }}
-              {% endif %}
-            </label>
-            <label title="{{ flg_original_title }}" class="text_color_{{ image.flg_original }}">
-              {% if image.flg_original is same as(1) %}
-                {{ pht_original_ok }}
-              {% elseif  image.flg_original is same as(0) %}
-                {{ pht_original_fail }}
-              {% else %}
-                {{ pht_original_notvf }}
-              {% endif %}
-            </label>
-          {% endif %}
-          <div class="js_photo_rotate">
-            <div class="js_photo_rotate_left" data-pht_id="photo_{{ image.id }}"><i class="fas fa-sync"></i> {{ pht_rotate_left }}</div>
-            <div class="js_photo_rotate_right" data-pht_id="photo_{{ image.id }}"><i class="fas fa-sync"></i> {{ pht_rotate_right }}</div>
-          </div>
-        </div>
+<div class="row map_dropdown"><div class="col"><div id="map"></div><div class="map_dropdown_btn">&boxh; &boxh;&boxh; &boxh;&boxh;&boxh; <span class="btn_hide">&#x25ba; {{hide_map|upper}} &#x25c4;</span><span class="btn_show">&#x25c4; {{show_map|upper}} &#x25ba;</span> &boxh;&boxh;&boxh; &boxh;&boxh; &boxh;</div></div></div>
+<a id="task_pdf_export" href="{{ pdf_url }}" target="_blank" class="btn btn-primary text-capitalize mb-2">{{ pdf_export|upper }}</a>
+<a id="task_pdf_export_selected" href="{{ pdf_url }}" target="_blank" class="btn btn-primary text-capitalize mb-2">{{ pdf_export_selected|upper }}</a>
+<div id="task_photos">
+  {% for image in images %}
+  <div class="thumb">
+    <div class="top_action_bar">
+      <div class="js_photo_rotate">
+        <div class="icon_cont js_photo_rotate_left" data-pht_id="photo_{{ image.id }}"><i class="fas fa-sync"></i></div>
+        <div class="icon_cont js_photo_rotate_right" data-pht_id="photo_{{ image.id }}"><i class="fas fa-sync"></i></div>
       </div>
-      {% endfor %}
     </div>
-
-    <div class="modal fade w-100" id="image-gallery" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-      aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title" id="image-gallery-title"></h4>
-            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span
-                class="sr-only"></span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <a id="image-gallery-zoom" href="" target="_blank">
-              <img id="image-gallery-image" data-photo_db_id="0" data-rotation="0" class="img-responsive col-md-12" src="">
-            </a>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary float-left" id="show-previous-image"><i
-                class="fa fa-arrow-left"></i>
-            </button>
-            <div class="js_photo_rotate">
-              <div class="js_photo_rotate_left" data-pht_id="image-gallery-image"><i class="fas fa-sync"></i> {{ pht_rotate_left }}</div>
-              <div class="js_photo_rotate_right" data-pht_id="image-gallery-image"><i class="fas fa-sync"></i> {{ pht_rotate_right }}</div>
-            </div>
-            <button type="button" id="show-next-image" class="btn btn-secondary float-right"><i
-                class="fa fa-arrow-right"></i>
-            </button>
-          </div>
-        </div>
-      </div>
+    <input class="assign_photo_input" id="assign_photo_input_{{ image.id }}" type="checkbox" value="{{ image.id }}">
+    <label for="assign_photo_input_{{ image.id }}" class="thumbnail" data-photo_db_id="{{ image.id }}" data-rotation="{{ image.rotation }}"
+    data-image-id="" data-toggle="modal" data-title="" data-image="{{ image.path }}{{ image.file_name }}" data-target="#image-gallery"
+    style="transform: rotate({{ image.rotation }}deg);" id="photo_{{ image.id }}" >
+      <img src="{{ image.path }}{{ image.file_name }}">
+    </label>
+    <!--<a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title=""
+      data-image="{{ image.path }}{{ image.file_name }}" data-target="#image-gallery">
+      <img id="photo_{{ image.id }}" data-photo_db_id="{{ image.id }}" data-rotation="{{ image.rotation }}" style="transform: rotate({{ image.rotation }}deg);" class="img-thumbnail" src="{{ image.path }}{{ image.file_name }}">
+    </a>-->
+    <div class="js_photo_metadata_popup">
+      <div class="icon_cont js_photo_select" data-checkbox_id="assign_photo_input_{{ image.id }}" ><i class="fas fa-check"></i> {{ pht_select }}</div>
+      <!--<label><b>{{ photo_meta_head }}</b></label>-->
+      <table class="table">
+        <tbody>
+          <tr><td><label title="{{ pht_lat_title }}">{{ pht_lat }}</label></td><td><label title="{{ pht_lat }}">{{ image.lat }}</label></td></tr>
+          <tr><td><label title="{{ pht_lng_title }}">{{ pht_lng }}</label></td><td><label title="{{ pht_lng }}">{{ image.lng }}</label></td></tr>
+          <tr><td><label title="{{ pht_alt_title }}">{{ pht_altitude }}</label></td><td><label title="{{ pht_alt }}">{{ image.altitude }} m</label></td></tr>
+          <tr><td><label title="{{ pht_azimuth_title }}">{{ pht_azimuth }}</label></td><td><label title="{{ pht_azimuth }}">{{ image.azimuth }}</label></td></tr>
+          <tr><td><label title="{{ pht_angle_title }}">{{ pht_angle }}</label></td><td><label title="{{ pht_angle }}">{{ image.photo_angle }}</label></td></tr>
+          <tr><td><label title="{{ pht_note_title }}">{{ pht_note }}</label></td><td><label title="{{ pht_note }}">{{ image.note }}</label></td></tr>
+          <tr><td><label title="{{ pht_device_title }}">{{ pht_device }}</label></td><td><label title="{{ pht_device }}">{{ image.device }}</label></td></tr>
+          <tr><td><label title="{{ pht_accuracy_title }}">{{ pht_accuracy }}</label></td><td><label title="{{ pht_accuracy }}">{% if image.accuracy is not empty %} {{ image.accuracy }} m{% endif %}</label></td></tr>
+          <tr><td><label title="{{ pht_distance_title }}">{{ pht_distance }}</label></td><td><label title="{{ pht_distance }}">{% if image.distance is not empty %} {{ image.distance }} m{% endif %}</label></td></tr>
+          <tr><td><label title="{{ pht_distance_nmea_title }}">{{ pht_distance_nmea }}</label></td><td><label title="{{ pht_distance_nmea }}">{% if image.nmea_distance is not empty %} {{ image.nmea_distance }} m{% endif %}</label></td></tr>
+          <tr><td><label title="{{ pht_timestamp_title }}">{{ pht_timestamp }}</label></td><td><label title="{{ pht_timestamp }}">{{ image.timestamp }}</label></td></tr>
+          <tr><td><label title="{{ pht_created_date_title }}">{{ pht_created_date }}</label></td><td><label title="{{ pht_created_date }}">{{ image.created_date }}</label></td></tr>
+          <tr><td></td><td><label class="js_open_ekf" data-id="{{ image.id }}">{{ show_ekf_metadata }}</label></td></tr>
+          {% if agency %}
+            <tr>
+              <td></td>
+              <td>
+                <label title="{{ flg_checked_location_title }}" class="text_color_{{ image.flg_checked_location }}">
+                  {% if image.flg_checked_location is same as(1) %}
+                    {{ pht_checked_location_ok }}
+                  {% elseif  image.flg_checked_location is same as(0) %}
+                    {{ pht_checked_location_fail }}
+                  {% else %}
+                    {{ pht_checked_location_notvf }}
+                  {% endif %}
+                </label>
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>
+                <label title="{{ flg_original_title }}" class="text_color_{{ image.flg_original }}">
+                  {% if image.flg_original is same as(1) %}
+                    {{ pht_original_ok }}
+                  {% elseif  image.flg_original is same as(0) %}
+                    {{ pht_original_fail }}
+                  {% else %}
+                    {{ pht_original_notvf }}
+                  {% endif %}
+                </label>
+              </td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+      {# OLD TEMPLATE:
+      <label title="{{ pht_lat_title }}">{{ pht_lat }}: {{ image.lat }}</label>
+        <label title="{{ pht_lng_title }}">{{ pht_lng }}: {{ image.lng }}</label>
+        <label title="{{ pht_alt_title }}">{{ pht_altitude }}: {{ image.altitude }} m</label>
+        <label title="{{ pht_azimuth_title }}">{{ pht_azimuth }}: {{ image.azimuth }}</label>
+        <label title="{{ pht_angle_title }}">{{ pht_angle }}: {{ image.photo_angle }}</label>
+        <label title="{{ pht_note_title }}">{{ pht_note }}: {{ image.note }}</label>
+        <label></label>
+        <label title="{{ pht_device_title }}">{{ pht_device }}: {{ image.device }}</label>
+        <label title="{{ pht_accuracy_title }}">{{ pht_accuracy }}:{% if image.accuracy is not empty %} {{ image.accuracy }} m{% endif %}</label>
+        <label title="{{ pht_distance_title }}">{{ pht_distance }}:{% if image.distance is not empty %} {{ image.distance }} m{% endif %}</label>
+        <label title="{{ pht_distance_nmea_title }}">{{ pht_distance_nmea }}:{% if image.nmea_distance is not empty %} {{ image.nmea_distance }} m{% endif %}</label>
+        <label></label>
+        <label title="{{ pht_timestamp_title }}">{{ pht_timestamp }}: {{ image.timestamp }}</label>
+        <label title="{{ pht_created_date_title }}">{{ pht_created_date }}: {{ image.created_date }}</label>
+        <label></label>
+        <label class="js_open_ekf">{{ show_ekf_metadata }}</label>
+        <label></label>
+      {% if agency %}
+        <label title="{{ flg_checked_location_title }}" class="text_color_{{ image.flg_checked_location }}">
+          {% if image.flg_checked_location is same as(1) %}
+            {{ pht_checked_location_ok }}
+          {% elseif  image.flg_checked_location is same as(0) %}
+            {{ pht_checked_location_fail }}
+          {% else %}
+            {{ pht_checked_location_notvf }}
+          {% endif %}
+        </label>
+        <label title="{{ flg_original_title }}" class="text_color_{{ image.flg_original }}">
+          {% if image.flg_original is same as(1) %}
+            {{ pht_original_ok }}
+          {% elseif  image.flg_original is same as(0) %}
+            {{ pht_original_fail }}
+          {% else %}
+            {{ pht_original_notvf }}
+          {% endif %}
+        </label>
+      {% endif %}
+      #}
     </div>
   </div>
+  <div class="js_hidden_ekf" data-id="{{ image.id }}">
+    <span class="close_popup"><i class="fas fa-times-circle" style="background: white;"></i></span>
+    <table>
+    <tr>
+      <td></td>
+      <td class="bold">GPS L1</td>
+      <td class="bold">GPS L5</td>
+      <td class="bold">GPS Iono Free (L1/L5)</td>
+      <td class="bold">Galileo E1</td>
+      <td class="bold">Galileo E5a</td>
+      <td class="bold">Galileo Iono Free (E1/E5a)</td>
+    </tr>
+    <tr>
+      <td class="bold">{{ pht_latitude }}</td>
+      <td>{{ image.efkLatGpsL1 }}</td>
+      <td>{{ image.efkLatGpsL5 }}</td>
+      <td>{{ image.efkLatGpsIf }}</td>
+      <td>{{ image.efkLatGalE1 }}</td>
+      <td>{{ image.efkLatGalE5 }}</td>
+      <td>{{ image.efkLatGalIf }}</td>
+    </tr>
+    <tr>
+      <td class="bold">{{ pht_longitude }}</td>
+      <td>{{ image.efkLngGpsL1 }}</td>
+      <td>{{ image.efkLngGpsL5 }}</td>
+      <td>{{ image.efkLngGpsIf }}</td>
+      <td>{{ image.efkLngGalE1 }}</td>
+      <td>{{ image.efkLngGalE5 }}</td>
+      <td>{{ image.efkLngGalIf }}</td>
+    </tr>
+    <tr>
+      <td class="bold">{{ pht_altitude }}</td>
+      <td>{{ image.efkAltGpsL1 }}</td>
+      <td>{{ image.efkAltGpsL5 }}</td>
+      <td>{{ image.efkAltGpsIf }}</td>
+      <td>{{ image.efkAltGalE1 }}</td>
+      <td>{{ image.efkAltGalE5 }}</td>
+      <td>{{ image.efkAltGalIf }}</td>
+    </tr>
+    <tr>
+      <td class="bold">{{ pht_ref_time }}</td>
+      <td>{{ image.efkTimeGpsL1 }}</td>
+      <td>{{ image.efkTimeGpsL5 }}</td>
+      <td>{{ image.efkTimeGpsIf }}</td>
+      <td>{{ image.efkTimeGalE1 }}</td>
+      <td>{{ image.efkTimeGalE5 }}</td>
+      <td>{{ image.efkTimeGalIf }}</td>
+    </tr>
+    </table>
+  </div>
+  {% endfor %}
+
 </div>
+<!--Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu-->
 {% endblock %}

@@ -49,23 +49,23 @@ class MapViewController: UIViewController, MKMapViewDelegate, PTManagerDelegate,
         ptManager = PTManager.acquire(indetifier: Self.ptManagerIdentifier, ptManagerDelegate: self)
         mkMapView.delegate = self
         
-        recordPathButton.layer.cornerRadius = 10
+        /*recordPathButton.layer.cornerRadius = 10
         recordPathButton.layer.shadowColor = UIColor.black.cgColor
         recordPathButton.layer.shadowOffset = CGSize(width: 3, height: 3)
         recordPathButton.layer.shadowOpacity = 0.3
-        recordPathButton.layer.shadowRadius = 2.0
+        recordPathButton.layer.shadowRadius = 2.0*/
         
-        showPathsButton.layer.cornerRadius = 10
+        /*showPathsButton.layer.cornerRadius = 10
         showPathsButton.layer.shadowColor = UIColor.black.cgColor
         showPathsButton.layer.shadowOffset = CGSize(width: 3, height: 3)
         showPathsButton.layer.shadowOpacity = 0.3
-        showPathsButton.layer.shadowRadius = 2.0
+        showPathsButton.layer.shadowRadius = 2.0*/
         
         shownPathInfoView.layer.cornerRadius = 10
-        shownPathInfoView.layer.shadowColor = UIColor.black.cgColor
+        /*shownPathInfoView.layer.shadowColor = UIColor.black.cgColor
         shownPathInfoView.layer.shadowOffset = CGSize(width: 3, height: 3)
         shownPathInfoView.layer.shadowOpacity = 0.3
-        shownPathInfoView.layer.shadowRadius = 2.0
+        shownPathInfoView.layer.shadowRadius = 2.0*/
         
         setupLocationManager()
         setupUserLocation()
@@ -211,10 +211,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, PTManagerDelegate,
     
     func setPathTrackState(isTracking: Bool) {
         if isTracking {
-            recordPathButton.setImage(#imageLiteral(resourceName: "icon_stop_act.png"), for: .normal)
+            recordPathButton.setImage(UIImage(named: "stop"), for: .normal)
             showPathInfo(ptPath: self.ptManager.acquirePTPathMainThread(), isRecording: isTracking)
         } else {
-            recordPathButton.setImage(#imageLiteral(resourceName: "icon_record_act.png"), for: .normal)
+            recordPathButton.setImage(UIImage(named: "record"), for: .normal)
             showPathInfo(ptPath: nil, isRecording: isTracking)
         }
     }
@@ -309,3 +309,5 @@ class MapViewController: UIViewController, MKMapViewDelegate, PTManagerDelegate,
     */
 
 }
+
+// Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu

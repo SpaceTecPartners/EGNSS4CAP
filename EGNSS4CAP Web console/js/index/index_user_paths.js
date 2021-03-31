@@ -1,4 +1,5 @@
 const FILTER_TYPE = 'user_paths';
+const PDF_PREPARE = false;
 var map_property = {zoom: 4, popup_bool: false};
 
 $(document)
@@ -7,6 +8,9 @@ $(document)
   if (confirm(alert_text)){
     delete_path($(this).data('path_db_id'));
   }
+})
+.on('change', '.js_path_show_on_map', function(){
+  showSelectedPaths();
 })
 
 function delete_path($id, $reload = true){
@@ -29,3 +33,4 @@ function delete_path($id, $reload = true){
     }
   })
 }
+//Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu

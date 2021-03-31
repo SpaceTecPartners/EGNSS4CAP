@@ -13,6 +13,9 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/convex_hull" />
+            <option value="$PROJECT_DIR$/gnss_compare_core" />
+            <option value="$PROJECT_DIR$/gnss_compare_core/GoGpsExtracts" />
+            <option value="$PROJECT_DIR$/gnss_compare_core/mylibrary" />
             <option value="$PROJECT_DIR$/gnss_scan" />
           </set>
         </option>

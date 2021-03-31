@@ -12,3 +12,5 @@ class AzimuthMKAnnotation: NSObject, MKAnnotation {
         self.coordinate = CLLocationCoordinate2D(latitude: photo.lat, longitude: photo.lng)
     }
 }
+
+// Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu

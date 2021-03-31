@@ -4,58 +4,40 @@
 <h2>{{ pa_name }} - {{ heading }}</h2>
 
 <div class="w-100">
-  <a href="{{ ret_url }}" class="btn btn-secondary text-capitalize">{{ back }}</a>
+  <a href="{{ ret_url }}" class="btn btn-outline-secondary text-capitalize" style="margin: 0 10px 0 0;">{{ back|upper }}</a>
   <input class="js_search_input" type="hidden" value="{{ pa_id }}">
-  <nav class="navbar navbar-light pl-md-0">
-    <button class="js_new_farmer_show mt-2 float-right mb-2 btn btn-primary" data-userid="0" data-formheader="{{ new_farmer_header }}">{{ new_farmer }}</button>
-  </nav>
-  <div class="js_new_farmer_inputs">
+  <button class="js_new_farmer_show mt-2 mb-2 btn btn-primary" data-userid="0" data-formheader="{{ new_farmer_header }}">{{ new_farmer|upper }}</button>
+  <div class="js_new_farmer_inputs box_dropdown">
     <h2 id="js_fi_header">{{ new_farmer_header }}</h2>
     <form id="new_farmer_form" method="POST" action="index.php">
     <input type="hidden" name="act" id="js_fi_act" value="new_farmer">
     <input type="hidden" class="not_clear" name="role" id="js_fi_role" value="2">
     <input type="hidden" class="not_clear" name="agency_id" id="js_fi_agency_id" value="{{ pa_id }}">
     <input type="hidden" name="user_id" id="js_fi_uid" value="0">
-      <table>
+      <table class="form_table">
         <thead>
           <tr>
-            <th>{{ login }}</th>
-            <th>{{ password }}</th>
-          </tr>
-          <tr>
-            <td><input id="js_fi_login" type="text" name="login" required></td>
-            <td><input id="js_fi_pass" type="password" name="password" required></td>
+            <td><label>{{login}}</label><input id="js_fi_login" type="text" name="login" required></td>
+            <td class="pass_input"><label>{{password}}</label><input id="js_fi_pass" type="password" name="password" required><span class="show_password"><i class="fas fa-eye"></i></span></td>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <th class="not_required">{{ name }}</th>
-            <th class="not_required">{{ surname }}</th>
+            <td><label class="not_required">{{name}}</label><input id="js_fi_name" type="text" name="name"></td>
+            <td><label class="not_required">{{surname}}</label><input id="js_fi_surname" type="text" name="surname"></td>
           </tr>
           <tr>
-            <td><input id="js_fi_name" type="text" name="name"></td>
-            <td><input id="js_fi_surname" type="text" name="surname"></td>
-          </tr>
-          <tr>
-            <th class="not_required">{{ email }}</th>
-            <th></th>
-          </tr>
-          <tr>
-            <td><input id="js_fi_email" type="email" name="email"></td>
+            <td><label class="not_required">{{email}}</label><input id="js_fi_email" type="email" name="email"></td>
             <td></td>
           </tr>
           <tr>
-            <th class="not_required">{{ ji }}</th>
-            <th class="not_required">{{ vat }}</th>
-          </tr>
-          <tr>
-            <td><input id="js_fi_in" type="number" name="identification_number"></td>
-            <td><input id="js_fi_vat" type="text" name="vat"></td>
+            <td><label class="not_required">{{ji}}</label><input id="js_fi_in" type="number" name="identification_number"></td>
+            <td><label class="not_required">{{vat}}</label><input id="js_fi_vat" type="text" name="vat"></td>
           </tr>
           <tr>
             <td>
-              <button class="js_new_farmer btn btn-primary" type="submit">{{ save }}</button>
-              <button class="js_button_close_farmer_edit btn btn-secondary" type="button">{{ close }}</button>
+              <button class="js_new_farmer btn btn-primary" type="submit">{{ save|upper }}</button>
+              <button class="js_button_close_farmer_edit btn btn-outline-secondary" type="button">{{ close|upper }}</button>
             </td>
             <td></td>
           </tr>
@@ -63,8 +45,8 @@
       </table>
     </form>
   </div>
-  <div class="w-100 float-md-left">
-    <table class="w-100 table float-md-left js_table">
+  <div class="table_cont">
+    <table class="w-100 table float-md-left js_table table_responsive">
       <thead>
         <tr>
           <th>{{ officer_login_text }}</th>
@@ -78,4 +60,5 @@
     </table>
   </div>
 </div>
+<!--Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu-->
 {% endblock %}

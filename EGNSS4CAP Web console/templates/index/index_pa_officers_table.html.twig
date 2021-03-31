@@ -1,11 +1,12 @@
 {% for officer in list_of_officers %}
 <tr class="clickable" id="{{officer.id}}">
-  <td>{{ officer.login }}</td>
-  <td>{{ officer.name }}</td>
-  <td>{{ officer.surname }}</td>
-  <td>
-    <button type="button" class="js_button_open_user_edit btn btn-secondary" data-userid="{{ officer.id }}" data-userlogin="{{ officer.login }}" data-username="{{ officer.name }}" data-usersurname="{{ officer.surname }}" data-useremail="{{ officer.email }}" data-uservat="{{ officer.vat }}" data-userin="{{ officer.identification_number }}" data-formheader="{{ edit_farmer_header }}">{{ edit_user }}</button>
-    <button type="button" class="js_button_user_deactivate btn btn-secondary" data-userid="{{ officer.id }}">{{ deactivate_user }}</button>
+  <td data-label="{{officer_login_text}}">{{ officer.login }}</td>
+  <td data-label="{{officer_name_text}}">{{ officer.name }}</td>
+  <td data-label="{{officer_surname_text}}">{{ officer.surname }}</td>
+  <td data-label="{{officer_actions_text}}">
+    <button type="button" class="js_button_open_user_edit btn btn-outline-secondary mb-2" data-userid="{{ officer.id }}" data-userlogin="{{ officer.login }}" data-username="{{ officer.name }}" data-usersurname="{{ officer.surname }}" data-useremail="{{ officer.email }}" data-uservat="{{ officer.vat }}" data-userin="{{ officer.identification_number }}" data-formheader="{{ edit_farmer_header }}">{{ edit_user|upper }}</button>
+    <button type="button" class="js_button_user_deactivate btn btn-outline-secondary mb-2" data-userid="{{ officer.id }}">{{ deactivate_user|upper }}</button>
   </td>
 </tr>
 {% endfor %}
+<!--Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu-->

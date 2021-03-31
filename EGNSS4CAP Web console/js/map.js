@@ -12,18 +12,24 @@ var polygons = [];
 var paths = [];
 var pathNames = [];
 var path_points = [];
+var path_points_circles = [];
 
 
 if(!map_property){
  var map_property = {zoom: 4, popup_bool: false};
 }
 
-async function initMap() {
+async function initMap($id = "map") {
   clear_vars();
   if (FILTER_TYPE != 'user_paths'){
     await load_tasks_gps_points();
   }
   let map_coordinate = coordinates[0];
+  if (PDF_PREPARE === true && $id == "map"){//if true -> its called by callback
+    $("#process_counter_cur").text(cur_photo+1);
+    $("#process_counter_max").text(photos.length);
+    $id = "map_for-"+photos[0];//change id to first photo
+  }
 
   google.maps.Polygon.prototype.getBoundingBox = function() {
     var bounds = new google.maps.LatLngBounds();  this.getPath().forEach(function(element,index) {
@@ -32,81 +38,101 @@ async function initMap() {
   };
   // Add center calculation method
   google.maps.Polygon.prototype.getApproximateCenter = function() {
-      var boundsHeight = 0,
-          boundsWidth = 0,
-          centerPoint,
-          heightIncr = 0,
-          maxSearchLoops,
-          maxSearchSteps = 10,
-          n = 1,
-          northWest,
-          polygonBounds = this.getBoundingBox(),
-          testPos,
-          widthIncr = 0;
+    var boundsHeight = 0,
+        boundsWidth = 0,
+        centerPoint,
+        heightIncr = 0,
+        maxSearchLoops,
+        maxSearchSteps = 10,
+        n = 1,
+        northWest,
+        polygonBounds = this.getBoundingBox(),
+        testPos,
+        widthIncr = 0;
 
-      // Get polygon Centroid
-      centerPoint = polygonBounds.getCenter();
+    // Get polygon Centroid
+    centerPoint = polygonBounds.getCenter();
 
-      if (google.maps.geometry.poly.containsLocation(centerPoint, this)) {
-          // Nothing to do Centroid is in polygon use it as is
-          return centerPoint;
-      } else {
-          maxSearchLoops = maxSearchSteps / 2;
+    if (google.maps.geometry.poly.containsLocation(centerPoint, this)) {
+      // Nothing to do Centroid is in polygon use it as is
+      return centerPoint;
+    } else {
+      maxSearchLoops = maxSearchSteps / 2;
 
-          // Calculate NorthWest point so we can work out height of polygon NW->SE
-          northWest = new google.maps.LatLng(polygonBounds.getNorthEast().lat(), polygonBounds.getSouthWest().lng());
+      // Calculate NorthWest point so we can work out height of polygon NW->SE
+      northWest = new google.maps.LatLng(polygonBounds.getNorthEast().lat(), polygonBounds.getSouthWest().lng());
 
-          // Work out how tall and wide the bounds are and what our search increment will be
-          boundsHeight = google.maps.geometry.spherical.computeDistanceBetween(northWest, polygonBounds.getSouthWest());
-          heightIncr = boundsHeight / maxSearchSteps;
-          boundsWidth = google.maps.geometry.spherical.computeDistanceBetween(northWest, polygonBounds.getNorthEast());
-          widthIncr = boundsWidth / maxSearchSteps;
+      // Work out how tall and wide the bounds are and what our search increment will be
+      boundsHeight = google.maps.geometry.spherical.computeDistanceBetween(northWest, polygonBounds.getSouthWest());
+      heightIncr = boundsHeight / maxSearchSteps;
+      boundsWidth = google.maps.geometry.spherical.computeDistanceBetween(northWest, polygonBounds.getNorthEast());
+      widthIncr = boundsWidth / maxSearchSteps;
 
-          // Expand out from Centroid and find a point within polygon at 0, 90, 180, 270 degrees
-          for (; n <= maxSearchLoops; n++) {
-              // Test point North of Centroid
-              testPos = google.maps.geometry.spherical.computeOffset(centerPoint, (heightIncr * n), 0);
-              if (google.maps.geometry.poly.containsLocation(testPos, this)) {
-                  break;
-              }
+      // Expand out from Centroid and find a point within polygon at 0, 90, 180, 270 degrees
+      for (; n <= maxSearchLoops; n++) {
+        // Test point North of Centroid
+        testPos = google.maps.geometry.spherical.computeOffset(centerPoint, (heightIncr * n), 0);
+        if (google.maps.geometry.poly.containsLocation(testPos, this)) {
+            break;
+        }
 
-              // Test point East of Centroid
-              testPos = google.maps.geometry.spherical.computeOffset(centerPoint, (widthIncr * n), 90);
-              if (google.maps.geometry.poly.containsLocation(testPos, this)) {
-                  break;
-              }
+        // Test point East of Centroid
+        testPos = google.maps.geometry.spherical.computeOffset(centerPoint, (widthIncr * n), 90);
+        if (google.maps.geometry.poly.containsLocation(testPos, this)) {
+            break;
+        }
 
-              // Test point South of Centroid
-              testPos = google.maps.geometry.spherical.computeOffset(centerPoint, (heightIncr * n), 180);
-              if (google.maps.geometry.poly.containsLocation(testPos, this)) {
-                  break;
-              }
+        // Test point South of Centroid
+        testPos = google.maps.geometry.spherical.computeOffset(centerPoint, (heightIncr * n), 180);
+        if (google.maps.geometry.poly.containsLocation(testPos, this)) {
+            break;
+        }
 
-              // Test point West of Centroid
-              testPos = google.maps.geometry.spherical.computeOffset(centerPoint, (widthIncr * n), 270);
-              if (google.maps.geometry.poly.containsLocation(testPos, this)) {
-                  break;
-              }
-          }
-
-          return(testPos);
+        // Test point West of Centroid
+        testPos = google.maps.geometry.spherical.computeOffset(centerPoint, (widthIncr * n), 270);
+        if (google.maps.geometry.poly.containsLocation(testPos, this)) {
+            break;
+        }
       }
+
+      return(testPos);
+    }
   };
 
   if(map_coordinate){
-    map = new google.maps.Map(document.getElementById('map'),{
+    map = new google.maps.Map(document.getElementById($id),{
       zoom: map_property.zoom,
-      center: {lat:map_coordinate.lat, lng:map_coordinate.lng}
+      center: {lat:map_coordinate.lat, lng:map_coordinate.lng},
+      gestureHandling: "cooperative"
     });
   }else{
-    map = new google.maps.Map(document.getElementById('map'),{
+    map = new google.maps.Map(document.getElementById($id),{
       zoom: 4,
-      center: {lat: 49.8037633, lng: 15.4749126} //cze gps
+      center: {lat: 49.8037633, lng: 15.4749126}, //cze gps
+      gestureHandling: "cooperative"
     });
   }
-
+  if (PDF_PREPARE === true){//when map is loaded, init another one
+    map.addListener('tilesloaded', function() {
+      markerCluster.setMap(null);
+      for (i = 0; i < markers.length; i++) {
+        markers[i].setMap(null);
+      }
+      if (photos[cur_photo+1] !== undefined && maps_done === false){
+        cur_photo++;
+        $("#process_counter_cur").text(cur_photo+1);
+        clear_vars_pdf();
+        $('.js_photo_ids').val(photos[cur_photo]);
+        initMap("map_for-"+photos[cur_photo]);
+      } else {
+        maps_done = true;
+        enable_generate_button();
+      }
+    });
+  }
   if (map_property.popup_bool){
     map.addListener('tilesloaded', function() {
+      if (map !== ""){
         var zoom = map.getZoom();
         if (zoom >= 17){
           markerCluster.setMap(null);
@@ -118,26 +144,25 @@ async function initMap() {
           }
         } else {
           markerCluster.setMap(map);
-          /*for (i = 0; i < markers.length; i++) {
-            markers[i].setMap(map);
-          }*/
           for (i = 0; i < popups.length; i++) {
             popups[i].setMap(null);
           }
         }
+      }
     });
   }
   map.addListener('idle', async function() {
-    if (FILTER_TYPE != 'user_paths'){
       if (map.getZoom() >= 16){
         await setPolygons(map);
       } else {
         hidePolygons();
       }
-    } else {
-      await setUserPaths(map);
-    }
   });
+  if (FILTER_TYPE == 'user_paths'){
+    map.addListener('click', function() {
+        highlightPathDefault();
+    });
+  }
   if (FILTER_TYPE != 'user_paths'){
     setMarkers(map, coordinates);
   }
@@ -157,22 +182,13 @@ async function initMap() {
   }
   if (map_property.popup_bool){ await setPopups(map, coordinates); }
 
-  if (FILTER_TYPE != 'user_paths'){
-    infoWindow = new google.maps.InfoWindow();
-    if (map.getZoom() >= 16){
-      await setPolygons(map);
-    } else {
-      hidePolygons();
-    }
-  } else {
+  infoWindow = new google.maps.InfoWindow();
+  if (FILTER_TYPE == 'user_paths'){
     await setUserPaths(map, true);
   }
 }
 
 $(document)
-  /*.on('mouseleave', '.js_popup', function() {
-    popup.hide();
-  })*/
   .on('click', '.js_popup', function() {
     if (FILTER_TYPE=='users_gallery'){
       findAndSelectPhoto($(this).data('photo_id'));
@@ -184,7 +200,7 @@ $(document)
 
 
 function insert_popup(num){
-  $('main').append('<div id="js_map_popup_'+num+'"></div>'); //je třeba, refresh mapy totiž sežere div
+  $('main').append('<div id="js_map_popup_'+num+'"></div>'); //map refresh needed because div has been consumed
 }
 
 function load_photos(id, photo_id){
@@ -232,9 +248,9 @@ function setMarkers(map, locations) {
   });
 }
 
-async function setPolygons(map){
-  var actualbounds = map.getBounds();
-  await getCurentPolygons(map, actualbounds.getNorthEast(), actualbounds.getSouthWest());
+async function setPolygons(mapa){
+  var actualbounds = mapa.getBounds();
+  await getCurentPolygons(mapa, actualbounds.getNorthEast(), actualbounds.getSouthWest());
   hidePolygons();
 
   $.each(polygons, function (index, polygon) {
@@ -270,9 +286,9 @@ async function setPolygons(map){
 
       lands.push(land);
       landNames.push(landName);
-      if (map.getZoom() >= 16){
-        land.setMap(map);
-        landName.setMap(map);
+      if (mapa.getZoom() >= 16){
+        land.setMap(mapa);
+        landName.setMap(mapa);
       } else {
         hidePolygons();
       }
@@ -327,53 +343,260 @@ async function setUserPaths(map, setMapBounds = false){
     var pathCoords = [];
     var myLatlng, lat, lng;
     var latlnglit = [];
+    var polygon_points = [];
     $.each(coords, function(index, coord){
       lat = coord.lat;
       lng = coord.lng;
+      if (coord.altitude == null){ alt = ""; } else { alt = coord.altitude;}
+      if (coord.accuracy == null){ accu = ""; } else { accu = coord.accuracy;}
+      if (coord.created_date == null){ created = ""; } else { created = coord.created_date;}
       myLatlng = new google.maps.LatLng(lat,lng);
       if (setMapBounds){
         bounds.extend(myLatlng);
       }
       latlnglit.push(myLatlng);
+      const circle = new google.maps.Circle({
+        center:myLatlng,
+        id: polygon.id,
+        data_order: index+1,
+        data_lat: lat,
+        data_lng: lng,
+        data_alt: alt,
+        data_accu: accu,
+        data_created: created,
+        label_order: polygon.point_labels.point,
+        label_path: polygon.point_labels.path,
+        label_lat: polygon.point_labels.lat,
+        label_lng: polygon.point_labels.lng,
+        label_alt: polygon.point_labels.alt,
+        label_accu: polygon.point_labels.accu,
+        label_created: polygon.point_labels.created,
+        path_name: polygon.name,
+        radius:0.0,
+        zIndex: 1,
+        strokeColor: "#0401b2",
+        strokeOpacity: 0.7,
+        strokeWeight: 13,
+        draggable: false
+      });
+      polygon_points.push(circle);
     });
+    path_points_circles[polygon.id] = polygon_points;
     pathCoords.push(latlnglit);
 
       // Construct the polygon.
       const path = new google.maps.Polygon({
           paths: pathCoords,
-          strokeColor: "#404040",
+          id: polygon.id,
+          zIndex: 1,
+          strokeColor: "#0401fc",
           strokeOpacity: 0.7,
           strokeWeight: 2,
-          fillColor: "#a6a6a6",
+          fillColor: "#9a97f2",
           fillOpacity: 0.2,
-          name: polygon.name
+          name: polygon.name,
+          draggable: false
         });
       const pathName = new google.maps.Marker({
         position: path.getApproximateCenter(),
+        id: polygon.id,
         icon:{
           url: "landNameGenerator.php?land="+polygon.name+"&zoom="+map.getZoom()
         }
       });
 
-      paths.push(path);
-      pathNames.push(pathName);
+      paths[polygon.id]=path;
+      pathNames[polygon.id]=pathName;
       path.setMap(map);
       pathName.setMap(map);
+      $.each(path_points_circles[polygon.id], function(index, circle){
+        circle.setMap(map);
+        circle.addListener('click', function(e) {
+            highlightPath(paths[this.id], pathNames[this.id], path_points_circles[this.id]);
+            showInfoBox(e, this);
+        });
+      });
+
+      path.addListener('click', function(e) {
+          highlightPath(this, pathNames[this.id], path_points_circles[this.id]);
+      });
+      pathName.addListener('click', function(e) {
+          highlightPath(paths[this.id], this, path_points_circles[this.id]);
+      });
   });
   if (setMapBounds){
     map.fitBounds(bounds);
   }
 }
 
-function hideUserPaths(){
+function showSelectedPaths(){
+  var selectedPaths = [];
+  hideUserPaths(true);
+  if ($('.js_path_show_on_map:checked').length == 0){
+    showAllPaths();
+  } else {
+    $.each($('.js_path_show_on_map:checked'), function(index, path_on_map){
+      id = $(path_on_map).data('path_id');
+      paths[id].setMap(map);
+      pathNames[id].setMap(map);
+      $.each(path_points_circles[id], function(index, circle){
+        circle.setMap(map);
+      });
+      selectedPaths.push(paths[id]);
+    });
+    mapBoundToPolygons(selectedPaths);
+  }
+}
+
+function showAllPaths(){
+  var selectedPaths = [];
   $.each(paths, function(index, curPath){
-    curPath.setMap(null);
+    if (curPath != undefined){
+      curPath.setMap(map);
+      selectedPaths.push(curPath);
+    }
   });
-  paths = [];
   $.each(pathNames, function(index, curPathName){
-    curPathName.setMap(null);
+    if (curPathName != undefined){
+      curPathName.setMap(map);
+    }
   });
-  pathNames = [];
+  $.each(path_points_circles, function(index, curPathCircles){
+    if (curPathCircles != undefined){
+      $.each(curPathCircles, function(index, circle){
+        circle.setMap(map);
+      });
+    }
+  });
+  mapBoundToPolygons(selectedPaths);
+}
+
+function mapBoundToPolygons(polygonsArray){
+  var bounds = new google.maps.LatLngBounds();
+  $.each(polygonsArray, function(index, polygon){
+    polygonBounds = polygon.getPath();
+    for (var i = 0; i < polygonBounds.length; i++) {
+        var point = {
+          lat: polygonBounds.getAt(i).lat(),
+          lng: polygonBounds.getAt(i).lng()
+        };
+        bounds.extend(point);
+   }
+  });
+ map.fitBounds(bounds);
+}
+
+function hideUserPaths(hideonly=false){
+  $.each(paths, function(index, curPath){
+    if (curPath != undefined){
+      curPath.setMap(null);
+    }
+  });
+  if (!hideonly){
+    paths = [];
+  }
+  $.each(pathNames, function(index, curPathName){
+    if (curPathName != undefined){
+      curPathName.setMap(null);
+    }
+  });
+  if (!hideonly){
+    pathNames = [];
+  }
+  $.each(path_points_circles, function(index, curPathCircles){
+    if (curPathCircles != undefined){
+      $.each(curPathCircles, function(index, circle){
+        circle.setMap(null);
+      });
+    }
+  });
+  if (!hideonly){
+    path_points_circles = [];
+  }
+}
+
+function highlightPathDefault(){
+  $.each(paths, function(index, curPath){
+    if (curPath != undefined){
+      curPath.setOptions({
+        zIndex: 1,
+        strokeColor: "#0401fc",
+        strokeOpacity: 0.7,
+        fillColor: "#9a97f2",
+        fillOpacity: 0.2,
+        draggable: false
+      } )
+    }
+  });
+  $.each(pathNames, function(index, curPathName){
+    if (curPathName != undefined){
+      curPathName.setOptions
+      ({
+        zIndex: 1,
+        opacity: 1
+      });
+    }
+  });
+  $.each(path_points_circles, function(index, pathCircles){
+    $.each(pathCircles, function(index, circle){
+      circle.setOptions({
+        zIndex: 1,
+        strokeColor: "#0401b2",
+        strokeOpacity: 0.7
+      });
+    });
+  });
+  infoWindow.close();
+}
+
+function highlightPath(clickedPath, clickedPathName, clickedPathCircles){
+  $.each(paths, function(index, curPath){
+    if (curPath != undefined){
+      curPath.setOptions({
+        zIndex: 1,
+        strokeColor: "#0401fc",
+        strokeOpacity: 0.4,
+        fillColor: "#9a97f2",
+        fillOpacity: 0.1
+      } )
+    }
+  });
+  $.each(pathNames, function(index, curPathName){
+    if (curPathName != undefined){
+      curPathName.setOptions
+      ({
+        zIndex: 1,
+        opacity: 0.4
+      });
+    }
+  });
+  $.each(path_points_circles, function(index, pathCircles){
+    $.each(pathCircles, function(index, circle){
+      circle.setOptions({
+        zIndex: 1,
+        strokeColor: "#0401fc",
+        strokeOpacity: 0.4
+      });
+    });
+  });
+  clickedPath.setOptions({
+    zIndex: 100,
+    strokeColor: "#ffd219",
+    strokeOpacity: 1,
+    fillColor: "#ffd219",
+    fillOpacity: 0.7
+  });
+  clickedPathName.setOptions({
+    zIndex: 100,
+    opacity: 1
+  });
+  $.each(clickedPathCircles, function(index, circle){
+    circle.setOptions({
+      zIndex: 101,
+      strokeColor: "#ffa31a",
+      strokeOpacity: 1
+    });
+  });
 }
 
 function getCurentUserPaths(map, id){
@@ -454,7 +677,7 @@ function load_tasks_gps_points(){
         async: true,
         data: {
           act: "get_tasks_gps_points",
-          filter_type: FILTER_TYPE, //definováno v zvláštních js skriptech
+          filter_type: FILTER_TYPE, //defined in page JS files
           search: $('.js_search_input').val(),
           specified_ids: specified_ids
         },
@@ -467,10 +690,8 @@ function load_tasks_gps_points(){
   });
 }
 
-function showArrays(event) {
-  const polygon = this;
-  const vertices = polygon.getPath();
-  let contentString = "<b>"+ this.name +"</b>";
+function showInfoBox(event, elem) {
+  let contentString = "<b style='font-size: 15px;'>"+ elem.label_order +" "+ elem.data_order +"</b><br><br><label>"+ elem.label_path +": "+ elem.path_name +"</label><br><label>"+ elem.label_lat +": "+ elem.data_lat +"</label><br><label>"+ elem.label_lng +": "+ elem.data_lng +"</label><br><label>"+ elem.label_alt +": "+ elem.data_alt +"</label><br><label>"+ elem.label_accu +": "+ elem.data_accu +"</label><br><label>"+ elem.label_created +": "+ elem.data_created +"</label>";
   infoWindow.setContent(contentString);
   infoWindow.setPosition(event.latLng);
   infoWindow.open(map);
@@ -549,3 +770,4 @@ function createPopupClass() {
 
   return Popup;
 }
+//Created for the GSA in 2020-2021. Project management: SpaceTec Partners, software development: www.foxcom.eu
