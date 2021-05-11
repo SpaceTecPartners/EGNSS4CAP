@@ -63,10 +63,12 @@
 
     <!-- MainActivity -->
     <string name="hs_title">Hlavní obrazovka</string>
-    <string name="hs_loggedUser">Přihlášený uživatel</string>
+    <string name="hs_loggedUser">Informace o uživateli</string>
     <string name="hs_login">Login</string>
     <string name="hs_name">Jméno</string>
     <string name="hs_surname">Příjmení</string>
+    <string name="hs_numberOpenTasks">Počet otevřených úkolů</string>
+    <string name="hs_numberPhotos">Počet snímků</string>
     <string name="hs_noLocationServiceTitle">Bez lokační služby</string>
     <string name="hs_noLocationServiceText">Zkontrolujte, zda máte povolenou lokační službu s dostatečnými oprávněními.</string>
 
@@ -187,12 +189,16 @@
     <string name="map_failedCurrentLocationText">Nelze zobrazovat aktuální polohu a informace o ní v důsledku nedostatečných oprávnění aplikace pro sledování polohy.</string>
     <string name="map_blueMarkerLabel">Modrá značka: </string>
     <string name="map_blueMarkerValue">Poloha dle čipu</string>
+    <string name="map_latChipSet">Šířka:</string>
+    <string name="map_lngChipSet">Výška:</string>
     <string name="map_redMarkerLabel">Červená značka:</string>
     <string name="map_redMarkerValue">Poloha dle těžiště</string>
+    <string name="map_latCentroid">Šířka:</string>
+    <string name="map_lngCentroid">Výška:</string>
     <string name="map_sampleCountLabel">Vzorků:</string>
     <string name="map_sampleCountValue">%1$s/%2$s</string>
     <string name="map_accuracy">Přesnost:</string>
-    <string name="map_accuracyUnavailable">nedostupné</string>
+    <string name="map_basicInfoUnavailable">nedostupné</string>
     <string name="map_accuracyUnit">m</string>
     <string name="map_buttonToggleSatellite">Sat</string>
     <string name="map_buttonToggleMap">Map</string>
@@ -231,7 +237,8 @@
     <string name="pt_infoPointCreated">Vytvořeno:</string>
     <string name="pt_infoCurPathTitleRecording">Nahrává se cesta</string>
     <string name="pt_infoCurPathTitleShown">Zobrazená cesta</string>
-    <string name="pt_infoCurPathPause">Pauza</string>
+    <string name="pt_infoCurPathVertex">Vrcholový režim</string>
+    <string name="pt_infoCurPathContinuous">Spojitý režim</string>
     <string name="pt_infoCurPathCentroidsNote">Dle těžišť</string>
     <string name="pt_infoCurPathId">Id:</string>
     <string name="pt_infoCurPathName">Jméno:</string>
@@ -240,11 +247,14 @@
     <string name="pt_deleteDialogTitle">Potvrdit smazání</string>
     <string name="pt_deleteDialogText">Opravdu si přejete odstranit cestu %1$s?</string>
     <string name="pt_androidVersionException">Tato verze systému Android není podporována (vyžadováno minimáně Nougat).</string>
+    <string name="pt_capturePointButton">Přidat bod</string>
+    <string name="pt_convexHullPointButton">Bod těžiště</string>
+    <string name="pt_deletePointButton">Smazat poslední bod</string>
     <string name="pt_sendButton">Odeslat</string>
     <string name="pt_recButton">Záznam</string>
     <string name="pt_stopButton">Stop</string>
-    <string name="pt_pauseButton">Pauza</string>
-    <string name="pt_continueButton">Pokračovat</string>
+    <string name="pt_pauseButton">Přepnout\ndo vrcholového\nrežimu</string>
+    <string name="pt_continueButton">Přepnout\ndo spojitého\nrežimu</string>
     <string name="pt_pathsButton">Cesty</string>
     <string name="pt_alertNothingToUploadTitle">Žádné cesty</string>
     <string name="pt_alertNothingToUploadText">Žádné cesty pro odeslání, které ještě nebyly odeslány.</string>
@@ -266,6 +276,15 @@
     <string name="pt_dialogStartButton">Začít nahrávání</string>
     <string name="pt_dialogStopButton">Ukončit nahrávání</string>
     <string name="pt_dialogStopMessage">Opravdu chcete ukončit nahrávání cesty?</string>
+    <string name="pt_errorNoCapturePointTitle">Žádný bod</string>
+    <string name="pt_errorNoCapturePointText">Neexistují žádná data aktuální pozice, proto nelze přidat žádný bod.</string>
+    <string name="pt_errorNoCentroidPointTitle">Žádný bod těžiště</string>
+    <string name="pt_errorNoCentroidPointText">Neexistují žádná data o aktuálním těžišti, proto nelze přidat žádný bod.</string>
+    <string name="pt_errorNoPointToDeleteTitle">Žádný bod ke smazání</string>
+    <string name="pt_errorNoPointToDeleteText">Nezbyly žádné další body ke smazání.</string>
+    <string name="pt_dialogDeleteLastPointTitle">Potvrdit smazání</string>
+    <string name="pt_dialogDeleteLastPointText">Opravdu checete smazat poslední bod?</string>
+    <string name="pt_dialogDeleteLastPointButton">Smazat</string>
 
     <!-- GNSS Raw Data -->
     <string name="gnss_satInUse">Využívaných satelitů</string>
@@ -290,8 +309,8 @@
     <string name="gnss_magneticDegrees">Magnetické stupně</string>
     <string name="gnss_snr">SNR</string>
     <string name="gnss_meanSnr">Střední hodnota SNR</string>
-    <string name="gnss_geolocationInfo">Geolokační info</string>
-    <string name="gnss_satInfo">Sat info</string>
+    <string name="gnss_geolocationInfo">Geolokační informace</string>
+    <string name="gnss_satInfo">Satelitní informace</string>
     <string name="gnss_latitude">Šířka</string>
     <string name="gnss_longitude">Výška</string>
     <string name="gnss_altitude">Nadmořská výška</string>
@@ -358,6 +377,7 @@
     <string name="se_buttonManualBrightnessCorrection">Manualní korekce jasu</string>
     <string name="se_buttonAutoPan">Automatické posouvání pohledu mapy během záznamu cesty</string>
     <string name="se_buttonBeep">Pípnutí při záznamu bodu cesty</string>
+    <string name="se_pointCapturePeriod">Perioda zachycení bodu [sekund]</string>
 
     <!-- SettingFilterActivity -->
     <string name="sef_hdopMin">Min. HDOP:</string>
@@ -431,7 +451,7 @@
     <string name="dl_Cancel">Zrušit</string>
 
     <!-- BasicInfo -->
-    <string name="bi_basicInfo">Základní informace</string>
+    <string name="bi_basicInfo">Informace o zařízení</string>
     <string name="bi_deviceCondition">Způsobilost telefonu</string>
     <string name="bi_phoneManufacturer">Výrobce telefonu</string>
     <string name="bi_phoneModel">Model telefonu</string>

@@ -48,7 +48,7 @@
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/pt_frameLayout_currentTrack"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:visibility="visible" />
+            tools:visibility="gone" />
 
         <HorizontalScrollView
             android:id="@+id/horizontalScrollView"
@@ -57,12 +57,13 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="gone">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="end"
+                android:gravity="center_vertical|end"
                 android:orientation="horizontal">
 
                 <ProgressBar
@@ -77,18 +78,18 @@
                     android:id="@+id/map_linearLayout_trackLoadControls"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="end"
+                    android:baselineAligned="false"
+                    android:gravity="center_vertical|end"
                     android:orientation="horizontal"
                     android:visibility="gone"
                     tools:visibility="visible">
 
                     <Button
-                        android:id="@+id/map_button_pause"
+                        android:id="@+id/map_button_mode"
                         style="@style/buttonTextWhite"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
-                        android:layout_weight="1"
                         android:background="@drawable/background_button_white_border_r8"
                         android:onClick="pauseTracking"
                         android:text="@string/pt_pauseButton" />
@@ -99,7 +100,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
-                        android:layout_weight="1"
                         android:background="@drawable/background_button_white_border_r8"
                         android:onClick="recordTracking"
                         android:text="@string/pt_recButton" />
@@ -121,12 +121,54 @@
             android:id="@+id/pt_frameLayout_currentTrack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toTopOf="@+id/horizontalScrollView"
             app:layout_constraintEnd_toEndOf="parent"
             tools:visibility="visible">
 
         </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/map_linearLayout_vertexControl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:gravity="end"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/pt_frameLayout_currentTrack"
+            app:layout_constraintEnd_toStartOf="@+id/pt_frameLayout_currentTrack"
+            tools:visibility="visible">
+
+            <Button
+                android:id="@+id/button11"
+                style="@style/buttonTextWhite"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/background_button_white_border_r8"
+                android:onClick="addCurrentPoint"
+                android:text="@string/pt_capturePointButton" />
+
+            <Button
+                android:id="@+id/button12"
+                style="@style/buttonTextWhite"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/background_button_white_border_r8"
+                android:onClick="addCentroidPoint"
+                android:text="@string/pt_convexHullPointButton" />
+
+            <Button
+                android:id="@+id/button10"
+                style="@style/buttonTextWhite"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:background="@drawable/background_button_white_border_r8"
+                android:onClick="deletePointDialog"
+                android:text="@string/pt_deletePointButton" />
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -169,9 +211,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="100dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tableLayout2">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
         <ToggleButton
             android:id="@+id/map_toggleButton_mapType"
@@ -193,10 +235,10 @@
         android:id="@+id/constraintLayout17"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="100dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tableLayout2">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -205,9 +247,9 @@
         style="@style/panelMin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="64dp"
+        android:layout_marginStart="78dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="64dp"
+        android:layout_marginEnd="78dp"
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -241,6 +283,54 @@
             android:layout_height="match_parent">
 
             <TextView
+                style="@style/textBlue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/map_latChipSet"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/map_textView_latChipSet"
+                style="@style/textBlue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/map_basicInfoUnavailable"
+                android:textSize="14sp"
+                android:visibility="visible"
+                tools:visibility="visible" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                style="@style/textBlue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/map_lngChipSet"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/map_textView_lngChipSet"
+                style="@style/textBlue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/map_basicInfoUnavailable"
+                android:textSize="14sp"
+                android:visibility="visible"
+                tools:visibility="visible" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
                 android:id="@+id/textView120"
                 style="@style/textBlue"
                 android:layout_width="wrap_content"
@@ -255,7 +345,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/map_accuracyUnavailable"
+                android:text="@string/map_basicInfoUnavailable"
                 android:textSize="14sp"
                 android:visibility="visible"
                 tools:visibility="visible" />
@@ -275,7 +365,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:text="@string/map_redMarkerLabel"
-                android:textAlignment="center"
                 android:textSize="14sp" />
 
             <TextView
@@ -312,6 +401,60 @@
                 android:layout_weight="1"
                 android:textColor="#FF0000"
                 android:textSize="14sp" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/map_tableRow_latCentroid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <TextView
+                style="@style/textRed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/map_latCentroid"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/map_textView_latCentroid"
+                style="@style/textRed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/map_basicInfoUnavailable"
+                android:textSize="14sp"
+                android:visibility="visible"
+                tools:visibility="visible" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/map_tableRow_lngCentroid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <TextView
+                style="@style/textRed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/map_lngCentroid"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/map_textView_lngCentroid"
+                style="@style/textRed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/map_basicInfoUnavailable"
+                android:textSize="14sp"
+                android:visibility="visible"
+                tools:visibility="visible" />
         </TableRow>
     </TableLayout>
 

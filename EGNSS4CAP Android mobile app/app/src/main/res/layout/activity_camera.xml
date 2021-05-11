@@ -354,7 +354,7 @@
                     android:layout_height="match_parent"
                     android:foregroundGravity="center">
 
-                    <eu.foxcom.gtphotos.model.component.VerticalSeekBarAPI26
+                    <eu.foxcom.stp.gsa.egnss4cap.model.component.VerticalSeekBarAPI26
                         android:id="@+id/ca_verticalSeekBarApi26_exposureCorrection"
                         style="@style/seekBarVertical"
                         android:layout_width="300dp"

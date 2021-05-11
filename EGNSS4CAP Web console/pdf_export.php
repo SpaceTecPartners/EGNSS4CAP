@@ -17,10 +17,27 @@ function create_pdf($task_id, $user_id, $photos = false, $map_prefix = ""){
     $photos_array = explode(',',$photos);
   }
   if ($task_id == 0){
+    $images = user_model::get_users_gallery_unassigned($user_id, $photos_array);
+    foreach($images as $key => $image){
+      $images[$key]['cid'] = "";
+      $ntwi_ar = json_decode($image->network_info);
+      if (isset($ntwi_ar->cid)){
+          $images[$key]['cid'] = $ntwi_ar->cid;
+      } else if(isset($ntwi_ar->cells)){
+        $cell_id = "";
+        $cell_id_arr = array();
+        foreach ($ntwi_ar->cells as $cell_key => $cell) {
+          if (!in_array($cell->cid,$cell_id_arr)){
+            $cell_id_arr[] = $cell->cid;
+          }
+        }
+        $images[$key]['cid'] = implode(", ", $cell_id_arr);
+      }
+    }
     $template_array = array(
       'unassigned' => true,
       'user' => user_model::get_users_credencials($user_id),
-      'images' => user_model::get_users_gallery_unassigned($user_id, $photos_array),
+      'images' => $images,
       'task' => array(),
       'tasks_verified' => "not_verified",
       'map_prefix' => $map_prefix
@@ -33,10 +50,27 @@ function create_pdf($task_id, $user_id, $photos = false, $map_prefix = ""){
     }
     $header_text = $template_array['user']['name'].' '.$template_array['user']['surname'].' - '.user_model::get_translate_from_db('heading');
   } else {
+    $images = $task_model->load_task_photos($task_id, $photos_array);
+    foreach($images as $key => $image){
+      $images[$key]['cid'] = "";
+      $ntwi_ar = json_decode($image->network_info);
+      if (isset($ntwi_ar->cid)){
+          $images[$key]['cid'] = $ntwi_ar->cid;
+      } else if(isset($ntwi_ar->cells)){
+        $cell_id = "";
+        $cell_id_arr = array();
+        foreach ($ntwi_ar->cells as $cell_key => $cell) {
+          if (!in_array($cell->cid,$cell_id_arr)){
+            $cell_id_arr[] = $cell->cid;
+          }
+        }
+        $images[$key]['cid'] = implode(", ", $cell_id_arr);
+      }
+    }
     $template_array = array(
       'unassigned' => false,
       'user' => user_model::get_users_credencials($user_id),
-      'images' => $task_model->load_task_photos($task_id, $photos_array),
+      'images' => $images,
       'task' => $task_model->load_task_info($task_id)[0],
       'tasks_verified' => $task_model->photos_verified_status($task_id),
       'map_prefix' => $map_prefix
@@ -54,7 +88,7 @@ function create_pdf($task_id, $user_id, $photos = false, $map_prefix = ""){
   $export_photos_count = user_model::get_translate_from_db('photo_exported').' '.$e_photos.' '.user_model::get_translate_from_db('photo_out_of').' '.$a_photos.' '.user_model::get_translate_from_db('photo_photo');
 
   try {
-      $mpdf = new \Mpdf\Mpdf(['tempDir' => '../../tmp/egnss4cap', 'mode' => 'utf-8', 'format' => 'A4', 'default_font_size' => 12, 'default_font' => 'Menlo', 'margin_left' => 5, 'margin_right' => 5, 'margin_top' => 25, 'margin_bottom' => 22, 'margin_header' => 5, 'margin_footer' => 5]);
+      $mpdf = new \Mpdf\Mpdf(['tempDir' => '../../tmp/egnss4cap', 'mode' => 'utf-8', 'format' => 'A4', 'default_font_size' => 12, 'default_font' => 'Menlo', 'margin_left' => 5, 'margin_right' => 5, 'margin_top' => 30, 'margin_bottom' => 22, 'margin_header' => 5, 'margin_footer' => 5]);
       $mpdf->shrink_tables_to_fit = 1;
       $mpdf->img_dpi = 300;
       $mpdf->SetTitle(date("Y.m.d").'_'.$header_text.'.pdf');
@@ -117,11 +151,28 @@ function open_prepare_pdf($task_id, $user_id, $photos = false){
   }
 
   if ($task_id == 0){
+    $images = user_model::get_users_gallery_unassigned($user_id, $photos_array);
+    foreach($images as $key => $image){
+      $images[$key]['cid'] = "";
+      $ntwi_ar = json_decode($image->network_info);
+      if (isset($ntwi_ar->cid)){
+          $images[$key]['cid'] = $ntwi_ar->cid;
+      } else if(isset($ntwi_ar->cells)){
+        $cell_id = "";
+        $cell_id_arr = array();
+        foreach ($ntwi_ar->cells as $cell_key => $cell) {
+          if (!in_array($cell->cid,$cell_id_arr)){
+            $cell_id_arr[] = $cell->cid;
+          }
+        }
+        $images[$key]['cid'] = implode(", ", $cell_id_arr);
+      }
+    }
     $template_array = array(
       'mapjs_filter_type' => 'users_gallery',
       'unassigned' => true,
       'user' => user_model::get_users_credencials($user_id),
-      'images' => user_model::get_users_gallery_unassigned($user_id, $photos_array),
+      'images' => $images,
       'task' => array(),
       'tasks_verified' => "not_verified",
       'search_string' => $user_id,
@@ -129,11 +180,28 @@ function open_prepare_pdf($task_id, $user_id, $photos = false){
       "pdf_url" => "pdf_export.php?act=create&user_id=".$user_id."&task_id=0&specified_photos=".$photos."&map_prefix="
     );
   } else {
+    $images = $task_model->load_task_photos($task_id, $photos_array);
+    foreach($images as $key => $image){
+      $images[$key]['cid'] = "";
+      $ntwi_ar = json_decode($image->network_info);
+      if (isset($ntwi_ar->cid)){
+          $images[$key]['cid'] = $ntwi_ar->cid;
+      } else if(isset($ntwi_ar->cells)){
+        $cell_id = "";
+        $cell_id_arr = array();
+        foreach ($ntwi_ar->cells as $cell_key => $cell) {
+          if (!in_array($cell->cid,$cell_id_arr)){
+            $cell_id_arr[] = $cell->cid;
+          }
+        }
+        $images[$key]['cid'] = implode(", ", $cell_id_arr);
+      }
+    }
     $template_array = array(
       'mapjs_filter_type' => 'task_detail',
       'unassigned' => false,
       'user' => user_model::get_users_credencials($user_id),
-      'images' => $task_model->load_task_photos($task_id, $photos_array),
+      'images' => $images,
       'task' => $task_model->load_task_info($task_id)[0],
       'tasks_verified' => $task_model->photos_verified_status($task_id),
       'search_string' => $task_id,

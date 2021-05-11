@@ -77,7 +77,7 @@
                         style="@style/se_countValue" />
                 </LinearLayout>
 
-                <eu.foxcom.gtphotos.model.component.SeekBarAPI26
+                <eu.foxcom.stp.gsa.egnss4cap.model.component.SeekBarAPI26
                     android:id="@+id/sef_seekBar_hdopMin"
                     style="@style/se_seekBar"
                     android:max="10"
@@ -108,7 +108,7 @@
                         style="@style/se_countValue" />
                 </LinearLayout>
 
-                <eu.foxcom.gtphotos.model.component.SeekBarAPI26
+                <eu.foxcom.stp.gsa.egnss4cap.model.component.SeekBarAPI26
                     android:id="@+id/sef_seekBar_minSatNumber"
                     style="@style/se_seekBar"
                     android:max="10"
@@ -139,7 +139,7 @@
                         style="@style/se_countValue" />
                 </LinearLayout>
 
-                <eu.foxcom.gtphotos.model.component.SeekBarAPI26
+                <eu.foxcom.stp.gsa.egnss4cap.model.component.SeekBarAPI26
                     android:id="@+id/sef_seekBar_minMeanSnr"
                     style="@style/se_seekBar"
                     android:max="10"
@@ -170,7 +170,7 @@
                         style="@style/se_countValue" />
                 </LinearLayout>
 
-                <eu.foxcom.gtphotos.model.component.SeekBarAPI26
+                <eu.foxcom.stp.gsa.egnss4cap.model.component.SeekBarAPI26
                     android:id="@+id/sef_seekBar_minFix"
                     style="@style/se_seekBar"
                     android:max="10"

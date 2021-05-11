@@ -103,14 +103,14 @@ class task_model{
     return $ret;
   }
 
-  public function delete_task_photos($task_id){
-    $ret=array('error' => '0', 'errorText' => '');
+  public function delete_task_photos($task_id, $farmer_id = 0){
+    $ret=array('error' => '0', 'errorText' => '', 'farmer_id' => $farmer_id);
     $fields_update_array = array(
       'flg_deleted%i' => 1
     );
     $creator_id = dibi::select('created_id')->from('task')->where('id = %i', $task_id)->fetchSingle();
     if ($creator_id !== user_model::get_loged_user_id()){
-      $ret = array('error' => '1', 'errorText' => user_model::get_translate_from_db('task_photo_delete_error'));
+      $ret = array('error' => '1', 'errorText' => user_model::get_translate_from_db('task_photo_delete_error'), 'farmer_id' => 0);
     } else {
       try{
         dibi::begin();

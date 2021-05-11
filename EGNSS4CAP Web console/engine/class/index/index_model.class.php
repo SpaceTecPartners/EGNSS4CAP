@@ -21,10 +21,10 @@ class index_model {
     }
     $users_sql = dibi::select('u.id, u.name, u.surname, u.identification_number, u.vat, u.email, u.login')->from('user u')
     ->innerJoin('user_role ur')->on('u.id = ur.user_id')
-    ->where('pa_id = %i', $agency_id)
-    ->where('role_id = %i', user_model::FARMER_ROLE);
+    ->where('u.pa_id = %i', $agency_id)
+    ->where('ur.role_id = %i', user_model::FARMER_ROLE);
     if(!empty($search)){
-      $users_sql->where('name LIKE %~like~ OR surname LIKE %~like~ OR identification_number LIKE %like~', $search, $search, $search);
+      $users_sql->where('(name LIKE %~like~ OR surname LIKE %~like~ OR identification_number LIKE %like~)', $search, $search, $search);
     }
       $users_sql->orderBy($sort);
       $users = $users_sql->fetchAll();
@@ -39,7 +39,7 @@ class index_model {
     return $users;
   }
 
-  public static function get_farmer_counts(int $farmers_id = 0, $count_type){
+  public static function get_farmer_counts(int $farmers_id = 0, $count_type,  $search = ''){
     $count_sql="";
     $ret=0;
     if ($farmers_id !== 0){
@@ -63,8 +63,12 @@ class index_model {
               $filter = index_model::setDefaultListFilter();
           }
           $count_sql = dibi::select('count(t.id) as count')->from('task t')->leftJoin('task_flag tf')->on('t.id = tf.task_id')->where('t.user_id = %i', $farmers_id)->where('t.flg_deleted = 0');
+          if(!empty($search))
+            $count_sql->where('t.name LIKE %~like~', $search);
           if(!empty($filter))
             $count_sql->where($filter);
+          $count_sql->innerJoin('user u')->on('t.user_id = u.id');
+          $count_sql->where('u.pa_id = %i', user_model::get_agency_id($farmers_id));
           break;
       }
     }

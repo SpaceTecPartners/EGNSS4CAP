@@ -377,3 +377,5 @@ INSERT INTO page_lang (page_id,template_param,cz,en) VALUES (8,'hide_map','Schov
 INSERT INTO page_lang (page_id,template_param,cz,en) VALUES (91,'counter_out_of','z','out of');
 INSERT INTO page_lang (page_id,template_param,cz,en) VALUES (91,'wait','Prosím vyčkejte','Please wait');
 INSERT INTO `egnss4cap`.`page_lang` (page_id, description, template_param, cz, en) VALUES (91, "", "title", "PDF Export", "PDF Export");
+
+INSERT INTO `page_lang` (page_id, description, template_param, cz, en) VALUES (8, "", "path_kml_export", "KML export", "KML export");

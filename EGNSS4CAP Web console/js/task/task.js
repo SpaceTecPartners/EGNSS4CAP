@@ -105,12 +105,14 @@ $(document)
   })
   .on('click', '.js_ack', async function(){
     await get_translate('task_accept_confirm');
+    if (alert_text.length == 0 || alert_text == 'null'){ return false; }
     if (confirm(alert_text)){
       accept_task();
     }
   })
   .on('click', '.js_decline', async function(){
     await get_translate('task_decline_confirm');
+    if (alert_text.length == 0 || alert_text == 'null'){ return false; }
     $text_ret = prompt(alert_text, "");
     if ($text_ret != null){
       decline_task($text_ret);
@@ -118,6 +120,7 @@ $(document)
   })
   .on('click', '.js_return', async function(){
     await get_translate('task_return_confirm');
+    if (alert_text.length == 0 || alert_text == 'null'){ return false; }
     $text_ret = prompt(alert_text, "");
     if ($text_ret != null){
       return_task($text_ret);
@@ -125,6 +128,7 @@ $(document)
   })
   .on('click', '.js_delete', async function(){
     await get_translate('task_delete_confirm');
+    if (alert_text.length == 0 || alert_text == 'null'){ return false; }
     if (confirm(alert_text)){
       delete_task();
     }
@@ -132,6 +136,7 @@ $(document)
   .on('click', '.js_move_from_open', async function(){
     await get_translate('task_move_from_open_confirm');
     await get_data_from_db('task_note', $('.js_task_id').attr('data-href'));
+    if (alert_text.length == 0 || alert_text == 'null'){ return false; }
     $text_note = prompt(alert_text, db_data);
     if ($text_note != null){
       move_from_open_task($text_note);
@@ -279,14 +284,17 @@ $(document)
       url: "task.php",
       data: {
         act: 'delete_task',
-        id: $('.js_task_id').attr('data-href')
+        id: $('.js_task_id').attr('data-href'),
+        farmer_id: $("#farmer_id").val()
       },
     }).done(function(result){
       data = JSON.parse(result);
       if (data.error=='1'){
         alert(data.errorText);
       } else {
-        if(data.reload=='true'){
+        if (data.farmer_id != 0){
+          location.href="index.php?act=agency_user_tasks_list&id="+data.farmer_id;
+        } else {
           location.reload();
         }
       }

@@ -30,6 +30,19 @@ class task_action_router extends \action_router{
     $tasks_verified = array();
     foreach ($tasks as $key => $task) {
       $tasks_verified[$task['id']] = task_model::photos_verified_status($task['id']);
+      //find_url in text
+      $strings = explode(" ", $task['text']);
+      $rebuilded_string = "";
+      foreach ($strings as $string) {
+        $url_signs = array("http", "www.");
+        foreach ($url_signs as $value) {
+          if (strpos($string, $value) !== false){
+            $string = "<a href='".$string."'>".$string."</a>";
+          }
+        }
+        $rebuilded_string.=$string." ";
+      }
+      $tasks[$key]['text'] = $rebuilded_string;
     }
     $template_array = array(
       'agency' => user_model::is_agency(),
@@ -38,6 +51,7 @@ class task_action_router extends \action_router{
       'show_trash' => ($tasks[0]['creator'] === user_model::get_loged_user_id())?true:false,
       'images' => $model->load_task_photos($params['id']),
       'farmer_name' => $users_credencials['surname'] . ' ' . $users_credencials['name'],
+      'farmer_id' => $users_credencials['id'],
       "ret_url" => "index.php?act=agency_user_tasks_list&id=".$users_credencials['id']."#".$params['id'],
       "pdf_url" => "pdf_export.php?act=prepare&user_id=".$users_credencials['id']."&task_id=".$params['id']
     );
@@ -68,7 +82,7 @@ class task_action_router extends \action_router{
 
   protected function delete_task($params){
     $model = new task_model();
-    echo json_encode($model->delete_task_photos($params['id']));
+    echo json_encode($model->delete_task_photos($params['id'], $params['farmer_id']));
     exit;
   }
 

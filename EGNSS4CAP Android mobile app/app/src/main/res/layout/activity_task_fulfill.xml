@@ -38,7 +38,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:visibility="gone">
+                tools:visibility="visible">
 
                 <LinearLayout
                     style="@style/panelHeader"
@@ -147,7 +147,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout12"
-                tools:visibility="gone">
+                tools:visibility="visible">
 
                 <TextView
                     android:id="@+id/textView16"
@@ -156,7 +156,8 @@
 
                 <TextView
                     android:id="@+id/tf_textView_text"
-                    style="@style/taskPanelText" />
+                    style="@style/taskPanelText"
+                    android:autoLink="web" />
 
             </LinearLayout>
 

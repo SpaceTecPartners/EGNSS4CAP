@@ -31,7 +31,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="photoWithCentroidToggle"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                tools:visibility="gone">
 
                 <LinearLayout
                     style="@style/se_content"
@@ -61,7 +62,8 @@
                 style="@style/se_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                tools:visibility="gone">
 
                 <LinearLayout
                     style="@style/se_content"
@@ -93,7 +95,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                tools:visibility="visible">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -114,7 +117,7 @@
                         tools:text="[count]" />
                 </LinearLayout>
 
-                <eu.foxcom.gtphotos.model.component.SeekBarAPI26
+                <eu.foxcom.stp.gsa.egnss4cap.model.component.SeekBarAPI26
                     android:id="@+id/se_seekBarAPI26_samplingNumber"
                     style="@style/se_seekBar"
                     android:max="10"
@@ -265,6 +268,53 @@
                     android:id="@+id/se_switch_beep"
                     style="@style/se_switch" />
             </LinearLayout>
+
+            <LinearLayout
+                style="@style/se_itemCustom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/se_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/se_pointCapturePeriod" />
+
+                    <TextView
+                        android:id="@+id/se_textView_pointCapturePeriod"
+                        style="@style/se_countValue"
+                        tools:text="[seconds]" />
+                </LinearLayout>
+
+                <eu.foxcom.stp.gsa.egnss4cap.model.component.SeekBarAPI26
+                    android:id="@+id/se_seekBarAPI26_pointCapturePeriod"
+                    style="@style/se_seekBar"
+                    android:max="60"
+                    android:progress="1" />
+
+                <Button
+                    android:id="@+id/se_button_pointCapturePeriodDefault"
+                    style="@style/buttonTextWhite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/background_button_white_r8"
+                    android:onClick="capturePointPeriodDefault"
+                    android:text="@string/se_buttonDefault"
+                    android:textAllCaps="false"
+                    android:textColor="@color/mainPrimary"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 

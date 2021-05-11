@@ -1,12 +1,5 @@
 <link rel="stylesheet" href="css/pdf/pdf.css" type="text/css" />
 
-<h2>{{ user.name }} {{ user.surname }} -
-{% if unassigned %}
-  {{ heading }}
-{% else %}
-  {{ header }} {{ task.name }}
-{% endif %}
-</h2>
 {% if not unassigned %}
 <div class="pdf_header">
   <table class="pdf_header_table">
@@ -76,6 +69,7 @@
             <tr><td class="td td_01"><label title="{{ pht_distance_nmea_title }}">{{ pht_distance_nmea }}</label></td><td class="td"><label title="{{ pht_distance_nmea }}">{% if image.nmea_distance is not empty %} {{ image.nmea_distance }} m{% endif %}</label></td></tr>
             <tr><td class="td td_01"><label title="{{ pht_timestamp_title }}">{{ pht_timestamp }}</label></td><td class="td"><label title="{{ pht_timestamp }}">{{ image.timestamp }}</label></td></tr>
             <tr><td class="td td_01"><label title="{{ pht_created_date_title }}">{{ pht_created_date }}</label></td><td class="td"><label title="{{ pht_created_date }}">{{ image.created_date }}</label></td></tr>
+            <tr><td class="td td_01"><label title="{{ pht_cell_id }}">{{ pht_cell_id }}</label></td><td class="td"><label title="{{ pht_cell_id }}">{{ image.cid }}</label></td></tr>
             <tr>
               <td class="td td_01"></td>
               <td class="td">

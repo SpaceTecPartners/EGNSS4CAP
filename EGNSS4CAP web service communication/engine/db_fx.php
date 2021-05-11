@@ -1,7 +1,7 @@
 <?php
 
 function db_connect() {
-	$spoj = ($GLOBALS["mysqli_spoj"] = mysqli_connect("localhost",  "login",  "pswd"));
+	$spoj = ($GLOBALS["mysqli_spoj"] = mysqli_connect("localhost",  "user",  "pswd"));
 	mysqli_select_db($GLOBALS["mysqli_spoj"], "egnss4cap");
 	mysqli_query($GLOBALS["mysqli_spoj"], "set character set UTF8"); 
   mysqli_query($GLOBALS["mysqli_spoj"], "set names UTF8"); 

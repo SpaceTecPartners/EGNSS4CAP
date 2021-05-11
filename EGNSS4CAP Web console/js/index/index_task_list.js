@@ -55,6 +55,21 @@ $(document)
             });
         });
   })*/
+function update_task_count(){
+  $.ajax({
+    type: "post",
+    url: "index.php",
+    async: true,
+    data: {
+      act: "get_filtered_task_count",
+      id: location.search.split('id=')[1]
+    },
+    dataType: "HTML",
+    success: function (res) {
+      $('#filtered_tasks').html(res);
+    }
+  })
+}
 
 function load_table(){
   $.ajax({
@@ -74,7 +89,7 @@ function load_table(){
         rowOffset = $("#"+hash).offset().top;
         scrollToTop(rowOffset-100);
       }
-
+      update_task_count();
       initMap();
     }
   })

@@ -91,6 +91,33 @@ class user_model{
     );
   }
 
+  public static function generate_path_kml_file(int $id, $name, $desc=""){
+    $xml="";
+    if ($id){
+      $points = SELF::get_path_points($id);
+      $xml = "<?xml version='1.0' encoding='UTF-8'?>";
+      $xml.= "<kml xmlns='http://earth.google.com/kml/2.1'>";
+      $xml.= "<Folder>";
+        $xml.= "<Placemark id='path-".$id."'>";
+          $xml.= "<name>".$name."</name>";
+          $xml.= "<description>".$name." - ".$desc." m²</description>";
+          $xml.= "<LineString>";
+            $xml.= "<extrude>1</extrude>";
+            $xml.= "<altitudeMode>relativeToGround</altitudeMode>";
+            $xml.= "<coordinates>";
+            foreach($points as $point){
+              $point_string = $point->lng.",".$point->lat." ";
+              $xml.= $point_string;
+            }
+            $xml.= "</coordinates>";
+          $xml.= "</LineString>";
+         $xml.= "</Placemark>";
+        $xml.= "</Folder>";
+      $xml.= "</kml>";
+    }
+    return $xml;
+  }
+
   public static function delete_user_path($path_id, $reload){
     $ret=array('error' => '0', 'errorText' => '', 'reload' => $reload);
     try{

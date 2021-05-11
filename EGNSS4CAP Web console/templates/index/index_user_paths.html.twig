@@ -37,7 +37,10 @@
         {% if show_visible_checkbox %}
           <td data-label="{{path_show}}"><input class="form-check-input js_path_show_on_map" type="checkbox" data-path_id="{{ path.id }}"></td>
         {% endif %}
-        <td data-label="{{path_actions}}"><div class="js_path_delete" data-path_db_id="{{ path.id }}"><i class="fas fa-trash"></i> {{ path_delete }}</div></td>
+        <td data-label="{{path_actions}}">
+          <div class="js_path_delete" data-path_db_id="{{ path.id }}"><i class="fas fa-trash"></i> {{ path_delete }}</div>
+          <div class="js_path_export_kml" data-path_db_id="{{ path.id }}" data-path_db_name="{{ path.name }}" data-path_db_desc="{{ path.area }}"><i class="fas fa-download"></i> {{ path_kml_export }}</div>
+        </td>
       </tr>
     {% endfor %}
     </tbody>

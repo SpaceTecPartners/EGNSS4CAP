@@ -6,7 +6,7 @@
     <string name="gn_failure">Failure</string>
     <string name="gn_taskRefreshStart">Starting synchronization with server.</string>
     <string name="gn_taskRefreshSuccess">All tasks successfully synchronized with server.</string>
-    <string name="gn_taskRefreshError">Error during tasks synchronization.\n\n%1$s</string>
+    <string name="gn_taskRefreshError">Error during task synchronization.\n\n%1$s</string>
     <string name="gn_taskUploadStatusFailed">Failed to upload task status.\n\n%1$s</string>
     <string name="gn_failedPhotoDownload">Failed to download photo.\n\n%1$s</string>
     <string name="gn_success">Success</string>
@@ -34,7 +34,7 @@
     <string name="title_pathTrackingOverview">Path Tracking Overview</string>
     <string name="title_settings">Settings</string>
     <string name="title_setFilterCentroid">Centroid Location Filter Settings</string>
-    <string name="title_taskView">Tasks Overview</string>
+    <string name="title_taskView">Task Overview</string>
     <string name="title_taskFulfill">Task Completion</string>
     <string name="title_taskPhotoGallery">Task Photo Gallery</string>
     <string name="title_taskDetail">Task Detail</string>
@@ -47,28 +47,30 @@
     <!-- BaseActivity -->
     <string name="bs_permissionDeniedTitle">Permission denied</string>
     <string name="bs_permissionDeniedContent">You denied %1$s permission.
-        You will be restricted to use full functionality of the application until you grant this permission.</string>
+        You will be restricted from using the full functionality of the application until you grant this permission.</string>
     <string name="bs_syncTitle">Synchronization</string>
     <string name="bs_syncStateProgress">Synchronization in progress.
-        \nYou are not allowed to use the application during synchronization.</string>
+        \nUse of the application is locked during synchronization.</string>
     <string name="bs_syncStateCompleteSuccess">Synchronization complete.</string>
     <string name="bs_syncStateCompleteError">Errors occurred during synchronization.</string>
-    <string name="bs_syncWait">Wait please.</string>
+    <string name="bs_syncWait">Please wait.</string>
 
     <!-- MainService -->
     <string name="ms_notificationContent">Application is running</string>
     <string name="ms_deviceConditionTitle">Device condition</string>
-    <string name="ms_deviceConditionDetail">Device is not able to run application. Check permission to use location services and if location services are enabled</string>
+    <string name="ms_deviceConditionDetail">Device is not able to run application. Please check permission to use location services and if location services are enabled</string>
 
     <!-- StartActivity -->
     <string name="st_loading">Loading</string>
 
     <!-- MainActivity -->
     <string name="hs_title">Home screen</string>
-    <string name="hs_loggedUser">Logged User</string>
+    <string name="hs_loggedUser">User information</string>
     <string name="hs_login">Login</string>
     <string name="hs_name">Name</string>
     <string name="hs_surname">Surname</string>
+    <string name="hs_numberOpenTasks">Number of Open Tasks</string>
+    <string name="hs_numberPhotos">Number of Photos</string>
     <string name="hs_noLocationServiceTitle">No Location Service</string>
     <string name="hs_noLocationServiceText">Check that you have activated location service with sufficient privileges.</string>
 
@@ -97,27 +99,27 @@
     <string name="tf_mapButton">Map</string>
     <string name="tf_lockedTaskTitle">The task is locked</string>
     <string name="tf_lockedTaskText">The task will be locked until it is sent without an error or synchronized with a steady state on the server.</string>
-    <string name="tf_sendFailedTitle">Sending failed</string>
+    <string name="tf_sendFailedTitle">Upload not successful</string>
     <string name="tf_createImgFileFailure">Failed to create an image file.\n\n%1$s</string>
     <string name="tf_savePhotoFileFailure">Failed to save image to a file.\n\n%1$s</string>
-    <string name="tf_unsatisfactoryLocation">Unsatisfactory location data.</string>
-    <string name="tf_unsatisfactoryLocationText">Satisfactory location data was not obtained when the photo was taken.</string>
+    <string name="tf_unsatisfactoryLocation">Incomplete location data.</string>
+    <string name="tf_unsatisfactoryLocationText">Incomplete location data acquired when the photo was taken.</string>
     <string name="tf_wait">Wait</string>
     <string name="tf_processingPosition">Don\'t move. Processing position ...</string>
-    <string name="tf_unsatisfactoryDatetime">Unsatisfactory age of photography.</string>
+    <string name="tf_unsatisfactoryDatetime">Time stamp of photo not permitted.</string>
     <string name="tf_unsatisfactoryDatetimeText">The photo must not be older than %1$s from the position calculation.</string>
-    <string name="tf_failedLoadPhoto">Failed load photo</string>
-    <string name="tf_failedLoadPhotoText">An error occurred during loading photo from local storage.\n\n%1$s</string>
+    <string name="tf_failedLoadPhoto">Failed to load photo</string>
+    <string name="tf_failedLoadPhotoText">An error occurred during loading of the photo from local storage.\n\n%1$s</string>
     <string name="tf_sendDialogTitle">Confirm submission</string>
     <string name="tf_sendDialogText">Do you really want to submit this task, including all its photos?\nOnce sent, it will not be further editable.</string>
-    <string name="tf_sendDialogNoPhotosTitle">No photos</string>
-    <string name="tf_sendDialogNoPhotosText">Cannot send task without newly taken photos.</string>
+    <string name="tf_sendDialogNoPhotosTitle">No photos available</string>
+    <string name="tf_sendDialogNoPhotosText">Cannot send task without without a photo.</string>
     <string name="tf_deleteDialogTitle">Confirm deletion</string>
     <string name="tf_deleteDialogText">Are you sure you want to delete this photo?</string>
 
     <!-- TaskOverview -->
-    <string name="to_forbiddenEdit">Task must be in open status to open an edit form.</string>
-    <string name="to_failedToOpenStatus">Failed to set the open status on a server.\n\n%1$s</string>
+    <string name="to_forbiddenEdit">Task status must be open to fill an edit form.</string>
+    <string name="to_failedToOpenStatus">Failed to set the status to open on the server.\n\n%1$s</string>
     <string name="to_filter">Filter</string>
     <string name="to_showCount">Showing %1$d of %2$d</string>
     <string name="to_contains">Name:</string>
@@ -175,26 +177,30 @@
     <string name="map_photoInfo_lng">Longitude:</string>
     <string name="map_photoInfo_alt">Altitude[m]:</string>
     <string name="map_photoInfo_created">Created:</string>
-    <string name="map_photoInfo_toDetailLabel">Touch to go to the task detail.</string>
-    <string name="map_photoInfo_toggleLabel">Touch the photo to see photos behind it.</string>
+    <string name="map_photoInfo_toDetailLabel">Click to go to the task detail.</string>
+    <string name="map_photoInfo_toggleLabel">Click the photo to see photos behind it.</string>
     <string name="map_drawingError">Drawing error.</string>
     <string name="map_failedDrawIconPhotoText">Failed to draw a photo icon.\n\n%1$s</string>
     <string name="map_unownedTask">Unassigned</string>
     <string name="map_nd">n/d</string>
     <string name="map_unexpectedExceptionGG">Unexpected error</string>
-    <string name="map_exceptionDuringDownloadGG">An unexpected error occurred during shape files downloading.</string>
-    <string name="map_exceptionAfterDownloadGG">Shape files were not download successfully.</string>
-    <string name="map_exceptionDuringParsingGG">Downloaded shape files are not valid.</string>
+    <string name="map_exceptionDuringDownloadGG">An unexpected error occurred during downloading of LPIS.</string>
+    <string name="map_exceptionAfterDownloadGG">Shapefiles were not downloaded successfully.</string>
+    <string name="map_exceptionDuringParsingGG">Downloaded shapefiles are not valid.</string>
     <string name="map_failedCurrentLocationTitle">No Current Location</string>
     <string name="map_failedCurrentLocationText">Unable to display current location and location information due to insufficient location tracking application permissions.</string>
     <string name="map_blueMarkerLabel">Blue marker:</string>
     <string name="map_blueMarkerValue">Chipset location</string>
+    <string name="map_latChipSet">Latitude:</string>
+    <string name="map_lngChipSet">Longitude:</string>
     <string name="map_redMarkerLabel">Red marker:</string>
     <string name="map_redMarkerValue">Centroid location</string>
+    <string name="map_latCentroid">Latitude:</string>
+    <string name="map_lngCentroid">Longitude:</string>
     <string name="map_sampleCountLabel">Samples:</string>
     <string name="map_sampleCountValue">%1$s/%2$s</string>
     <string name="map_accuracy">Accuracy:</string>
-    <string name="map_accuracyUnavailable">unavailable</string>
+    <string name="map_basicInfoUnavailable">unavailable</string>
     <string name="map_accuracyUnit">m</string>
     <string name="map_buttonToggleSatellite">Sat</string>
     <string name="map_buttonToggleMap">Map</string>
@@ -213,7 +219,7 @@
     <string name="pt_stoppingExceptionTitle">Error Stopping Trace</string>
     <string name="pt_stoppingExceptionText">%1$s</string>
     <string name="pt_nameHint">Type name of track</string>
-    <string name="pt_centroidsNote">The track will be recorded according to the convex hull centroids .</string>
+    <string name="pt_centroidsNote">The track will be recorded using the convex hull centroids.</string>
     <string name="pt_itemId">Id:</string>
     <string name="pt_itemName">Name:</string>
     <string name="pt_itemSent">Sent:</string>
@@ -224,7 +230,7 @@
     <string name="pt_notSent">Not Sent</string>
     <string name="pt_lockState">Locked</string>
     <string name="pt_cannotDrawWhileRecTitle">Cannot Draw Path</string>
-    <string name="pt_cannotDrawWhileRecText">The path cannot be drawn if another one is currently being recorded.</string>
+    <string name="pt_cannotDrawWhileRecText">This path cannot be drawn if another one is currently being recorded.</string>
     <string name="pt_infoPointLat">Latitude:</string>
     <string name="pt_infoPointLng">Longitude:</string>
     <string name="pt_infoPointAltitude">Altitude [m]:</string>
@@ -233,7 +239,8 @@
     <string name="pt_infoPointCreated">Created:</string>
     <string name="pt_infoCurPathTitleRecording">Recording Path</string>
     <string name="pt_infoCurPathTitleShown">Shown Path</string>
-    <string name="pt_infoCurPathPause">Pause</string>
+    <string name="pt_infoCurPathVertex">Vertex Mode</string>
+    <string name="pt_infoCurPathContinuous">Continuous Mode</string>
     <string name="pt_infoCurPathCentroidsNote">By Centroids</string>
     <string name="pt_infoCurPathId">Id:</string>
     <string name="pt_infoCurPathName">Name:</string>
@@ -242,37 +249,49 @@
     <string name="pt_deleteDialogTitle">Confirm deletion</string>
     <string name="pt_deleteDialogText">Are you sure you want to delete %1$s path?</string>
     <string name="pt_androidVersionException">This version of Android is not supported (minimum Nougat required).</string>
+    <string name="pt_capturePointButton">Capture Point</string>
+    <string name="pt_convexHullPointButton">Convex Hull Point</string>
+    <string name="pt_deletePointButton">Delete Last Point</string>
     <string name="pt_sendButton">Send</string>
     <string name="pt_recButton">Record</string>
     <string name="pt_stopButton">Stop</string>
-    <string name="pt_pauseButton">Pause</string>
-    <string name="pt_continueButton">Unpause</string>
+    <string name="pt_pauseButton">Switch\nto vertex\nmode</string>
+    <string name="pt_continueButton">Switch\nto continuous\nmode</string>
     <string name="pt_pathsButton">Paths</string>
-    <string name="pt_alertNothingToUploadTitle">No Paths</string>
-    <string name="pt_alertNothingToUploadText">No paths that are not yet uploaded.</string>
-    <string name="pt_uploadPathsStarted">Paths uploading started.</string>
-    <string name="pt_uploadPathsCompleted">Paths uploading completed.</string>
-    <string name="pt_uploadPathsFailed">Paths uploading failed.</string>
-    <string name="pt_errorUploadPathsTitle">Paths Uploading Errors</string>
+    <string name="pt_alertNothingToUploadTitle">Path upload</string>
+    <string name="pt_alertNothingToUploadText">All paths have been uploaded.</string>
+    <string name="pt_uploadPathsStarted">Uploading of paths has started.</string>
+    <string name="pt_uploadPathsCompleted">Uploading of paths has completed.</string>
+    <string name="pt_uploadPathsFailed">Uploading of paths has failed.</string>
+    <string name="pt_errorUploadPathsTitle">Error in path upload</string>
     <string name="pt_errorUploadPathsText">Unexpected errors occurred while uploading paths:\n\n%1$s</string>
-    <string name="pt_uploadDialogPathsTitle">Confirm Sending</string>
+    <string name="pt_uploadDialogPathsTitle">Confirm Upload</string>
     <string name="pt_uploadDialogPathsText">Are you sure you want to send all unsent paths (total %1$s)?\n\nOnce sent, they cannot be changed.</string>
-    <string name="pt_downloadRestrictedError">No paths can be downloaded because there are still unposted paths on this device in a locked and error state. These paths will be locked until successfully uploaded to the server.</string>
-    <string name="pt_uploadDialogPathTitle">Confirm sending</string>
-    <string name="pt_uploadDialogPathText">Are you sure you want to send this? It cannot be changed afterwards.</string>
-    <string name="pt_uploadPathStarted">Path uploading started.</string>
-    <string name="pt_uploadPathCompleted">Path uploading completed.</string>
-    <string name="pt_uploadPathFailed">Path uploading failed.</string>
-    <string name="pt_errorUploadPathTitle">Path uploading Error</string>
+    <string name="pt_downloadRestrictedError">No paths can be downloaded because there are still unuploaded paths on this device in a locked and error state. These paths will be locked until successfully uploaded to the server.</string>
+    <string name="pt_uploadDialogPathTitle">Confirm Upload</string>
+    <string name="pt_uploadDialogPathText">Are you sure you want to upload this path? It cannot be changed afterwards.</string>
+    <string name="pt_uploadPathStarted">Uploading of paths has started.</string>
+    <string name="pt_uploadPathCompleted">Uploading of paths has completed.</string>
+    <string name="pt_uploadPathFailed">Uploading of paths has failed.</string>
+    <string name="pt_errorUploadPathTitle">Error in path upload</string>
     <string name="pt_errorUploadPathText">An unexpected error occurred while uploading path:\n\n%1$s</string>
     <string name="pt_dialogStartButton">Start Recording</string>
     <string name="pt_dialogStopButton">Stop Recording</string>
     <string name="pt_dialogStopMessage">Are you sure you want to stop recording the path?</string>
+    <string name="pt_errorNoCapturePointTitle">No Capture Point</string>
+    <string name="pt_errorNoCapturePointText">There are no current location data, so no point can be captured.</string>
+    <string name="pt_errorNoCentroidPointTitle">No Centroid Point</string>
+    <string name="pt_errorNoCentroidPointText">There are no current centroid data, so no point can be captured.</string>
+    <string name="pt_errorNoPointToDeleteTitle">No Point to Delete</string>
+    <string name="pt_errorNoPointToDeleteText">There are no more points to delete.</string>
+    <string name="pt_dialogDeleteLastPointTitle">Confirm Deletion</string>
+    <string name="pt_dialogDeleteLastPointText">Are you sure you want to delete the last point?</string>
+    <string name="pt_dialogDeleteLastPointButton">Delete</string>
 
     <!-- GNSS Raw Data -->
-    <string name="gnss_satInUse">Sat in Use</string>
-    <string name="gnss_satInView">Sat in View</string>
-    <string name="gnss_egnos">Egnos</string>
+    <string name="gnss_satInUse">Satellite in Use</string>
+    <string name="gnss_satInView">Satellite in View</string>
+    <string name="gnss_egnos">EGNOS</string>
     <string name="gnss_rmcInfo">RMC Info</string>
     <string name="gnss_satellites">Satellites</string>
     <string name="gnss_galileoSats">GALILEO SAT</string>
@@ -284,16 +303,16 @@
     <string name="gnss_magneticVariation">Magnetic Variation</string>
     <string name="gnss_EW">E/W</string>
     <string name="gnss_TrueNorthAngle">True North Angle</string>
-    <string name="gnss_speedKnots">Speed Knots</string>
-    <string name="gnss_speedKmh">Speed Km/h</string>
+    <string name="gnss_speedKnots">Speed (Knots)</string>
+    <string name="gnss_speedKmh">Speed (Km/h)</string>
     <string name="gnss_nd">n/d</string>
     <string name="gnss_vtgInfo">VTG Info</string>
     <string name="gnss_trueDegrees">True Degrees</string>
     <string name="gnss_magneticDegrees">Magnetic Degrees</string>
     <string name="gnss_snr">SNR</string>
     <string name="gnss_meanSnr">Mean SNR</string>
-    <string name="gnss_geolocationInfo">Geolocation Info</string>
-    <string name="gnss_satInfo">Sat Info</string>
+    <string name="gnss_geolocationInfo">Geolocation information</string>
+    <string name="gnss_satInfo">Satellite information</string>
     <string name="gnss_latitude">Latitude</string>
     <string name="gnss_longitude">Longitude</string>
     <string name="gnss_altitude">Altitude</string>
@@ -302,14 +321,14 @@
     <string name="gnss_hdop">HDOP</string>
     <string name="gnss_pdop">PDOP</string>
     <string name="gnss_vdop">VDOP</string>
-    <string name="gnss_accurancy">Accurancy</string>
+    <string name="gnss_accurancy">Accuracy</string>
     <string name="gnss_precision">Precision</string>
 
     <!-- CameraActivity -->
     <string name="ca_snap">SNAP</string>
     <string name="ca_camera">Camera</string>
-    <string name="ca_failedCreateFile">An error occurs on creating a photo file.\n\n%1$s</string>
-    <string name="ca_failedSavePhoto">An error occurs during saving photo into a file.\n\n%1$s</string>
+    <string name="ca_failedCreateFile">An error occurs when creating a photo file.\n\n%1$s</string>
+    <string name="ca_failedSavePhoto">An error occurs saving of photo into a file.\n\n%1$s</string>
     <string name="ca_latitude">Latitude</string>
     <string name="ca_longitude">Longitude</string>
     <string name="ca_altitude">Altitude[m]</string>
@@ -318,11 +337,11 @@
     <string name="ca_tilt">Tilt</string>
     <string name="ca_accuracy">Accuracy[m]</string>
     <string name="ca_unavailable">Unavailable</string>
-    <string name="ca_wrongAnglePortrait">Wrong angle.\nAllow range is %1$s° - %2$s°.</string>
-    <string name="ca_wrongAngleLandscape">Wrong angle.\nAllow range is %1$s° - %2$s°.</string>
-    <string name="ca_unsatifactoryPosition">Unsatisfactory location data.\nStay in place.</string>
+    <string name="ca_wrongAnglePortrait">Wrong angle.\nAllowed range is %1$s° - %2$s°.</string>
+    <string name="ca_wrongAngleLandscape">Wrong angle.\nAllowed range is %1$s° - %2$s°.</string>
+    <string name="ca_unsatifactoryPosition">Incomplete location data.\nStay in place.</string>
     <string name="ca_takePictureWait">Waiting to take snapshot.</string>
-    <string name="ca_takePictureCountDown">Calculating position. (%1$s s left)</string>
+    <string name="ca_takePictureCountDown">Connecting to satellites. (%1$s s left)</string>
     <string name="ca_takePictureCalibrating">Calibrating camera …</string>
     <string name="ca_pictureRejectedTitle">Picture rejected</string>
     <string name="ca_pictureRejectedText">Make sure no warning message is displayed during shooting.</string>
@@ -333,10 +352,10 @@
         \nStay in place to collect all samples.</string>
     <string name="ca_unsupportedSettingsTitle">Unsupported Setting</string>
     <string name="ca_unssuprotedSettingsText">This setting is not supported by this device.</string>
-    <string name="ca_ekfCreateExceptionTitle">Exception during creating the EKF process</string>
-    <string name="ca_ekfCreateExceptionText">An exception occurred during creating the process for calculating location data by using the extended Kalman filter:\n%1$s</string>
-    <string name="ca_ekfStartExceptionTitle">Exception during starting the EKF process</string>
-    <string name="ca_ekfStartExceptionText">An exception occurred during starting the process for calculating location data by using the extended Kalman filter:\n%1$s</string>
+    <string name="ca_ekfCreateExceptionTitle">Exception while creating creating the EKF process</string>
+    <string name="ca_ekfCreateExceptionText">An exception occurred while creating the process for calculating location data by using the extended Kalman filter:\n%1$s</string>
+    <string name="ca_ekfStartExceptionTitle">Exception while starting the EKF process</string>
+    <string name="ca_ekfStartExceptionText">An exception occurred while starting the process for calculating location data by using the extended Kalman filter:\n%1$s</string>
 
     <!-- task STATUS -->
     <string name="stat_new">New</string>
@@ -355,11 +374,12 @@
     <string name="se_buttonToSnap">Button to capture a photo</string>
     <string name="se_buttonToSnapCode">Button:</string>
     <string name="se_buttonToSnapTitle">Press a button</string>
-    <string name="se_buttonToSnapDesc">Press a button on the phone with which you want to take photos.\n\nIf it can be used, you will see its name in the settings.Not all buttons can be used or are suitable.</string>
+    <string name="se_buttonToSnapDesc">Press a button on your phone with which you want to take photos.\n\nIf it can be used, you will see its name in the settings. Not all buttons can be used or are suitable.</string>
     <string name="se_buttonToSnapUnassigned">Unassigned</string>
     <string name="se_buttonManualBrightnessCorrection">Manual brightness correction</string>
-    <string name="se_buttonAutoPan">Automatically pan the map during a path recording</string>
-    <string name="se_buttonBeep">Beep when recording a path point</string>
+    <string name="se_buttonAutoPan">Automatically pan the map during path recording</string>
+    <string name="se_buttonBeep">Beep when recording a path vertex</string>
+    <string name="se_pointCapturePeriod">Point Capture Period [seconds]</string>
 
     <!-- SettingFilterActivity -->
     <string name="sef_hdopMin">HDOP Min:</string>
@@ -373,8 +393,8 @@
     <string name="ab_text">
         EGNSS4CAP is a mobile phone application for farmers in the European Union to digitalise procedures surrounding their reporting requirements under the current and post-2020 Common Agricultural Policy (CAP) reform.
         \n\nThis application enables farmers to provide geotagged photos to support and complement a Copernicus Sentinel-based monitoring approach for CAP.
-        \n\nIt is using EGNSS (EGNOS and Galileo) differentiators such as OS-NMA and dual-frequency capabilities to reduce errors and duplication, as well as improve performance and trustworthiness.
-        \n\nTo check if the device that you are using is able to use all the EGNSS differentiators, the following traffic lights are giving a confirmation of your smartphone capabilities
+        \n\nIt is using EGNSS (EGNOS and Galileo) differentiators such as OS-NMA and dual-frequency capabilities to reduce errors and duplication, as well as improved performance and trustworthiness.
+        \n\nTo check if the device that you are using is able to use all the EGNSS differentiators, the following traffic lights provide a confirmation of your smartphone capabilities
     </string>
     <string name="ab_textAfter">
         &lt;b&gt;Device Condition&lt;/b&gt;: green light if this device meets the minimum requirements for the application to work.
@@ -407,24 +427,24 @@
     <string name="pd_errorImageLoadTitle">Image Loading Error</string>
     <string name="pd_errorImageLoadText">An error occurred during image file loading.\n\n%1$s</string>
     <string name="pd_errorUploadPhotoTitle">Image Uploading Error</string>
-    <string name="pd_errorUploadPhotoText">An error occurred during image file uploading to server.\n\n%1$s</string>
+    <string name="pd_errorUploadPhotoText">An error occurred during image file upload to server.\n\n%1$s</string>
     <string name="pd_errorImagesLoadTitle">Images Uploading Error</string>
-    <string name="pd_errorImagesLoadText">An error occurred during image files uploading to server.\n\n%1$s</string>
+    <string name="pd_errorImagesLoadText">An error occurred during image files upload to server.\n\n%1$s</string>
     <string name="pd_startUploading">Image uploading started.</string>
     <string name="pd_completedUploading">Image uploading completed.</string>
     <string name="pd_failedUploading">Image uploading failed.</string>
     <string name="pd_deleteDialogTitle">Confirm deletion</string>
     <string name="pd_deleteDialogText">Are you sure you want to delete this separate photo?</string>
     <string name="pd_noteHint">Type a note</string>
-    <string name="pd_sendDialogTitle">Confirm sending</string>
-    <string name="pd_sendDialogText">Are you sure you want to send this? It cannot be changed afterwards.</string>
+    <string name="pd_sendDialogTitle">Confirm upload</string>
+    <string name="pd_sendDialogText">Are you sure you want to upload this? It cannot be changed afterwards.</string>
     <string name="pd_lockedPhotoTitle">The photo is locked</string>
     <string name="pd_lockedPhotoText">The photo will be locked until it is sent without errors or synchronized with a steady state on the server, if it already exists on the server.</string>
 
     <!-- UnownedPhotoOverviewActivity -->
-    <string name="un_alertNothingToUploadTitle">No photos</string>
-    <string name="un_alertNothingToUploadText">No photos that are not yet uploaded.</string>
-    <string name="un_uploadDialogTitle">Confirm sending</string>
+    <string name="un_alertNothingToUploadTitle">Photo upload</string>
+    <string name="un_alertNothingToUploadText">All photos have been uploaded.</string>
+    <string name="un_uploadDialogTitle">Confirm upload</string>
     <string name="un_uploadDialogText">Are you sure you want to send all unsent photos (total %1$s)?\n\nOnce sent, they cannot be changed.</string>
 
     <!-- Dialogs -->
@@ -432,7 +452,7 @@
     <string name="dl_Cancel">Cancel</string>
 
     <!-- BasicInfo -->
-    <string name="bi_basicInfo">Basic Info</string>
+    <string name="bi_basicInfo">Device information</string>
     <string name="bi_deviceCondition">Device Condition</string>
     <string name="bi_phoneManufacturer">Phone Manufacturer</string>
     <string name="bi_phoneModel">Phone Model</string>

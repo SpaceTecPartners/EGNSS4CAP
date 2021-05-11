@@ -1,0 +1,418 @@
+-- MySQL dump 10.13  Distrib 8.0.11, for FreeBSD11.1 (amd64)
+--
+-- Host: localhost    Database: egnss4cap
+-- ------------------------------------------------------
+-- Server version	8.0.11
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+ SET NAMES utf8mb4 ;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `comm_log`
+--
+
+DROP TABLE IF EXISTS `comm_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `comm_log` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `status` varchar(45) DEFAULT NULL,
+  `error_msg` text,
+  `timestamp` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3403 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `land`
+--
+
+DROP TABLE IF EXISTS `land`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `land` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `identificator` varchar(45) DEFAULT NULL,
+  `pa_description` text,
+  `wkt` text,
+  `wgs_geometry` mediumtext,
+  `wgs_max_lat` float DEFAULT NULL,
+  `wgs_min_lat` float DEFAULT NULL,
+  `wgs_max_lng` float DEFAULT NULL,
+  `wgs_min_lng` float DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_minmax` (`wgs_max_lat`,`wgs_min_lat`,`wgs_max_lng`,`wgs_min_lng`)
+) ENGINE=InnoDB AUTO_INCREMENT=627847 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `pa`
+--
+
+DROP TABLE IF EXISTS `pa`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `pa` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `timestamp` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `pa_flag`
+--
+
+DROP TABLE IF EXISTS `pa_flag`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `pa_flag` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `flag` varchar(45) NOT NULL,
+  `timestamp` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `page`
+--
+
+DROP TABLE IF EXISTS `page`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `page` (
+  `id` bigint(20) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `timestamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `page_lang`
+--
+
+DROP TABLE IF EXISTS `page_lang`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `page_lang` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `page_id` bigint(20) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `template_param` varchar(45) NOT NULL,
+  `cz` varchar(4000) DEFAULT NULL,
+  `en` varchar(4000) DEFAULT NULL,
+  `timestamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `page_id_idx` (`page_id`),
+  CONSTRAINT `page_id` FOREIGN KEY (`page_id`) REFERENCES `page` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=350 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `path`
+--
+
+DROP TABLE IF EXISTS `path`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `path` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `device_manufacture` varchar(255) DEFAULT NULL,
+  `device_model` varchar(255) DEFAULT NULL,
+  `device_platform` varchar(255) DEFAULT NULL,
+  `device_version` varchar(255) DEFAULT NULL,
+  `start` datetime NOT NULL,
+  `end` datetime NOT NULL,
+  `area` double NOT NULL DEFAULT '0',
+  `flg_deleted` int(11) NOT NULL DEFAULT '0',
+  `timestamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `fk_user_id_idx` (`user_id`),
+  CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=296 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `path_point`
+--
+
+DROP TABLE IF EXISTS `path_point`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `path_point` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `path_id` bigint(20) NOT NULL,
+  `lat` double NOT NULL,
+  `lng` double NOT NULL,
+  `altitude` float DEFAULT NULL,
+  `accuracy` float DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `timestamp` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `fk_path_id_idx` (`path_id`),
+  CONSTRAINT `fk_path_id` FOREIGN KEY (`path_id`) REFERENCES `path` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=22001 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `photo`
+--
+
+DROP TABLE IF EXISTS `photo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `photo` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) DEFAULT NULL,
+  `task_id` bigint(20) DEFAULT NULL,
+  `note` text,
+  `lat` float(10,6) DEFAULT NULL,
+  `lng` float(10,6) DEFAULT NULL,
+  `centroidLat` float(10,6) DEFAULT NULL,
+  `centroidLng` float(10,6) DEFAULT NULL,
+  `altitude` float DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
+  `bearing` float DEFAULT NULL,
+  `magnetic_azimuth` float DEFAULT NULL,
+  `photo_heading` float DEFAULT NULL,
+  `photo_angle` float DEFAULT NULL,
+  `roll` float DEFAULT NULL,
+  `pitch` float DEFAULT NULL,
+  `orientation` int(11) DEFAULT NULL,
+  `horizontal_view_angle` float DEFAULT NULL,
+  `vertical_view_angle` float DEFAULT NULL,
+  `accuracy` float DEFAULT NULL,
+  `device_manufacture` varchar(255) DEFAULT NULL,
+  `device_model` varchar(255) DEFAULT NULL,
+  `device_platform` varchar(255) DEFAULT NULL,
+  `device_version` varchar(255) DEFAULT NULL,
+  `sats_info` text,
+  `extra_sat_count` int(11) DEFAULT NULL,
+  `nmea_msg` text,
+  `nmea_location` text,
+  `nmea_distance` float DEFAULT NULL,
+  `network_info` text,
+  `network_location` text,
+  `distance` float DEFAULT NULL,
+  `flg_checked_location` int(11) DEFAULT NULL,
+  `path` varchar(255) DEFAULT NULL,
+  `file_name` varchar(255) DEFAULT NULL,
+  `timestamp` datetime NOT NULL,
+  `digest` varchar(255) DEFAULT NULL,
+  `flg_original` int(11) DEFAULT NULL,
+  `rotation_correction` int(11) NOT NULL DEFAULT '0',
+  `flg_deleted` int(11) DEFAULT '0',
+  `efkLatGpsL1` float DEFAULT NULL,
+  `efkLngGpsL1` float DEFAULT NULL,
+  `efkAltGpsL1` float DEFAULT NULL,
+  `efkTimeGpsL1` datetime DEFAULT NULL,
+  `efkLatGpsL5` float DEFAULT NULL,
+  `efkLngGpsL5` float DEFAULT NULL,
+  `efkAltGpsL5` float DEFAULT NULL,
+  `efkTimeGpsL5` datetime DEFAULT NULL,
+  `efkLatGpsIf` float DEFAULT NULL,
+  `efkLngGpsIf` float DEFAULT NULL,
+  `efkAltGpsIf` float DEFAULT NULL,
+  `efkTimeGpsIf` datetime DEFAULT NULL,
+  `efkLatGalE1` float DEFAULT NULL,
+  `efkLngGalE1` float DEFAULT NULL,
+  `efkAltGalE1` float DEFAULT NULL,
+  `efkTimeGalE1` datetime DEFAULT NULL,
+  `efkLatGalE5` float DEFAULT NULL,
+  `efkLngGalE5` float DEFAULT NULL,
+  `efkAltGalE5` float DEFAULT NULL,
+  `efkTimeGalE5` datetime DEFAULT NULL,
+  `efkLatGalIf` float DEFAULT NULL,
+  `efkLngGalIf` float DEFAULT NULL,
+  `efkAltGalIf` float DEFAULT NULL,
+  `efkTimeGalIf` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_task_id` (`task_id`),
+  KEY `idx_digest` (`digest`)
+) ENGINE=InnoDB AUTO_INCREMENT=17809 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `release_notes`
+--
+
+DROP TABLE IF EXISTS `release_notes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `release_notes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` enum('web','android','ios') NOT NULL,
+  `version` varchar(255) DEFAULT NULL,
+  `note_en` text,
+  `note_cz` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `role`
+--
+
+DROP TABLE IF EXISTS `role`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `role` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `role` varchar(255) NOT NULL,
+  `description` varchar(2000) DEFAULT NULL,
+  `timestamp` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `status_sortorder`
+--
+
+DROP TABLE IF EXISTS `status_sortorder`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `status_sortorder` (
+  `status` varchar(45) NOT NULL,
+  `sortorder` int(11) NOT NULL,
+  PRIMARY KEY (`status`),
+  UNIQUE KEY `status_UNIQUE` (`status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `task`
+--
+
+DROP TABLE IF EXISTS `task`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `task` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) NOT NULL,
+  `created_id` bigint(20) NOT NULL,
+  `type_id` bigint(20) DEFAULT NULL,
+  `status` enum('new','open','returned','data provided','data checked','closed') NOT NULL DEFAULT 'new',
+  `name` varchar(255) DEFAULT NULL,
+  `text` text,
+  `text_returned` text,
+  `text_reason` text,
+  `date_created` datetime DEFAULT NULL,
+  `task_due_date` datetime DEFAULT NULL,
+  `note` text,
+  `timestamp` datetime NOT NULL,
+  `flg_deleted` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `fk_user_id_idx` (`user_id`),
+  KEY `fk_uid_created_idx` (`created_id`),
+  KEY `idx_status` (`status`),
+  KEY `fk_ta_type_idx` (`type_id`),
+  CONSTRAINT `fk_ta_created` FOREIGN KEY (`created_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `fk_ta_type` FOREIGN KEY (`type_id`) REFERENCES `task_type` (`id`),
+  CONSTRAINT `fk_ta_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=125890 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `task_flag`
+--
+
+DROP TABLE IF EXISTS `task_flag`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `task_flag` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `task_id` bigint(20) NOT NULL,
+  `flag_id` bigint(20) NOT NULL,
+  `timestamp` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_task_id_idx` (`task_id`),
+  KEY `fk_flag_id_idx` (`flag_id`),
+  CONSTRAINT `fk_tf_flag` FOREIGN KEY (`flag_id`) REFERENCES `pa_flag` (`id`),
+  CONSTRAINT `fk_tf_task` FOREIGN KEY (`task_id`) REFERENCES `task` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=5684 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `task_type`
+--
+
+DROP TABLE IF EXISTS `task_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `task_type` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `user` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `pa_id` bigint(20) NOT NULL,
+  `login` varchar(255) NOT NULL,
+  `pswd` varchar(255) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `surname` varchar(255) DEFAULT NULL,
+  `identification_number` int(10) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `vat` varchar(45) DEFAULT NULL,
+  `active` int(1) NOT NULL DEFAULT '1',
+  `timestamp` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_pa_idx` (`pa_id`),
+  CONSTRAINT `fk_pa` FOREIGN KEY (`pa_id`) REFERENCES `pa` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=160 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `user_role`
+--
+
+DROP TABLE IF EXISTS `user_role`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `user_role` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) NOT NULL,
+  `role_id` bigint(20) NOT NULL,
+  `timestamp` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_user_idx` (`user_id`),
+  KEY `fk_role_idx` (`role_id`),
+  CONSTRAINT `fk_ur_role` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`),
+  CONSTRAINT `fk_ur_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=160 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2021-05-11 10:02:05

@@ -85,7 +85,7 @@ const FILTER_TYPE = "{{ mapjs_filter_type }}";
             <tr><td><label title="{{ pht_distance_nmea_title }}">{{ pht_distance_nmea }}</label></td><td><label title="{{ pht_distance_nmea }}">{% if image.nmea_distance is not empty %} {{ image.nmea_distance }} m{% endif %}</label></td></tr>
             <tr><td><label title="{{ pht_timestamp_title }}">{{ pht_timestamp }}</label></td><td><label title="{{ pht_timestamp }}">{{ image.timestamp }}</label></td></tr>
             <tr><td><label title="{{ pht_created_date_title }}">{{ pht_created_date }}</label></td><td><label title="{{ pht_created_date }}">{{ image.created_date }}</label></td></tr>
-            <tr><td></td><td><label class="js_open_ekf">{{ show_ekf_metadata }}</label></td></tr>
+            <tr><td><label title="{{ pht_cell_id }}">{{ pht_cell_id }}</label></td><td><label title="{{ pht_cell_id }}">{{ image.cid }}</label></td></tr>
             <tr>
               <td></td>
               <td>
@@ -120,7 +120,7 @@ const FILTER_TYPE = "{{ mapjs_filter_type }}";
     </tr>
   </table>
   <div class="w-100 mt-5" style="display:flex; justify-content:center;">
-    <div id="map_for-{{ image.id }}" class="map" style="width:900px; height:500px;"></div>
+    <div id="map_for-{{ image.id }}" class="map" style="width:1000px; height:650px;"></div>
   </div>
 </div>
 {% endfor %}

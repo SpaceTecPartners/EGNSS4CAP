@@ -105,7 +105,7 @@
 {% if agency %}
   <button type="button" class="clickGroupTaskAccept btn btn-outline-secondary mb-2" style="float: right;">{{ group_task_accept_button|upper }}</button>
 {% endif %}
-<div>{{ showing }} {{ count['filtered'] }} {{ out_of }} {{ count['total'] }}</div>
+<div>{{ showing }} <span id="filtered_tasks">{{ count['filtered'] }}</span> {{ out_of }} {{ count['total'] }}</div>
 <div class="table_cont">
   <table class="w-100 table float-md-left js_table table_responsive">
     <thead>

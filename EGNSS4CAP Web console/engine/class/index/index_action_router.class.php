@@ -26,10 +26,12 @@ class index_action_router extends \action_router{
     'save_photo_rotation',
     'delete_photo',
     'user_paths',
+    'generate_path_kml_file',
     'get_user_paths_gps_points',
     'delete_path',
     'new_agency',
-    'load_release_notes'
+    'load_release_notes',
+    'get_filtered_task_count'
   );
 
   public function __construct(){
@@ -56,7 +58,7 @@ class index_action_router extends \action_router{
         "url_paths" => "index.php?act=user_paths&id=".$params['id'],
         "sort" => (isset($_SESSION['task_list_sort'])?$_SESSION['task_list_sort']:array()),
         "filter" => (isset($_SESSION['task_list_filter'])?$_SESSION['task_list_filter']:array("search" => "", "filter" => "")),
-        "count" => array("total" => index_model::get_farmer_counts($params['id'], 'tasks'), "filtered" => index_model::get_farmer_counts($params['id'], 'filtered_tasks'))
+        "count" => array("total" => index_model::get_farmer_counts($params['id'], 'tasks'), "filtered" => index_model::get_farmer_counts($params['id'], 'filtered_tasks', (isset($_SESSION['task_list_filter']['search'])?$_SESSION['task_list_filter']['search']:"")))
       );
       echo $template->load_index_farmers_tasks_html_page($template_variables);
     }
@@ -108,6 +110,14 @@ class index_action_router extends \action_router{
 
       echo $template->load_index_user_paths_html_page($template_variables);
     }
+    exit;
+  }
+
+  protected function generate_path_kml_file($params){
+    $kml_file = user_model::generate_path_kml_file($params['id'], $params['name'], $params['desc']);
+    header('Content-Disposition: attachment; filename="kml.xml"');
+    header("Content-Type: text/xml");
+    echo $kml_file;
     exit;
   }
 
@@ -336,6 +346,16 @@ class index_action_router extends \action_router{
         }
     }
     echo "1";
+    exit;
+  }
+
+  protected function get_filtered_task_count($params){
+    if(isset($params['id'])){
+      $id = $params['id'];
+    } else {
+      $id = user_model::get_loged_user_id();
+    }
+    echo json_encode(index_model::get_farmer_counts($id, 'filtered_tasks', (isset($_SESSION['task_list_filter']['search'])?$_SESSION['task_list_filter']['search']:"")));
     exit;
   }
 

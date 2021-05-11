@@ -18,8 +18,10 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="1.0">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -47,7 +49,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/gnss_frameLayout_basicInfo"
-                tools:visibility="gone">
+                tools:visibility="visible">
 
                 <LinearLayout
                     style="@style/panelHeader"
@@ -144,7 +146,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout16"
-                tools:visibility="gone">
+                tools:visibility="visible">
 
                 <LinearLayout style="@style/panelHeader">
 
@@ -333,7 +335,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout17"
-                tools:visibility="gone">
+                tools:visibility="visible">
 
                 <LinearLayout style="@style/panelHeader">
 
@@ -556,7 +558,7 @@
 
                             <LinearLayout style="@style/panelRowMin">
 
-                                <eu.foxcom.gtphotos.model.component.DynamicListView
+                                <eu.foxcom.stp.gsa.egnss4cap.model.component.DynamicListView
                                     android:id="@+id/gnss_listView_galileo"
                                     style="@style/gnss_satsList" />
 
@@ -579,7 +581,7 @@
 
                             <LinearLayout style="@style/panelRowMin">
 
-                                <eu.foxcom.gtphotos.model.component.DynamicListView
+                                <eu.foxcom.stp.gsa.egnss4cap.model.component.DynamicListView
                                     android:id="@+id/gnss_listView_glonass"
                                     style="@style/gnss_satsList" />
 
@@ -611,7 +613,7 @@
 
                             <LinearLayout style="@style/panelRowMin">
 
-                                <eu.foxcom.gtphotos.model.component.DynamicListView
+                                <eu.foxcom.stp.gsa.egnss4cap.model.component.DynamicListView
                                     android:id="@+id/gnss_listView_gps"
                                     style="@style/gnss_satsList" />
 
@@ -634,7 +636,7 @@
 
                             <LinearLayout style="@style/panelRowMin">
 
-                                <eu.foxcom.gtphotos.model.component.DynamicListView
+                                <eu.foxcom.stp.gsa.egnss4cap.model.component.DynamicListView
                                     android:id="@+id/gnss_listView_beidou"
                                     style="@style/gnss_satsList" />
 

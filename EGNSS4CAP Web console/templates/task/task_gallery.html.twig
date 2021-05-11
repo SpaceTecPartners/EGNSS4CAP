@@ -40,7 +40,7 @@
           <tr><td><label title="{{ pht_distance_nmea_title }}">{{ pht_distance_nmea }}</label></td><td><label title="{{ pht_distance_nmea }}">{% if image.nmea_distance is not empty %} {{ image.nmea_distance }} m{% endif %}</label></td></tr>
           <tr><td><label title="{{ pht_timestamp_title }}">{{ pht_timestamp }}</label></td><td><label title="{{ pht_timestamp }}">{{ image.timestamp }}</label></td></tr>
           <tr><td><label title="{{ pht_created_date_title }}">{{ pht_created_date }}</label></td><td><label title="{{ pht_created_date }}">{{ image.created_date }}</label></td></tr>
-          <tr><td></td><td><label class="js_open_ekf" data-id="{{ image.id }}">{{ show_ekf_metadata }}</label></td></tr>
+          <!--<tr><td></td><td><label class="js_open_ekf" data-id="{{ image.id }}">{{ show_ekf_metadata }}</label></td></tr>-->
           {% if agency %}
             <tr>
               <td></td>

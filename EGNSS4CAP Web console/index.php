@@ -29,7 +29,7 @@ if($model->getUser_role() == user_model::FARMER_ROLE){
     "url_paths" => "index.php?act=user_paths&id=".user_model::get_loged_user_id(),
     "sort" => (isset($_SESSION['task_list_sort'])?$_SESSION['task_list_sort']:array()),
     "filter" => (isset($_SESSION['task_list_filter'])?$_SESSION['task_list_filter']:array("search" => "", "filter" => "")),
-    "count" => array("total" => index_model::get_farmer_counts(user_model::get_loged_user_id(), 'tasks'), "filtered" => index_model::get_farmer_counts(user_model::get_loged_user_id(), 'filtered_tasks'))
+    "count" => array("total" => index_model::get_farmer_counts(user_model::get_loged_user_id(), 'tasks'), "filtered" => index_model::get_farmer_counts(user_model::get_loged_user_id(), 'filtered_tasks', (isset($_SESSION['task_list_filter']['search'])?$_SESSION['task_list_filter']['search']:"")))
   );
   echo $template->load_index_farmers_tasks_html_page($template_variables);
 }

@@ -16,7 +16,7 @@
         android:layout_marginStart="@dimen/gn_screenMargin"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="@dimen/gn_screenMargin"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout7"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,7 +33,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -75,8 +75,11 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/hs_linearLayout_nameRow"
                     style="@style/panelRow"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    tools:visibility="visible">
 
                     <TextView
                         android:id="@+id/textView71"
@@ -96,8 +99,11 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/hs_linearLayout_surnameRow"
                     style="@style/panelRow"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    tools:visibility="visible">
 
                     <TextView
                         android:id="@+id/textView74"
@@ -115,13 +121,55 @@
                         android:id="@+id/hs_textView_surname"
                         style="@style/panelValueEnd" />
                 </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/hs_linearLayout_numberOpenTaskRow"
+                    style="@style/panelRow"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <TextView
+                        style="@style/panelValueStart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:text="@string/hs_numberOpenTasks" />
+
+                    <TextView style="@style/panelValueMiddle" />
+
+                    <TextView
+                        android:id="@+id/hs_textView_numberOpenTasks"
+                        style="@style/panelValueEnd" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/hs_linearLayout_numberPhotosRow"
+                    style="@style/panelRow"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <TextView
+                        style="@style/panelValueStart"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:text="@string/hs_numberPhotos" />
+
+                    <TextView style="@style/panelValueMiddle" />
+
+                    <TextView
+                        android:id="@+id/hs_textView_numberPhotos"
+                        style="@style/panelValueEnd" />
+                </LinearLayout>
             </LinearLayout>
 
             <Space
                 android:id="@+id/hs_space_loggedUserBottom"
                 android:layout_width="0dp"
                 android:layout_height="16dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/hs_linearLayout_loggedUser"
@@ -147,6 +195,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -160,7 +209,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/icon_inline_logo" />
+            app:srcCompat="@drawable/icon_inline_logo"
+            tools:visibility="visible" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

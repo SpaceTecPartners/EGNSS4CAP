@@ -4,6 +4,7 @@
 {% block body %}
   <h2>{{farmer_name}} {{ header }}</h2>
   <a href="{{ ret_url }}" class="btn btn-primary text-capitalize">{{ back|upper }}</a>
+  <input type="hidden" id="farmer_id" value="{{ farmer_id }}">
   <div class="table_cont">
     <table class="w-100 table table_responsive">
       <thead>
@@ -41,7 +42,9 @@
             <td data-label="{{type}}" class="td_name">{{ task.type_name }}</td>
             <td data-label="{{name}}">{{ task.name }}</td>
             <td data-label="{{note}}">{{ task.note }}</td>
-            <td data-label="{{description}}">{{ task.text }}</td>
+            {% autoescape 'html' %}
+              <td data-label="{{description}}">{{ task.text|raw }}</td>
+            {% endautoescape %}
             <td data-label="{{note_returned}}">{{ task.text_returned }}</td>
             {% if task.flag_id == 2  %}
               <td data-label="{{note_declined}}">{{ task.text_reason }}</td>

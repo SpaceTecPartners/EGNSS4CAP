@@ -15,7 +15,7 @@ switch (SERVER) {
     define('SYSTEM_HOST', 'https://egnss4cap-uat.foxcom.eu');
     define('DB_TYPE', 'mysqli');
     define('DB_HOST', '127.0.0.1');
-    define('DB_USER', 'login');
+    define('DB_USER', 'user');
     define('DB_PASSWORD', 'pswd');
     define('DB_SCHEMA', 'egnss4cap');
     break;
@@ -24,7 +24,27 @@ switch (SERVER) {
     define('SYSTEM_HOST', 'http://farmari.localhost');
     define('DB_TYPE', 'mysqli');
     define('DB_HOST', 'localhost');
-    define('DB_USER', 'login');
+    define('DB_USER', 'user');
+    define('DB_PASSWORD', 'pswd');
+    define('DB_SCHEMA', 'egnss4cap');
+    ini_set('display_errors', 1);
+    break;
+
+  case 'LOCALHOST_MARTIN':
+    define('SYSTEM_HOST', 'http://localhost/farmari/web');
+    define('DB_TYPE', 'mysqli');
+    define('DB_HOST', 'localhost');
+    define('DB_USER', 'user');
+    define('DB_PASSWORD', 'pswd');
+    define('DB_SCHEMA', 'egnss4cap_1');
+    ini_set('display_errors', 1);
+    break;
+
+  case 'LOCALHOST_MICHAL':
+    define('SYSTEM_HOST', 'http://localhost/EGNSS4CAP-project-2/web');
+    define('DB_TYPE', 'mysqli');
+    define('DB_HOST', 'localhost');
+    define('DB_USER', 'user');
     define('DB_PASSWORD', 'pswd');
     define('DB_SCHEMA', 'egnss4cap');
     ini_set('display_errors', 1);
