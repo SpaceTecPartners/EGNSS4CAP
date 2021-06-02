@@ -8,8 +8,8 @@ android {
         applicationId "eu.foxcom.stp.gsa.egnss4cap"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 34
-        versionName "1.1.29"
+        versionCode 35
+        versionName "1.1.30"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 

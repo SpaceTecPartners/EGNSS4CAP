@@ -123,7 +123,7 @@ class LoginViewController: UIViewController,UITextFieldDelegate {
         let pswdText = pswdTextField.text ?? ""
         
         // Prepare URL
-        let url = URL(string: "https://login:pswd@egnss4cap-uat.foxcom.eu/ws/comm_login.php")
+        let url = URL(string: "https://login:password@egnss4cap-uat.foxcom.eu/ws/comm_login.php")
         guard let requestUrl = url else { fatalError() }
         // Prepare URL Request Object
         var request = URLRequest(url: requestUrl)

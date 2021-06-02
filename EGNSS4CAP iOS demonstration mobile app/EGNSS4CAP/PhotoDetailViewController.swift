@@ -67,7 +67,7 @@ class PhotoDetailViewController: UIViewController {
             let jsonString = String(data: jsonData, encoding: .utf8)!
             
             // Prepare URL
-            let url = URL(string: "https://login:pswd@egnss4cap-uat.foxcom.eu/ws/comm_photo.php")
+            let url = URL(string: "https://login:password@egnss4cap-uat.foxcom.eu/ws/comm_photo.php")
             guard let requestUrl = url else { fatalError() }
             // Prepare URL Request Object
             var request = URLRequest(url: requestUrl)
